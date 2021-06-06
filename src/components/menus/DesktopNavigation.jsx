@@ -43,7 +43,7 @@ const Desktopmenu = (props) => {
                             : null
                          } */}
                         <StyledLi>
-                            {isLoggedIn ? <StyledLink secondary="true"  to="/">Sign Out</StyledLink> : <a href={`https://discord.com/api/oauth2/authorize?client_id=850815958943268904&redirect_uri=https%3A%2F%2Fvibrant-banach-08b6d9.netlify.app%2F&response_type=code&scope=identify%20email`}>Sign In</a>}
+                            {isLoggedIn ? <StyledLink secondary="true"  to="/">Sign Out</StyledLink> : <a href={`http://localhost:8080/login`}>Sign In</a>}
                         </StyledLi>
                     </StyledUL>
                 </StyledNavigation>
