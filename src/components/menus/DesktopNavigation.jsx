@@ -43,7 +43,7 @@ const Desktopmenu = (props) => {
                             : null
                          } */}
                         <StyledLi>
-                            {isLoggedIn ? <StyledLink secondary="true"  to="/">Sign Out</StyledLink> : <StyledLink to="/login">Sign In</StyledLink>}
+                            {isLoggedIn ? <StyledLink secondary="true"  to="/">Sign Out</StyledLink> : <a href={`https://discordapp.com/api/oauth2/authorize?client_id=${850815958943268904}&scope=identify&response_type=code&redirect_uri=https://vibrant-banach-08b6d9.netlify.app/`}>Sign In</a>}
                         </StyledLi>
                     </StyledUL>
                 </StyledNavigation>
@@ -51,7 +51,7 @@ const Desktopmenu = (props) => {
 
 
 
-            
+
         </StyledHeader>
     );
 }
