@@ -43,7 +43,7 @@ const Desktopmenu = (props) => {
                             : null
                          } */}
                         <StyledLi>
-                            {isLoggedIn ? <StyledLink secondary="true"  to="/">Sign Out</StyledLink> : <a href={`https://discord.com/api/oauth2/authorize?client_id=850815958943268904&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Flogin%2Fcallback&response_type=code&scope=identify%20email`}>Sign In</a>}
+                            {isLoggedIn ? <StyledLink secondary="true"  to="/">Sign Out</StyledLink> : <a href={`http://localhost:8080/login`}>Sign In</a>}
                         </StyledLi>
                     </StyledUL>
                 </StyledNavigation>

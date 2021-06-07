@@ -1,11 +1,10 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import axios from 'axios';
+import React,{useState, useEffect} from 'react';
+import {Link, useLocation} from 'react-router-dom';
 import S from 'styled-components';
 import image from '../../assets/Season_2019_-_Challenger_1.png';
 
  function Homepage(props) {
-    
-
     return (
         <HeroSection>
             <Container>

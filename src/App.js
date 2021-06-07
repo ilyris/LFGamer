@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import DesktopNavigation from './components/menus/DesktopNavigation';
 import HomePage from './components/pages/HomePage';
 import LoginPage from './components/pages/LoginPage';
+import Profilepage from './components/pages/ProfilePage';
 // import SignupForm from './components/Forms/SignupForm/SignupForm';
 // import MobileMenu from './components/Menus/MobileMenu/MobileMenu';
 // import IsLoadingComponent from './components/StyledComponents/IsLoadingComponent';
@@ -60,6 +61,7 @@ function App() {
             <ProtectedRoute  path="/profile/:id" component={ProfilePage} IsLoggedIn={isLoggedIn}  />
             <ProtectedRoute  path="/inbox" component={InboxPage} IsLoggedIn={isLoggedIn}  /> */}
              <Route exact path="/login" component={LoginPage} />
+             <Route exact path="/profile" component={Profilepage} />
            {/* <Route exact path="/signup" render={props => <SignupForm {...props}/> } />
             <Route exact path="/signup/interests" component={InterestListPage} />
             <Route exact path="/signup/add-profile"  component={ProfileCreationPage} /> */}
