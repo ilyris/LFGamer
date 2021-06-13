@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios';
 import Playercard from '../player/PlayerCard'
+import S from 'styled-components';
 
 export function Profilepage(props) {
     const [user, setUser] = useState('');
@@ -15,10 +16,21 @@ export function Profilepage(props) {
 
 
     return (
-        <>
-          {user && user.username ? <Playercard username={user.username} discriminator={user.discriminator}/> : null}
-        </>
+        <MainContainer>
+            {user && user.username ? <Playercard username={user.username} discriminator={user.discriminator}/> : null}
+            <RiotConnectButton>
+                Riot Connect
+            </RiotConnectButton>
+        </MainContainer>
     )
 }
 
-export default Profilepage
+export default Profilepage;
+const MainContainer = S.section`
+    display: flex;
+    flex-flow: row wrap;
+`;
+const RiotConnectButton = S.a`
+    padding: 10px 25px;
+    
+`;
