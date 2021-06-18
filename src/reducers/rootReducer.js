@@ -1,9 +1,10 @@
-let token = localStorage.getItem('auth-token');
+let token = localStorage.getItem('token');
 
 
 export const initialState = {
     loggedInUser: {},
     isLoggedIn: token ? true : false,
+    riotAccount: false,
     newSignedUpUser: {
         // email: '',
         // username: '',

@@ -10,7 +10,7 @@ import image from '../../assets/Season_2019_-_Challenger_1.png';
             <Container>
             <TextContainer>
                 <HeroTitle>Welcome to <ImportantText>LFGamer</ImportantText></HeroTitle>
-                <SubTitle>Your <ImportantText>League of Legends</ImportantText> duo gamer provider. Youre s few clicks away from finding your duo gamer</SubTitle>
+                <SubTitle>Your <ImportantText>League of Legends</ImportantText> duo gamer provider. You're a few clicks away from finding your duo gamer</SubTitle>
                 <ButtonContainer>
                     <StyledLink>Gamers</StyledLink>
                     <StyledLink>Coaches</StyledLink>
