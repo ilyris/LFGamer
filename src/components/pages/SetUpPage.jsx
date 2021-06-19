@@ -43,7 +43,7 @@ export function SetUpPage(props) {
             })
             .catch(err => console.log(err));
 
-            axios.get('http://ddragon.leagueoflegends.com/cdn/11.12.1/data/en_US/champion.json')
+            axios.get('https://ddragon.leagueoflegends.com/cdn/11.12.1/data/en_US/champion.json')
             .then(res => {
                 setChampionData(res.data.data);
             })
