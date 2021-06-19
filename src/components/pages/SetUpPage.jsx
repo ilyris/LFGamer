@@ -1,57 +1,80 @@
 import React, {useState, useEffect} from 'react'
-import {Link, useLocation} from 'react-router-dom';
+import {Link,} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import axios from 'axios';
 import S from 'styled-components';
 import image from '../../assets/league-of-legends-game-logo.png';
+import ChampionCard from '../cards/ChampionCard';
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
 
 
 export function SetUpPage(props) {
-    console.log(env_be_url);
     const dispatch = useDispatch();
 
+    const [profile, setProfile] = useState({
+        aboutMe: '',
+
+    })
     const [user, setUser] = useState('');
-    // const isLoggedIn = useSelector( state => state.root.isLoggedIn);
+    const [championData, setChampionData] = useState({});
+
     const riotAccount = useSelector( state => state.root.riotAccount);
     const uid = 123;
 
+
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        axios.post(`${env_be_url}profile/`,profile)
+        .then(res => {
+        })
+        .catch(err => console.log(err))
+    }
+    const onChange = (event) => {
+        profile({...profile, [event.target.name]: event.target.value});
+    }
     useEffect(() => {
-        // if(token !== null) {
             axios.get(`${env_be_url}login/user`)
             .then( async res => {
                 await setUser(res.data);
                 await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data})
-                // await dispatch({type: 'IS_LOGGED_IN', payload: true})
-                console.log(res)
             })
             .catch(err => console.log(err));
-        // }
-    },[])
 
-
+            axios.get('http://ddragon.leagueoflegends.com/cdn/11.12.1/data/en_US/champion.json')
+            .then(res => {
+                setChampionData(res.data.data);
+            })
+            .catch(err => console.log(err))
+    },[dispatch])
+    const champions = Object.values(championData);
     return (
         <MainContainer>
             <PageIntroContainer>
                 <Heading>Welcome, <Username>{`${user.username}`}</Username></Heading>
-                <img src={`https://cdn.discordapp.com/avatars/300623558265143296/${user.avatar}.png`}/>
+                <DiscordAvatar src={`https://cdn.discordapp.com/avatars/300623558265143296/${user.avatar}.png`}/>
                 <AboutContainer>
                     <About>
-                    Thanks for joining LFGamer, connect some of your gaming platforms to sync tthe information to your LFGamer account
+                    Thanks for joining LFGamer, Here you can add information to your profile and connect your Riot games account to your LFGamer account.
                     </About>
                 </AboutContainer>
                 <ViewAccountContainer>
                     <AccountLink to={`/profile/${uid}`}>View your account</AccountLink>
                 </ViewAccountContainer>
-                <Form>
+                <Form onSubmit={onSubmit}>
                     <Label> About You:
-                        <TextArea type="textarea" placeholder="tell everyone a little bit about yourself"/>
+                        <TextArea  onChange={onChange} name="about_me" type="textarea" value={profile.aboutMe} placeholder="tell everyone a little bit about yourself"/>
                     </Label>
+                    <FormButtonContainer>
+                        <Button>Save
+                            <StyledIconArrow icon={faArrowRight} />  
+                        </Button>
+                    </FormButtonContainer>
                 </Form>
+                <ChampionCard champions={champions}/>
             </PageIntroContainer>
-
             {riotAccount ? 'Riot Account has been connected!' : 
                 <ConnectionContainer>
                     <RiotConnectionText>
@@ -89,10 +112,18 @@ const PageIntroContainer = S.div`
 const Heading = S.h2`
     font-size: 60px;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding-right: 20px;
 `;
 const Username = S.span`
     color: #76ee74;
     font-size: 60px;
+    padding-left: 20px;
+`;
+const DiscordAvatar = S.img`
+    width: auto;
+    border-radius: 50%;
 `;
 const ViewAccountContainer = S.div`
     width: 100%;
@@ -209,4 +240,29 @@ const TextArea = S.textarea`
     resizE: none;
     padding: 20px;
     border-radius: 5px;
+`;
+const FormButtonContainer = S.div`
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    margin-top: 20px;
+`;
+const Button = S.button`
+    padding: 10px 30px;
+    border-radius: 40px;
+    color: #fff;
+    font-size: 20px;
+    position: relative;
+    transition: all ease 300ms;
+    background: linear-gradient(to right,rgba(118,238,116,1) 0%,rgba(0,152,142,1) 100%);
+    box-shadow:  2px 2px 12px 0px #494848c4;
+    border: none;
+    &:hover {
+        padding-right: 50px;
+
+        ${StyledIconArrow} {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
 `;
