@@ -1,0 +1,2 @@
+// Champion data: http://ddragon.leagueoflegends.com/cdn/11.12.1/data/en_US/champion.json
+// Champion image path: http://ddragon.leagueoflegends.com/cdn/11.12.1/img/champion/Aatrox.png

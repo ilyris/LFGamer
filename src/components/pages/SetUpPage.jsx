@@ -13,12 +13,13 @@ const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/"
 export function SetUpPage(props) {
     const dispatch = useDispatch();
 
-    const [profile, setProfile] = useState({
-        aboutMe: '',
+    // const [profile, setProfile] = useState({
+    //     aboutMe: '',
 
-    })
+    // })
     const [user, setUser] = useState('');
     const [championData, setChampionData] = useState({});
+    const [userChampionOptions, setUserChampionOptions] = useState([]);
 
     const riotAccount = useSelector( state => state.root.riotAccount);
     const uid = 123;
@@ -27,13 +28,14 @@ export function SetUpPage(props) {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${env_be_url}profile/`,profile)
+        axios.post(`${env_be_url}login/profile`,{champions: userChampionOptions})
         .then(res => {
+            console.log(res.data);
         })
         .catch(err => console.log(err))
     }
     const onChange = (event) => {
-        profile({...profile, [event.target.name]: event.target.value});
+        // profile({...profile, [event.target.name]: event.target.value});
     }
     useEffect(() => {
             axios.get(`${env_be_url}login/user`)
@@ -65,15 +67,15 @@ export function SetUpPage(props) {
                 </ViewAccountContainer>
                 <Form onSubmit={onSubmit}>
                     <Label> About You:
-                        <TextArea  onChange={onChange} name="about_me" type="textarea" value={profile.aboutMe} placeholder="tell everyone a little bit about yourself"/>
+                        <TextArea  onChange={onChange} name="about_me" type="textarea"  placeholder="tell everyone a little bit about yourself"/>
                     </Label>
+                    <ChampionCard champions={champions} setUserChampionOptions={setUserChampionOptions}/>
                     <FormButtonContainer>
                         <Button>Save
                             <StyledIconArrow icon={faArrowRight} />  
                         </Button>
                     </FormButtonContainer>
                 </Form>
-                <ChampionCard champions={champions}/>
             </PageIntroContainer>
             {riotAccount ? 'Riot Account has been connected!' : 
                 <ConnectionContainer>

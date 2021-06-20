@@ -2,14 +2,28 @@ import React,{useState, useEffect, useRef} from 'react'
 import S from 'styled-components';
 
 function ChampionCard(props) {
+    // When to display the list of champion in select list
     const [displayChampionList, setDisplayChampionList] = useState(false);
+
+    // THe user selected champions
     const [selectedChampions, setSelectedChampions] = useState([]);
-    // Due to the async nature of useState, sometimes the filteredChampList would be empty
-    const [filteredChampionList, setFilteredChampionList] = useState(props.champions || [])
+    
+    // The user input when searching for a champions
+    const [championUserInput, setChampionUserInput] = useState('');
+
+    // The raw championlist Data
+    const [championList, setChampionList] = useState(props.champions || []);
+
+    // champion reference element(s)
     const champcontainer = useRef(null);
 
+    // create a copy of the props.champions so that I can filter the array, without changing the raw data.
+    let filteredChampions = props.champions;
+
+    // Outside click detection from ref element
     useOutsideAlerter(champcontainer, setDisplayChampionList);
-    useFilterChampions(setFilteredChampionList)
+    // Filter champion hook
+    useFilterChampions(setChampionList)
 
     const onClick = () => {
         // This functionality should be incorportated into the outsideAlter function
@@ -18,17 +32,22 @@ function ChampionCard(props) {
 
     // Store the champion name data into an array
     const onChampionClick = (e) => {
-        setSelectedChampions([...selectedChampions, e.target.getAttribute("data-champ-name")])
+        setSelectedChampions([...new Set(selectedChampions), e.target.getAttribute("data-champ-name")])
+    }
+
+    const onChange = (e) => {
+        setChampionUserInput(e.target.value);
     }
 
     // On page component render, pass in our hook to filter the champion list when a user makes a selection
-    function useFilterChampions(setFilteredChampionList) {
+    function useFilterChampions(setChampionList) {
         useEffect(() => {
-            setFilteredChampionList(props.champions.filter(champion => {
+            setChampionList(filteredChampions.filter(champion => {
                     return !selectedChampions.includes(champion.name);
                 })
             )
-        }, [selectedChampions])   
+            props.setUserChampionOptions(selectedChampions);
+        }, [selectedChampions]) 
     }
 
     // On component render, look to see if a user is clicking on our referenced components (input / champ_list)
@@ -50,29 +69,39 @@ function ChampionCard(props) {
 
     // On page render, check that the championList is empty, if it is set the default state.
     useEffect(() => {
-        if(filteredChampionList.length <= 0) {
-            setFilteredChampionList(props.champions);
+        if(championList.length <= 0) {
+            setChampionList(filteredChampions);
         }
     }, [props.champions])
+
+    useEffect( () => {
+        filteredChampions = props.champions.filter(champion => champion.name.toLowerCase().includes(championUserInput.toLocaleLowerCase()));
+        setChampionList(filteredChampions)
+    },[championUserInput])
 
     return (
         <ChampionSelectionContainer>
             <UserSelectionContainer>
                 <ChampionSelect name="champion_selections">
-                    <Options></Options>
+                    {selectedChampions && selectedChampions.map( champion =><Options value={champion}>{champion}</Options>)}
                 </ChampionSelect>
-                <Label> Champion
+                <SelectedChampionContainer>
+                    {selectedChampions && selectedChampions.map( champion =><SelectedChampTags>{champion}</SelectedChampTags>)}
+                </SelectedChampionContainer>
+                <Label> Your Champion Pool
                     <ChampionInput
                         onClick={onClick}
+                        onChange={onChange}
                         type="text" 
-                        name="champion_input" 
+                        name="champion_input"
+                        autocomplete="off"
                         placeholder="select your champion(s)"
                         ref={champcontainer}
                     />
                 </Label>
             </UserSelectionContainer>
-            <ChampionContainer   ref={champcontainer} displayChampionList={displayChampionList}>
-                {filteredChampionList.map(champion => {
+            <ChampionContainer ref={champcontainer} displayChampionList={displayChampionList}>
+                {championList.map(champion => {
                     return (
                         <ChampionCardContainer onClick={onChampionClick} data-champ-name={champion.name}>
                             <ChampionImage data-champ-name={champion.name} src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.image.full}`} />
@@ -98,12 +127,25 @@ const ChampionSelectionContainer = S.div`
 const UserSelectionContainer = S.div`
     display: inline;
 `;
-const ChampionSelect = S.div`
+const ChampionSelect = S.select`
     display: none;
 `;
 // These options will be generated on the champions the user selects
-const Options = S.div`
+const Options = S.option`
     display: none;
+`;
+const SelectedChampionContainer = S.div`
+    display: flex;
+    flex-flow: row wrap;
+`;
+const SelectedChampTags = S.div`
+    padding: 5px 15px;
+    border-radius: 20px;
+    background-color: #76ee74;
+    font-size: 16px;
+    color: #000;
+    margin-right: 5px;
+    margin-top: 5px;
 `;
 const Label = S.label`
     display: flex;
@@ -121,12 +163,9 @@ const ChampionInput = S.input`
     margin-top: 10px;
 `;
 const ChampionContainer = S.div`
-    justify-content: center;
-    align-items: center;
-    display: flex;
     padding: 20px;
     width: 300px;
-    flex-flow: row wrap;
+    display: block;
     overflow-y: scroll;
     height: ${props => props.displayChampionList ? '300px' : '0'};
     padding: 0 10px;
@@ -156,7 +195,6 @@ const ChampionCardContainer = S.div`
         }
     }
 `;
-
 
 const ChampionImage = S.img`
     width: 50px;
