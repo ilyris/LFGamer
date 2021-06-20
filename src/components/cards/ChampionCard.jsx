@@ -75,7 +75,7 @@ function ChampionCard(props) {
                 {filteredChampionList.map(champion => {
                     return (
                         <ChampionCardContainer onClick={onChampionClick} data-champ-name={champion.name}>
-                            <ChampionImage data-champ-name={champion.name} src={`https://ddragon.leagueoflegends.com/cdn/11.12.1/img/champion/${champion.image.full}`} />
+                            <ChampionImage data-champ-name={champion.name} src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.image.full}`} />
                             <ChampionName data-champ-name={champion.name}> {champion.name}</ChampionName>
                         </ChampionCardContainer>
                     )
