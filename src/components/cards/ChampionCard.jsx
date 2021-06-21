@@ -94,7 +94,7 @@ console.log(selectedOptions.length)
                         onChange={onChange}
                         type="text"
                         name={inputName}
-                        autocomplete="off"
+                        autoComplete="off"
                         placeholder={placeHolder}
                         ref={inputAndDataList}
                     />
