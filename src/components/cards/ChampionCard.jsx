@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import S from 'styled-components';
 import DisplayListCard from './DisplayListCard';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons"
 
 function ChampionCard(props) {
-const {rawData,selectedOptions, action, placeHolder, inputName, lengthCheck, label} = props;
-console.log(selectedOptions.length)
+    const { rawData, selectedOptions, action, placeHolder, inputName, lengthCheck, label } = props;
+    console.log(selectedOptions.length)
 
 
     const dispatch = useDispatch();
@@ -39,6 +41,14 @@ console.log(selectedOptions.length)
         dispatch({ type: action, payload: [...new Set(selectedOptions), e.target.getAttribute("data-name")] })
     }
 
+    const onCloseClick = (e) => {
+        e.stopPropagation()
+        dispatch({
+            type: action, payload: [...new Set(selectedOptions.filter(option => {
+                return option !== e.target.getAttribute("data-name")
+            }))]
+        })
+    }
     const onChange = (e) => {
         setUserInput(e.target.value);
     }
@@ -78,15 +88,23 @@ console.log(selectedOptions.length)
     }, [rawData])
 
     useEffect(() => {
-        filteredData =rawData.filter(champion => champion.name.toLowerCase().includes(userInput.toLocaleLowerCase()));
+        filteredData = rawData.filter(champion => champion.name.toLowerCase().includes(userInput.toLocaleLowerCase()));
         setDataList(filteredData)
     }, [userInput])
 
     return (
         <ChampionSelectionContainer>
             <UserSelectionContainer>
-                <SelectedChampionContainer>
-                    {selectedOptions && selectedOptions.map(champion => <SelectedChampTags>{champion}</SelectedChampTags>)}
+                <SelectedChampionContainer >
+                    {selectedOptions && selectedOptions.map(champion => {
+                        return (
+                            <SelectedChampTags data-name={champion} >
+                                {champion} 
+                                | 
+                                <RemoveButton data-name={champion} onClick={onCloseClick} icon={faTimes} />
+                            </SelectedChampTags>
+                        )
+                    })}
                 </SelectedChampionContainer>
                 <Label> {label}
                     <ChampionInput
@@ -102,18 +120,18 @@ console.log(selectedOptions.length)
             </UserSelectionContainer>
             {selectedOptions.length >= lengthCheck ? <NoMoreText>No more selections please</NoMoreText> : null}
             <ChampionContainer ref={inputAndDataList} displayList={displayList} selectedOptions={selectedOptions} lengthCheck={lengthCheck}>
-            {selectedOptions.length <= lengthCheck ?
-            dataList.map(data => {
-                return (
-                    <DisplayListCard 
-                        onChampionClick={onChampionClick}
-                        data={data}
-                    />
-                )
-            
-            }) : null
+                {selectedOptions.length <= lengthCheck ?
+                    dataList.map(data => {
+                        return (
+                            <DisplayListCard
+                                onChampionClick={onChampionClick}
+                                data={data}
+                            />
+                        )
 
-            }
+                    }) : null
+
+                }
             </ChampionContainer>
         </ChampionSelectionContainer>
 
@@ -148,6 +166,18 @@ const SelectedChampTags = S.div`
     color: #000;
     margin-right: 5px;
     margin-top: 5px;
+    display: flex;
+    align-items: center;
+`;
+const RemoveButton = S(FontAwesomeIcon)`
+    margin: 2px 0 0 2px;
+    &:hover {
+        cursor: pointer;
+    }
+    * {
+        pointer-events: none;
+
+    }
 `;
 const Label = S.label`
     display: flex;
