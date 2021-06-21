@@ -5,11 +5,6 @@ export const initialState = {
     loggedInUser: {},
     isLoggedIn: token ? true : false,
     riotAccount: false,
-    newSignedUpUser: {
-        // email: '',
-        // username: '',
-        // interests: [],
-    },
     isLoading: false,
 };
 

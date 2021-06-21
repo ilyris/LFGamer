@@ -2,55 +2,76 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import S from 'styled-components';
 
-function ChampionCard(props) {
+//Images
+import Bronze_Emblem from '../../assets/ranked-emblems/Emblem_Bronze.png';
+import Silver_Emblem from '../../assets/ranked-emblems/Emblem_Silver.png';
+import Gold_Emblem from '../../assets/ranked-emblems/Emblem_Gold.png';
+import Platinum_Emblem from '../../assets/ranked-emblems/Emblem_Platinum.png';
+import Diamond_Emblem from '../../assets/ranked-emblems/Emblem_Diamond.png';
+import Master_Emblem from '../../assets/ranked-emblems/Emblem_Master.png';
+import Grandmaster_Emblem from '../../assets/ranked-emblems/Emblem_Grandmaster.png';
+import Challenger_Emblem from '../../assets/ranked-emblems/Emblem_Challenger.png';
+
+const rankedEmblemArr = [
+    { file: Bronze_Emblem, name: 'Bronze' },
+    { file: Silver_Emblem, name: 'Silver' },
+    { file: Gold_Emblem, name: 'Gold' },
+    { file: Platinum_Emblem, name: 'Platinum' },
+    { file: Diamond_Emblem, name: 'Diamond' },
+    { file: Master_Emblem, name: 'Master' },
+    { file: Grandmaster_Emblem, name: 'Grandmaster' },
+    { file: Challenger_Emblem, name: 'Challenger' }
+];
+
+function RankedSelectionCard(props) {
     const dispatch = useDispatch();
     // When to display the list of champion in select list
-    const [displayChampionList, setDisplayChampionList] = useState(false);
+    const [displayRankedList, setDisplayRankedList] = useState(false);
 
     // THe user selected champions
-    const selectedChampions = useSelector(state => state.championSelections.selectedChampions)
+    const selectedRank = useSelector(state => state.championSelections.selectedRank)
 
     // The user input when searching for a champions
-    const [championUserInput, setChampionUserInput] = useState('');
+    const [rankedUserInput, setRankedUserInput] = useState('');
 
     // The raw championlist Data
-    const [championList, setChampionList] = useState(props.champions || []);
+    const [rankedList, setRankedList] = useState(rankedEmblemArr); // set ranked icons
 
     // champion reference element(s)
-    const champcontainer = useRef(null);
+    const rankedcontainer = useRef(null);
 
     // create a copy of the props.champions so that I can filter the array, without changing the raw data.
-    let filteredChampions = props.champions;
+    let filteredRank = rankedEmblemArr;
 
     // Outside click detection from ref element
-    useOutsideAlerter(champcontainer, setDisplayChampionList);
+    useOutsideAlerter(rankedcontainer, setDisplayRankedList);
     // Filter champion hook
-    useFilterChampions(setChampionList)
+    useFilterRankedIcons(setRankedList)
 
     const onClick = () => {
-        // This functionality should be incorportated into the outsideAlter function
-        setDisplayChampionList(true);
+
+        console.log(true)// This functionality should be incorportated into the outsideAlter function
+        setDisplayRankedList(true);
     }
 
     // Store the champion name data into an array
     const onChampionClick = (e) => {
-        dispatch({ type: 'SET_SELECTED_CHAMPIONS', payload: [...new Set(selectedChampions), e.target.getAttribute("data-champ-name")] })
+        dispatch({ type: 'SET_SELECTED_RANK', payload: [...new Set(selectedRank), e.target.getAttribute("data-rank")] })
     }
 
     const onChange = (e) => {
-        setChampionUserInput(e.target.value);
+        setRankedUserInput(e.target.value);
     }
 
     // On page component render, pass in our hook to filter the champion list when a user makes a selection
-    function useFilterChampions(setChampionList) {
+    function useFilterRankedIcons(setRankedList) {
         useEffect(() => {
-            setChampionList(filteredChampions.filter(champion => {
-                return !selectedChampions.includes(champion.name);
+            setRankedList(filteredRank.filter(rank => {
+                return !selectedRank.includes(rank);
             })
             )
-            dispatch({ type: 'SET_CHAMPION_OPTIONS', payload: selectedChampions })
-            // props.setUserChampionOptions(selectedChampions);
-        }, [selectedChampions])
+            dispatch({ type: 'SET_RANK_OPTIONS', payload: selectedRank })
+        }, [selectedRank])
     }
 
     // On component render, look to see if a user is clicking on our referenced components (input / champ_list)
@@ -72,51 +93,52 @@ function ChampionCard(props) {
 
     // On page render, check that the championList is empty, if it is set the default state.
     useEffect(() => {
-        if (championList.length <= 0) {
-            setChampionList(filteredChampions);
+        if (rankedList.length <= 0) {
+            setRankedList(filteredRank);
         }
     }, [props.champions])
 
     useEffect(() => {
-        filteredChampions = props.champions.filter(champion => champion.name.toLowerCase().includes(championUserInput.toLocaleLowerCase()));
-        setChampionList(filteredChampions)
-    }, [championUserInput])
+        filteredRank = rankedEmblemArr.filter(rank => rank.name.toLowerCase().includes(rankedUserInput.toLocaleLowerCase()));
+        setRankedList(filteredRank)
+    }, [rankedUserInput])
 
     return (
         <ChampionSelectionContainer>
             <UserSelectionContainer>
-                <ChampionSelect name="champion_selections">
-                    {selectedChampions && selectedChampions.map(champion => <Options value={champion}>{champion}</Options>)}
+                <ChampionSelect name="rank_selection">
+                    {selectedRank && selectedRank.map(rank => <Options value={rank}>{rank}</Options>)}
                 </ChampionSelect>
                 <SelectedChampionContainer>
-                    {selectedChampions && selectedChampions.map(champion => <SelectedChampTags>{champion}</SelectedChampTags>)}
+                    {selectedRank && selectedRank.map(rank => <SelectedChampTags>{rank}</SelectedChampTags>)}
                 </SelectedChampionContainer>
-                <Label> Your Champion Pool
+                <Label> Your Rank
                     <ChampionInput
                         onClick={onClick}
                         onChange={onChange}
                         type="text"
-                        name="champion_input"
+                        name="rank_input"
                         autocomplete="off"
-                        placeholder="select your champion(s)"
-                        ref={champcontainer}
+                        placeholder="Select your rank"
+                        ref={rankedcontainer}
                     />
                 </Label>
             </UserSelectionContainer>
-            {selectedChampions.length >= 6 ? <NoMoreText>No more selections please</NoMoreText> : null}
-            <ChampionContainer ref={champcontainer} displayChampionList={displayChampionList} selectedChampions={selectedChampions}>
-            {selectedChampions.length <= 5 ?
-            championList.map(champion => {
-                return (
-                    <ChampionCardContainer onClick={onChampionClick} data-champ-name={champion.name}>
-                        <ChampionImage data-champ-name={champion.name} src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.image.full}`} />
-                        <ChampionName data-champ-name={champion.name}> {champion.name}</ChampionName>
-                    </ChampionCardContainer>
-                )
-            
-            }) : null
+            {selectedRank.length >= 1 ? <NoMoreText>No more selections please</NoMoreText> : null}
 
-            }
+            <ChampionContainer ref={rankedcontainer} displayRankedList={displayRankedList} selectedRank={selectedRank}>
+                {selectedRank.length !== 1 ?
+                    rankedEmblemArr.map(rank => {
+                        return (
+                            <ChampionCardContainer onClick={onChampionClick} data-rank={rank.name}>
+                                <ChampionImage data-rank={rank.name} src={`${rank.file}`} />
+                                <ChampionName data-rank={rank.name}> {rank.name}</ChampionName>
+                            </ChampionCardContainer>
+                        )
+
+                    }) : null
+
+                }
             </ChampionContainer>
         </ChampionSelectionContainer>
 
@@ -125,7 +147,7 @@ function ChampionCard(props) {
 
 
 
-export default ChampionCard;
+export default RankedSelectionCard;
 
 const ChampionSelectionContainer = S.div`
     margin-top: 20px;
@@ -177,11 +199,10 @@ const ChampionInput = S.input`
 const ChampionContainer = S.div`
     width: 300px;
     display: block;
-    overflow-y: scroll;
-    overflow-y: ${props => props.selectedChampions.length >= 6 ? 'unset' : 'scroll'};
-    height: ${props => props.displayChampionList ? '300px' : '0'};
+    overflow-y: ${props => props.selectedRank.length == 1 ? 'unset' : 'scroll'};
+    height: ${props => props.displayRankedList ? '300px' : '0'};
     transition: all ease 120ms;
-    max-height: ${props => props.displayChampionList ? '999px' : '0'};
+    max-height: ${props => props.displayRankedList ? '999px' : '0'};
     margin-top: -3px;
     &::-webkit-scrollbar-thumb {
         background-color: #0077ff;

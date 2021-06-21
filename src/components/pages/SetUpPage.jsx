@@ -7,35 +7,50 @@ import axios from 'axios';
 import S from 'styled-components';
 import image from '../../assets/league-of-legends-game-logo.png';
 import ChampionCard from '../cards/ChampionCard';
+import RankedSelectionCard from '../cards/RankedSelectionCard';
+import LaneSelectionCard from '../cards/LaneSelectionCard';
+
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
 
 
 export function SetUpPage(props) {
     const dispatch = useDispatch();
 
-    // const [profile, setProfile] = useState({
-    //     aboutMe: '',
+    const [profile, setProfile] = useState({
+        about_me: '',
+    })
 
-    // })
     const [user, setUser] = useState('');
     const [championData, setChampionData] = useState({});
-    const [userChampionOptions, setUserChampionOptions] = useState([]);
 
     const riotAccount = useSelector( state => state.root.riotAccount);
+    const userChampionOptions = useSelector(state => state.championSelections.userChampionOptions)
+    const userRank = useSelector(state => state.championSelections.selectedRank)
+    const userLanes = useSelector(state => state.championSelections.selectedLanes)
+
+
     const uid = 123;
 
 
 
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${env_be_url}login/profile`,{champions: userChampionOptions})
+        axios.post(`${env_be_url}login/profile`,{champions: userChampionOptions, rank:userRank, lanes:userLanes, aboutMe: profile.about_me})
         .then(res => {
             console.log(res.data);
         })
         .catch(err => console.log(err))
+        setProfile({
+            about_me: '',
+        })
+        dispatch({type: 'CLEAR_CHAMPION_OPTIONS', payload: []})
+        dispatch({type: 'SET_SELECTED_CHAMPIONS', payload: []})
+        dispatch({type: 'CLEAR_SELECTED_RANK', payload: []})
+        dispatch({type: 'CLEAR_SELECTED_LANES', payload: []})
+
     }
     const onChange = (event) => {
-        // profile({...profile, [event.target.name]: event.target.value});
+        setProfile({...profile, [event.target.name]: event.target.value});
     }
     useEffect(() => {
             axios.get(`${env_be_url}login/user`)
@@ -67,9 +82,11 @@ export function SetUpPage(props) {
                 </ViewAccountContainer>
                 <Form onSubmit={onSubmit}>
                     <Label> About You:
-                        <TextArea  onChange={onChange} name="about_me" type="textarea"  placeholder="tell everyone a little bit about yourself"/>
+                        <TextArea onChange={onChange} name="about_me" type="textarea" value={profile.about_me} placeholder="tell everyone a little bit about yourself"/>
                     </Label>
-                    <ChampionCard champions={champions} setUserChampionOptions={setUserChampionOptions}/>
+                    <ChampionCard champions={champions}/>
+                    <RankedSelectionCard />
+                    <LaneSelectionCard />
                     <FormButtonContainer>
                         <Button>Save
                             <StyledIconArrow icon={faArrowRight} />  
@@ -223,8 +240,9 @@ const RiotConnectButton = S.a`
 // ProfilePage About Description Form
 const Form = S.form`
     display: flex;
-    flex-direction: column;
     width: 100%;
+    flex-flow: row wrap;
+    justify-content: space-between;
 `;
 const Label = S.label`
     font-size: 22px;
@@ -248,6 +266,7 @@ const FormButtonContainer = S.div`
     flex-flow: row wrap;
     justify-content: flex-start;
     margin-top: 20px;
+    width: 100%;
 `;
 const Button = S.button`
     padding: 10px 30px;
