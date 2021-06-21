@@ -24,7 +24,7 @@ export function SetUpPage(props) {
     const [championData, setChampionData] = useState({});
 
     const riotAccount = useSelector( state => state.root.riotAccount);
-    const userChampionOptions = useSelector(state => state.championSelections.userChampionOptions)
+    const userChampionOptions = useSelector(state => state.championSelections.selectedChampions)
     const userRank = useSelector(state => state.championSelections.selectedRank)
     const userLanes = useSelector(state => state.championSelections.selectedLanes)
 
@@ -43,8 +43,7 @@ export function SetUpPage(props) {
         setProfile({
             about_me: '',
         })
-        dispatch({type: 'CLEAR_CHAMPION_OPTIONS', payload: []})
-        dispatch({type: 'SET_SELECTED_CHAMPIONS', payload: []})
+        dispatch({type: 'CLEAR_SELECTED_CHAMPIONS', payload: []})
         dispatch({type: 'CLEAR_SELECTED_RANK', payload: []})
         dispatch({type: 'CLEAR_SELECTED_LANES', payload: []})
 

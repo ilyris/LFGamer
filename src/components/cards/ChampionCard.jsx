@@ -3,33 +3,46 @@ import { useDispatch, useSelector } from 'react-redux';
 import S from 'styled-components';
 
 function ChampionCard(props) {
+
+// the dynamic data that needs to be passed?
+/* 
+    selected data (champions, role, rank)
+    filteredData (champion data, rank & role images)
+    dispatch action (Setter)
+    placeholder-value
+    input_field-name
+    integer for selected_length check
+    
+
+*/
+
     const dispatch = useDispatch();
     // When to display the list of champion in select list
-    const [displayChampionList, setDisplayChampionList] = useState(false);
+    const [displayList, setDisplayList] = useState(false);
 
     // THe user selected champions
-    const selectedChampions = useSelector(state => state.championSelections.selectedChampions)
+    const selectedChampions = useSelector(state => state.championSelections.selectedChampions) // This needs to be dynamic (passed in?)
 
     // The user input when searching for a champions
-    const [championUserInput, setChampionUserInput] = useState('');
+    const [userInput, setUserInput] = useState('');
 
-    // The raw championlist Data
-    const [championList, setChampionList] = useState(props.champions || []);
+    // The raw list data
+    const [dataList, setDataList] = useState(props.champions || []);
 
     // champion reference element(s)
-    const champcontainer = useRef(null);
+    const inputAndDataList = useRef(null);
 
     // create a copy of the props.champions so that I can filter the array, without changing the raw data.
-    let filteredChampions = props.champions;
+    let filteredData = props.champions;
 
     // Outside click detection from ref element
-    useOutsideAlerter(champcontainer, setDisplayChampionList);
+    useOutsideAlerter(inputAndDataList, setDisplayList);
     // Filter champion hook
-    useFilterChampions(setChampionList)
+    useFilterChampions(setDataList)
 
     const onClick = () => {
         // This functionality should be incorportated into the outsideAlter function
-        setDisplayChampionList(true);
+        setDisplayList(true);
     }
 
     // Store the champion name data into an array
@@ -38,18 +51,16 @@ function ChampionCard(props) {
     }
 
     const onChange = (e) => {
-        setChampionUserInput(e.target.value);
+        setUserInput(e.target.value);
     }
 
     // On page component render, pass in our hook to filter the champion list when a user makes a selection
-    function useFilterChampions(setChampionList) {
+    function useFilterChampions(setDataList) {
         useEffect(() => {
-            setChampionList(filteredChampions.filter(champion => {
+            setDataList(filteredData.filter(champion => {
                 return !selectedChampions.includes(champion.name);
             })
             )
-            dispatch({ type: 'SET_CHAMPION_OPTIONS', payload: selectedChampions })
-            // props.setUserChampionOptions(selectedChampions);
         }, [selectedChampions])
     }
 
@@ -72,22 +83,19 @@ function ChampionCard(props) {
 
     // On page render, check that the championList is empty, if it is set the default state.
     useEffect(() => {
-        if (championList.length <= 0) {
-            setChampionList(filteredChampions);
+        if (dataList.length <= 0) {
+            setDataList(filteredData);
         }
     }, [props.champions])
 
     useEffect(() => {
-        filteredChampions = props.champions.filter(champion => champion.name.toLowerCase().includes(championUserInput.toLocaleLowerCase()));
-        setChampionList(filteredChampions)
-    }, [championUserInput])
+        filteredData = props.champions.filter(champion => champion.name.toLowerCase().includes(userInput.toLocaleLowerCase()));
+        setDataList(filteredData)
+    }, [userInput])
 
     return (
         <ChampionSelectionContainer>
             <UserSelectionContainer>
-                <ChampionSelect name="champion_selections">
-                    {selectedChampions && selectedChampions.map(champion => <Options value={champion}>{champion}</Options>)}
-                </ChampionSelect>
                 <SelectedChampionContainer>
                     {selectedChampions && selectedChampions.map(champion => <SelectedChampTags>{champion}</SelectedChampTags>)}
                 </SelectedChampionContainer>
@@ -99,14 +107,14 @@ function ChampionCard(props) {
                         name="champion_input"
                         autocomplete="off"
                         placeholder="select your champion(s)"
-                        ref={champcontainer}
+                        ref={inputAndDataList}
                     />
                 </Label>
             </UserSelectionContainer>
             {selectedChampions.length >= 6 ? <NoMoreText>No more selections please</NoMoreText> : null}
-            <ChampionContainer ref={champcontainer} displayChampionList={displayChampionList} selectedChampions={selectedChampions}>
+            <ChampionContainer ref={inputAndDataList} displayList={displayList} selectedChampions={selectedChampions}>
             {selectedChampions.length <= 5 ?
-            championList.map(champion => {
+            dataList.map(champion => {
                 return (
                     <ChampionCardContainer onClick={onChampionClick} data-champ-name={champion.name}>
                         <ChampionImage data-champ-name={champion.name} src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.image.full}`} />
@@ -135,13 +143,7 @@ const ChampionSelectionContainer = S.div`
 const UserSelectionContainer = S.div`
     display: inline;
 `;
-const ChampionSelect = S.select`
-    display: none;
-`;
-// These options will be generated on the champions the user selects
-const Options = S.option`
-    display: none;
-`;
+
 const SelectedChampionContainer = S.div`
     flex-flow: row wrap;
     display: flex;
@@ -179,9 +181,9 @@ const ChampionContainer = S.div`
     display: block;
     overflow-y: scroll;
     overflow-y: ${props => props.selectedChampions.length >= 6 ? 'unset' : 'scroll'};
-    height: ${props => props.displayChampionList ? '300px' : '0'};
+    height: ${props => props.displayList ? '300px' : '0'};
     transition: all ease 120ms;
-    max-height: ${props => props.displayChampionList ? '999px' : '0'};
+    max-height: ${props => props.displayList ? '999px' : '0'};
     margin-top: -3px;
     &::-webkit-scrollbar-thumb {
         background-color: #0077ff;

@@ -1,6 +1,5 @@
 
 export const initialState = {
-    userChampionOptions: [],
     selectedChampions: [],
     selectedRank: [],
     selectedLanes: [],
@@ -10,10 +9,6 @@ export const initialState = {
 
 export const championSelectionReducer = (state = initialState, action) => {
     switch(action.type) {
-        case 'SET_CHAMPION_OPTIONS':
-            return  {...state, userChampionOptions: action.payload};
-        case 'CLEAR_CHAMPION_OPTIONS':
-            return  {...state, userChampionOptions: action.payload};
         case 'SET_SELECTED_CHAMPIONS':
             return  {...state, selectedChampions: action.payload};
         case 'CLEAR_SELECTED_CHAMPIONS':

@@ -107,7 +107,7 @@ function LaneSelectionCard(props) {
                 <SelectedChampionContainer>
                     {selectedLanes && selectedLanes.map(rank => <SelectedChampTags>{rank}</SelectedChampTags>)}
                 </SelectedChampionContainer>
-                <Label> Your Lane(s)
+                <Label> Your Roles
                     <ChampionInput
                         onClick={onClick}
                         onChange={onChange}
