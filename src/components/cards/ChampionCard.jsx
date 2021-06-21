@@ -1,39 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import S from 'styled-components';
+import DisplayListCard from './DisplayListCard';
 
 function ChampionCard(props) {
+const {rawData,selectedOptions, action, placeHolder, inputName, lengthCheck, label} = props;
+console.log(selectedOptions.length)
 
-// the dynamic data that needs to be passed?
-/* 
-    selected data (champions, role, rank)
-    filteredData (champion data, rank & role images)
-    dispatch action (Setter)
-    placeholder-value
-    input_field-name
-    integer for selected_length check
-    
-
-*/
 
     const dispatch = useDispatch();
     // When to display the list of champion in select list
     const [displayList, setDisplayList] = useState(false);
 
-    // THe user selected champions
-    const selectedChampions = useSelector(state => state.championSelections.selectedChampions) // This needs to be dynamic (passed in?)
-
     // The user input when searching for a champions
     const [userInput, setUserInput] = useState('');
 
     // The raw list data
-    const [dataList, setDataList] = useState(props.champions || []);
+    const [dataList, setDataList] = useState(rawData || []);
 
     // champion reference element(s)
     const inputAndDataList = useRef(null);
 
     // create a copy of the props.champions so that I can filter the array, without changing the raw data.
-    let filteredData = props.champions;
+    let filteredData = rawData;
 
     // Outside click detection from ref element
     useOutsideAlerter(inputAndDataList, setDisplayList);
@@ -47,7 +36,7 @@ function ChampionCard(props) {
 
     // Store the champion name data into an array
     const onChampionClick = (e) => {
-        dispatch({ type: 'SET_SELECTED_CHAMPIONS', payload: [...new Set(selectedChampions), e.target.getAttribute("data-champ-name")] })
+        dispatch({ type: action, payload: [...new Set(selectedOptions), e.target.getAttribute("data-name")] })
     }
 
     const onChange = (e) => {
@@ -58,10 +47,10 @@ function ChampionCard(props) {
     function useFilterChampions(setDataList) {
         useEffect(() => {
             setDataList(filteredData.filter(champion => {
-                return !selectedChampions.includes(champion.name);
+                return !selectedOptions.includes(champion.name);
             })
             )
-        }, [selectedChampions])
+        }, [selectedOptions])
     }
 
     // On component render, look to see if a user is clicking on our referenced components (input / champ_list)
@@ -86,10 +75,10 @@ function ChampionCard(props) {
         if (dataList.length <= 0) {
             setDataList(filteredData);
         }
-    }, [props.champions])
+    }, [rawData])
 
     useEffect(() => {
-        filteredData = props.champions.filter(champion => champion.name.toLowerCase().includes(userInput.toLocaleLowerCase()));
+        filteredData =rawData.filter(champion => champion.name.toLowerCase().includes(userInput.toLocaleLowerCase()));
         setDataList(filteredData)
     }, [userInput])
 
@@ -97,29 +86,29 @@ function ChampionCard(props) {
         <ChampionSelectionContainer>
             <UserSelectionContainer>
                 <SelectedChampionContainer>
-                    {selectedChampions && selectedChampions.map(champion => <SelectedChampTags>{champion}</SelectedChampTags>)}
+                    {selectedOptions && selectedOptions.map(champion => <SelectedChampTags>{champion}</SelectedChampTags>)}
                 </SelectedChampionContainer>
-                <Label> Your Champion Pool
+                <Label> {label}
                     <ChampionInput
                         onClick={onClick}
                         onChange={onChange}
                         type="text"
-                        name="champion_input"
+                        name={inputName}
                         autocomplete="off"
-                        placeholder="select your champion(s)"
+                        placeholder={placeHolder}
                         ref={inputAndDataList}
                     />
                 </Label>
             </UserSelectionContainer>
-            {selectedChampions.length >= 6 ? <NoMoreText>No more selections please</NoMoreText> : null}
-            <ChampionContainer ref={inputAndDataList} displayList={displayList} selectedChampions={selectedChampions}>
-            {selectedChampions.length <= 5 ?
-            dataList.map(champion => {
+            {selectedOptions.length >= lengthCheck ? <NoMoreText>No more selections please</NoMoreText> : null}
+            <ChampionContainer ref={inputAndDataList} displayList={displayList} selectedOptions={selectedOptions} lengthCheck={lengthCheck}>
+            {selectedOptions.length <= lengthCheck ?
+            dataList.map(data => {
                 return (
-                    <ChampionCardContainer onClick={onChampionClick} data-champ-name={champion.name}>
-                        <ChampionImage data-champ-name={champion.name} src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.image.full}`} />
-                        <ChampionName data-champ-name={champion.name}> {champion.name}</ChampionName>
-                    </ChampionCardContainer>
+                    <DisplayListCard 
+                        onChampionClick={onChampionClick}
+                        data={data}
+                    />
                 )
             
             }) : null
@@ -180,7 +169,7 @@ const ChampionContainer = S.div`
     width: 300px;
     display: block;
     overflow-y: scroll;
-    overflow-y: ${props => props.selectedChampions.length >= 6 ? 'unset' : 'scroll'};
+    overflow-y: ${props => props.selectedOptions.length >= props.lengthCheck ? 'unset' : 'scroll'};
     height: ${props => props.displayList ? '300px' : '0'};
     transition: all ease 120ms;
     max-height: ${props => props.displayList ? '999px' : '0'};
@@ -195,34 +184,7 @@ const ChampionContainer = S.div`
         background-color: #fff;
       }
 `;
-const ChampionName = S.p`
-    font-size: 20px;
-    color: #000;
-    padding-left: 10px;
-`;
-const ChampionCardContainer = S.div`
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    padding: 10px 20px;
-    background-color: white;
-    z-index: 100;
 
-    &:hover {
-        cursor: pointer;
-        background-color: #000;
-        ${ChampionName} {
-            color: #fff;
-        }
-    }
-`;
-
-const ChampionImage = S.img`
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-`;
 const NoMoreText = S.p`
     font-size: 18px;
     color: #191818;

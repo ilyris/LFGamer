@@ -112,7 +112,7 @@ function LaneSelectionCard(props) {
                         onClick={onClick}
                         onChange={onChange}
                         type="text"
-                        name="rank_input"
+                        name="role_input"
                         autocomplete="off"
                         placeholder="Select your rank"
                         ref={rankedcontainer}

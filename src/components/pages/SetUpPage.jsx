@@ -7,11 +7,12 @@ import axios from 'axios';
 import S from 'styled-components';
 import image from '../../assets/league-of-legends-game-logo.png';
 import ChampionCard from '../cards/ChampionCard';
-import RankedSelectionCard from '../cards/RankedSelectionCard';
-import LaneSelectionCard from '../cards/LaneSelectionCard';
+// import RankedSelectionCard from '../cards/RankedSelectionCard';
+// import LaneSelectionCard from '../cards/LaneSelectionCard';
+import {rankedEmblemArr} from './RankImageExport'
+import {roleArr} from './RoleImageExport'
 
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
-
 
 export function SetUpPage(props) {
     const dispatch = useDispatch();
@@ -83,9 +84,34 @@ export function SetUpPage(props) {
                     <Label> About You:
                         <TextArea onChange={onChange} name="about_me" type="textarea" value={profile.about_me} placeholder="tell everyone a little bit about yourself"/>
                     </Label>
-                    <ChampionCard champions={champions}/>
-                    <RankedSelectionCard />
-                    <LaneSelectionCard />
+                    <ChampionCard 
+                        rawData={champions}
+                        selectedOptions={userChampionOptions}
+                        action={'SET_SELECTED_CHAMPIONS'}
+                        placeHolder={"select your champion(s)"}
+                        label={'Your Champion Pool'}
+                        inputName={'champion_input'}
+                        lengthCheck={6}
+                    />                    
+                    <ChampionCard
+                        rawData={rankedEmblemArr}
+                        selectedOptions={userRank}
+                        action={'SET_SELECTED_RANK'}
+                        label={'Your Rank'}
+                        placeHolder={"Select your rank"}
+                        inputName={'rank_input'}
+                        lengthCheck={1}
+                    />
+                    <ChampionCard
+                        rawData={roleArr}
+                        selectedOptions={userLanes}
+                        action={'SET_SELECTED_LANES'}
+                        label={'Your Roles'}
+                        placeHolder={"Select your roles"}
+                        inputName={'role_input'}
+                        lengthCheck={2}
+                    />
+
                     <FormButtonContainer>
                         <Button>Save
                             <StyledIconArrow icon={faArrowRight} />  
