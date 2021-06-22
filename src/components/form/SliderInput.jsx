@@ -31,7 +31,8 @@ const MainContainer = S.div`
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    margin-top: 50px;
+    margin: 50px 0;
+    
 `;
 const Label = S.label`
     font-size: 20px;

@@ -203,11 +203,14 @@ const ChampionContainer = S.div`
     transition: all ease 120ms;
     max-height: ${props => props.displayList ? '300px' : '0'};
     margin-top: -3px;
+    position: absolute;
+    z-index: 11;
     &::-webkit-scrollbar-thumb {
         background-color: #0077ff;
+        border-radius: 5px;
       }
       &::-webkit-scrollbar {
-        width: 12px;
+        width: 10px;
       }
       &::-webkit-scrollbar-track {
         background-color: #fff;

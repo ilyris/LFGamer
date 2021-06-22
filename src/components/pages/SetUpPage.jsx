@@ -85,6 +85,7 @@ export function SetUpPage(props) {
                     <Label> About You:
                         <TextArea onChange={onChange} name="about_me" type="textarea" value={profile.about_me} placeholder="tell everyone a little bit about yourself"/>
                     </Label>
+                    <SelectListContainer>
                         <ChampionCard 
                             rawData={champions}
                             selectedOptions={userChampionOptions}
@@ -111,7 +112,9 @@ export function SetUpPage(props) {
                             placeHolder={"Select your roles"}
                             inputName={'role_input'}
                             lengthCheck={2}
-                        />
+                        />                        
+                    </SelectListContainer>
+
                         <SliderInput />
                     <FormButtonContainer>
                         <Button>Save
@@ -160,6 +163,7 @@ const Heading = S.h2`
     display: flex;
     align-items: center;
     padding-right: 20px;
+    color: #fff;
 `;
 const Username = S.span`
     color: #76ee74;
@@ -269,6 +273,7 @@ const Form = S.form`
     width: 100%;
     flex-flow: row wrap;
     justify-content: space-between;
+    margin-top: 50px;
 `;
 const Label = S.label`
     font-size: 22px;
@@ -287,7 +292,11 @@ const TextArea = S.textarea`
     padding: 20px;
     border-radius: 5px;
 `;
-
+const SelectListContainer = S.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+`;
 const FormButtonContainer = S.div`
     display: flex;
     flex-flow: row wrap;
