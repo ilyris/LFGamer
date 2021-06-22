@@ -7,8 +7,7 @@ import axios from 'axios';
 import S from 'styled-components';
 import image from '../../assets/league-of-legends-game-logo.png';
 import ChampionCard from '../cards/ChampionCard';
-// import RankedSelectionCard from '../cards/RankedSelectionCard';
-// import LaneSelectionCard from '../cards/LaneSelectionCard';
+import SliderInput from '../form/SliderInput';
 import {rankedEmblemArr} from './RankImageExport'
 import {roleArr} from './RoleImageExport'
 
@@ -25,9 +24,10 @@ export function SetUpPage(props) {
     const [championData, setChampionData] = useState({});
 
     const riotAccount = useSelector( state => state.root.riotAccount);
-    const userChampionOptions = useSelector(state => state.championSelections.selectedChampions)
-    const userRank = useSelector(state => state.championSelections.selectedRank)
-    const userLanes = useSelector(state => state.championSelections.selectedLanes)
+    const userChampionOptions = useSelector(state => state.championSelections.selectedChampions);
+    const userRank = useSelector(state => state.championSelections.selectedRank);
+    const userLanes = useSelector(state => state.championSelections.selectedLanes);
+    const userMicSetting = useSelector(state => state.championSelections.micEnabled);
 
 
     const uid = 123;
@@ -36,7 +36,7 @@ export function SetUpPage(props) {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${env_be_url}login/profile`,{champions: userChampionOptions, rank:userRank, lanes:userLanes, aboutMe: profile.about_me})
+        axios.post(`${env_be_url}login/profile`,{champions: userChampionOptions, rank:userRank, lanes:userLanes,mic:userMicSetting, aboutMe: profile.about_me})
         .then(res => {
             console.log(res.data);
         })
@@ -47,6 +47,7 @@ export function SetUpPage(props) {
         dispatch({type: 'CLEAR_SELECTED_CHAMPIONS', payload: []})
         dispatch({type: 'CLEAR_SELECTED_RANK', payload: []})
         dispatch({type: 'CLEAR_SELECTED_LANES', payload: []})
+        dispatch({type: 'CLEAR_IS_MIC_ENABLED', payload: false})
 
     }
     const onChange = (event) => {
@@ -84,34 +85,34 @@ export function SetUpPage(props) {
                     <Label> About You:
                         <TextArea onChange={onChange} name="about_me" type="textarea" value={profile.about_me} placeholder="tell everyone a little bit about yourself"/>
                     </Label>
-                    <ChampionCard 
-                        rawData={champions}
-                        selectedOptions={userChampionOptions}
-                        action={'SET_SELECTED_CHAMPIONS'}
-                        placeHolder={"select your champion(s)"}
-                        label={'Your Champion Pool'}
-                        inputName={'champion_input'}
-                        lengthCheck={6}
-                    />                    
-                    <ChampionCard
-                        rawData={rankedEmblemArr}
-                        selectedOptions={userRank}
-                        action={'SET_SELECTED_RANK'}
-                        label={'Your Rank'}
-                        placeHolder={"Select your rank"}
-                        inputName={'rank_input'}
-                        lengthCheck={1}
-                    />
-                    <ChampionCard
-                        rawData={roleArr}
-                        selectedOptions={userLanes}
-                        action={'SET_SELECTED_LANES'}
-                        label={'Your Roles'}
-                        placeHolder={"Select your roles"}
-                        inputName={'role_input'}
-                        lengthCheck={2}
-                    />
-
+                        <ChampionCard 
+                            rawData={champions}
+                            selectedOptions={userChampionOptions}
+                            action={'SET_SELECTED_CHAMPIONS'}
+                            placeHolder={"select your champion(s)"}
+                            label={'Your Champion Pool'}
+                            inputName={'champion_input'}
+                            lengthCheck={6}
+                        />                    
+                        <ChampionCard
+                            rawData={rankedEmblemArr}
+                            selectedOptions={userRank}
+                            action={'SET_SELECTED_RANK'}
+                            label={'Your Rank'}
+                            placeHolder={"Select your rank"}
+                            inputName={'rank_input'}
+                            lengthCheck={1}
+                        />
+                        <ChampionCard
+                            rawData={roleArr}
+                            selectedOptions={userLanes}
+                            action={'SET_SELECTED_LANES'}
+                            label={'Your Roles'}
+                            placeHolder={"Select your roles"}
+                            inputName={'role_input'}
+                            lengthCheck={2}
+                        />
+                        <SliderInput />
                     <FormButtonContainer>
                         <Button>Save
                             <StyledIconArrow icon={faArrowRight} />  
@@ -286,6 +287,7 @@ const TextArea = S.textarea`
     padding: 20px;
     border-radius: 5px;
 `;
+
 const FormButtonContainer = S.div`
     display: flex;
     flex-flow: row wrap;
@@ -305,7 +307,7 @@ const Button = S.button`
     border: none;
     &:hover {
         padding-right: 50px;
-
+        cursor: pointer;
         ${StyledIconArrow} {
             transform: translateX(0);
             opacity: 1;

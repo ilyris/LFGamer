@@ -5,10 +5,9 @@ import DisplayListCard from './DisplayListCard';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons"
 
+
 function ChampionCard(props) {
     const { rawData, selectedOptions, action, placeHolder, inputName, lengthCheck, label } = props;
-    console.log(selectedOptions.length)
-
 
     const dispatch = useDispatch();
     // When to display the list of champion in select list
@@ -30,11 +29,6 @@ function ChampionCard(props) {
     useOutsideAlerter(inputAndDataList, setDisplayList);
     // Filter champion hook
     useFilterChampions(setDataList)
-
-    const onClick = () => {
-        // This functionality should be incorportated into the outsideAlter function
-        setDisplayList(true);
-    }
 
     // Store the champion name data into an array
     const onChampionClick = (e) => {
@@ -67,8 +61,11 @@ function ChampionCard(props) {
     function useOutsideAlerter(ref, hook) {
         useEffect(() => {
             function handleClickOutside(event) {
+
                 if (!ref.current.contains(event.target)) {
                     hook(false);
+                } else {
+                    hook(true);
                 }
             }
             // Bind the event listener
@@ -92,9 +89,14 @@ function ChampionCard(props) {
         setDataList(filteredData)
     }, [userInput])
 
+    useEffect(() => {
+        filteredData = rawData.filter(champion => champion.name.toLowerCase().includes(userInput.toLocaleLowerCase()));
+        setDataList(filteredData)
+    }, [userInput])
+
     return (
-        <ChampionSelectionContainer>
-            <UserSelectionContainer>
+        <ChampionSelectionContainer ref={inputAndDataList}>
+            <UserSelectionContainer >
                 <SelectedChampionContainer >
                     {selectedOptions && selectedOptions.map(champion => {
                         return (
@@ -106,21 +108,20 @@ function ChampionCard(props) {
                         )
                     })}
                 </SelectedChampionContainer>
-                <Label> {label}
+                <Label > {label}
                     <ChampionInput
-                        onClick={onClick}
                         onChange={onChange}
                         type="text"
                         name={inputName}
                         autoComplete="off"
                         placeholder={placeHolder}
-                        ref={inputAndDataList}
+                        
                     />
                 </Label>
             </UserSelectionContainer>
             {selectedOptions.length >= lengthCheck ? <NoMoreText>No more selections please</NoMoreText> : null}
-            <ChampionContainer ref={inputAndDataList} displayList={displayList} selectedOptions={selectedOptions} lengthCheck={lengthCheck}>
-                {selectedOptions.length <= lengthCheck ?
+            <ChampionContainer displayList={displayList} selectedOptions={selectedOptions} lengthCheck={lengthCheck}>
+                {selectedOptions.length < lengthCheck ?
                     dataList.map(data => {
                         return (
                             <DisplayListCard
@@ -128,9 +129,7 @@ function ChampionCard(props) {
                                 data={data}
                             />
                         )
-
                     }) : null
-
                 }
             </ChampionContainer>
         </ChampionSelectionContainer>
@@ -161,16 +160,17 @@ const SelectedChampionContainer = S.div`
 const SelectedChampTags = S.div`
     padding: 5px 15px;
     border-radius: 20px;
-    background-color: #76ee74;
     font-size: 16px;
     color: #000;
     margin-right: 5px;
     margin-top: 5px;
     display: flex;
     align-items: center;
+    background: linear-gradient(to right,rgba(118,238,116,1) 0%,rgba(0,152,142,1) 100%);
 `;
 const RemoveButton = S(FontAwesomeIcon)`
     margin: 2px 0 0 2px;
+    color: #fff;
     &:hover {
         cursor: pointer;
     }
@@ -198,11 +198,10 @@ const ChampionInput = S.input`
 const ChampionContainer = S.div`
     width: 300px;
     display: block;
-    overflow-y: scroll;
     overflow-y: ${props => props.selectedOptions.length >= props.lengthCheck ? 'unset' : 'scroll'};
-    height: ${props => props.displayList ? '300px' : '0'};
+    height: ${props => props.displayList ? 'auto' : '0'};
     transition: all ease 120ms;
-    max-height: ${props => props.displayList ? '999px' : '0'};
+    max-height: ${props => props.displayList ? '300px' : '0'};
     margin-top: -3px;
     &::-webkit-scrollbar-thumb {
         background-color: #0077ff;

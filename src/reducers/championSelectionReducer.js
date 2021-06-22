@@ -3,7 +3,7 @@ export const initialState = {
     selectedChampions: [],
     selectedRank: [],
     selectedLanes: [],
-
+    micEnabled: false,
 };
 
 
@@ -21,6 +21,10 @@ export const championSelectionReducer = (state = initialState, action) => {
             return  {...state, selectedLanes: action.payload};
         case 'CLEAR_SELECTED_LANES':
             return  {...state, selectedLanes: action.payload};
+        case 'SET_IS_MIC_ENABLED':
+            return  {...state, micEnabled: action.payload};
+        case 'CLEAR_IS_MIC_ENABLED':
+            return  {...state, micEnabled: action.payload};
         default:
             return state;
     }
