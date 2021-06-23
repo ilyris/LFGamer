@@ -39,7 +39,7 @@ const Desktopmenu = (props) => {
                         <StyledLi>
                             <StyledLink  to="/">Courses</StyledLink> 
                         </StyledLi>
-                        {isLoggedIn
+                        {isLoggedIn && JSONDiscordData
                             ? <StyledLi>
                                 <StyledLink to={{ pathname: `/profile/${JSONDiscordData.user_id}`}}>Profile</StyledLink>
                               </StyledLi>
