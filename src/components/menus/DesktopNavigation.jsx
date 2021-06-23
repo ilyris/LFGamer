@@ -10,8 +10,9 @@ const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/"
 
 
 const Desktopmenu = (props) => {
-    console.log(env_be_url);
     const isLoggedIn = useSelector( state => state.root.isLoggedIn);
+    const discordData = JSON.parse(useSelector(state => state.root.discordUserData))
+
     const dispatch = useDispatch();
     const signOut = () => {
         if (isLoggedIn) {
@@ -36,7 +37,7 @@ const Desktopmenu = (props) => {
                         </StyledLi>
                         {isLoggedIn
                             ? <StyledLi>
-                                <StyledLink to={{ pathname: `/profile/`}}>Profile</StyledLink>
+                                <StyledLink to={{ pathname: `/profile/${discordData.user_id}`}}>Profile</StyledLink>
                               </StyledLi>
                             : null
                          }

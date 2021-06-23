@@ -13,6 +13,15 @@ import {roleArr} from './RoleImageExport'
 
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
 
+/* 
+***Bugs***
+
+- If the user refreshes the page, the discord data is lost and the page bombs, however, the FE don'es reach out to Discord
+So, I need to "cache the data" which isn't ideal because Discord data changes.
+
+SO, instead just on page load use the token we store in local_Storage (from discord) to reach out to our backend, pass that token and get the user data again
+Will also need to generate our own JWT for login purposes, because using their token causes issues.
+*/
 export function SetUpPage(props) {
     const dispatch = useDispatch();
 
@@ -28,15 +37,12 @@ export function SetUpPage(props) {
     const userRank = useSelector(state => state.championSelections.selectedRank);
     const userLanes = useSelector(state => state.championSelections.selectedLanes);
     const userMicSetting = useSelector(state => state.championSelections.micEnabled);
-
-
     const uid = 123;
-
-
 
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${env_be_url}login/profile`,{champions: userChampionOptions, rank:userRank, lanes:userLanes,mic:userMicSetting, aboutMe: profile.about_me})
+        console.log(user)
+        axios.post(`${env_be_url}setup`,{champions: userChampionOptions, rank:userRank, lanes:userLanes,mic:userMicSetting, aboutMe: profile.about_me, email: user.email})
         .then(res => {
             console.log(res.data);
         })
@@ -54,8 +60,13 @@ export function SetUpPage(props) {
         setProfile({...profile, [event.target.name]: event.target.value});
     }
     useEffect(() => {
+
             axios.get(`${env_be_url}login/user`)
             .then( async res => {
+                console.log(res.data);
+                // Hacky way to keep the users data accessible by the application, but would rather not store it in here and would like to have persistent state
+                // or just call to the Backend to fire the Discord calls to get the user data again.
+                localStorage.setItem('discordUserData', JSON.stringify({user_id: res.data.user_id, avatar: res.data.avatar, username: res.data.username, discriminator: res.data.discriminator}))
                 await setUser(res.data);
                 await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data})
             })
@@ -66,7 +77,8 @@ export function SetUpPage(props) {
                 setChampionData(res.data.data);
             })
             .catch(err => console.log(err))
-    },[dispatch])
+    },[])
+
     const champions = Object.values(championData);
     return (
         <MainContainer>

@@ -1,11 +1,12 @@
 let token = localStorage.getItem('token');
-
+let discordData = localStorage.getItem('discordUserData')
 
 export const initialState = {
     loggedInUser: {},
     isLoggedIn: token ? true : false,
     riotAccount: false,
     isLoading: false,
+    discordUserData: discordData ? JSON.parse(discordData) : {},
 };
 
 
@@ -26,7 +27,9 @@ export const rootReducer = (state = initialState, action) => {
         case 'SET_ISLOADING':
             return {...state, isLoading: true};
         case 'REMOVE_ISLOADING':
-            return {...state, isLoading: false};  
+            return {...state, isLoading: false}; 
+        case 'SET_DISCORD_DATA':
+            return {...state, discordUserData: action.payload}; 
         default:
             return state;
     }

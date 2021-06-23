@@ -8,6 +8,7 @@ html {
 }
 body {
   background-color: #191818;
+  font-family: 'Open Sans', sans-serif;
 }
 body::-webkit-scrollbar-thumb {
   background-color: #0077ff;

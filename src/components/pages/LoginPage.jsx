@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react'
-import S from 'styled-components';
 import axios from 'axios';
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
 

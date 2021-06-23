@@ -24,7 +24,6 @@ function ChampionCard(props) {
 
     // create a copy of the props.champions so that I can filter the array, without changing the raw data.
     let filteredData = rawData;
-
     // Outside click detection from ref element
     useOutsideAlerter(inputAndDataList, setDisplayList);
     // Filter champion hook
@@ -83,11 +82,6 @@ function ChampionCard(props) {
             setDataList(filteredData);
         }
     }, [rawData])
-
-    useEffect(() => {
-        filteredData = rawData.filter(champion => champion.name.toLowerCase().includes(userInput.toLocaleLowerCase()));
-        setDataList(filteredData)
-    }, [userInput])
 
     useEffect(() => {
         filteredData = rawData.filter(champion => champion.name.toLowerCase().includes(userInput.toLocaleLowerCase()));
