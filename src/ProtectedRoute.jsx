@@ -5,6 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 // pass in an object, with the Component as a value to 'component' then spread the rest of the object in.
 // We also pass in our individual props we prop drilled.
 export const ProtectedRoute = ({component: Component, ...restOfProps}) => {
+    
     const location = useLocation();
     const dispatch = useDispatch();
     
@@ -20,7 +21,7 @@ export const ProtectedRoute = ({component: Component, ...restOfProps}) => {
     return(
     <Route {...restOfProps} render={props => (
         isLoggedIn 
-        ? <Component {...props} /> 
+        ? <Component {...restOfProps}/> 
         : <Redirect to={{pathname:'/', state: {from: props.location} }} />
     )} />
     )

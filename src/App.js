@@ -29,8 +29,8 @@ function App() {
            {/* <Route exact path="/signup" render={props => <SignupForm {...props}/> } />
             <Route exact path="/signup/interests" component={InterestListPage} />
             <Route exact path="/signup/add-profile"  component={ProfileCreationPage} /> */}
-            <Route path="/404" component={Page404} />
-            <Redirect to="/404" />
+            <Route component={Page404} />
+            {/* <Redirect to="/404" /> */}
           </Switch>
         </div>
     </Router>
