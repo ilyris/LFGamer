@@ -43,16 +43,17 @@ export function SetUpPage(props) {
         axios.post(`${env_be_url}setup`,{champions: userChampionOptions, rank:userRank, lanes:userLanes,mic:userMicSetting, aboutMe: profile.about_me, email: user.email})
         .then(res => {
             console.log(res.data);
+            setProfile({
+                about_me: '',
+            })
+            dispatch({type: 'CLEAR_SELECTED_CHAMPIONS', payload: []})
+            dispatch({type: 'CLEAR_SELECTED_RANK', payload: []})
+            dispatch({type: 'CLEAR_SELECTED_LANES', payload: []})
+            dispatch({type: 'CLEAR_IS_MIC_ENABLED', payload: false})
+            history.push(`/profile/${user.user_id}`)
         })
         .catch(err => console.log(err))
-        setProfile({
-            about_me: '',
-        })
-        dispatch({type: 'CLEAR_SELECTED_CHAMPIONS', payload: []})
-        dispatch({type: 'CLEAR_SELECTED_RANK', payload: []})
-        dispatch({type: 'CLEAR_SELECTED_LANES', payload: []})
-        dispatch({type: 'CLEAR_IS_MIC_ENABLED', payload: false})
-        history.push(`/profile/${user.user_id}`)
+
     }
     const onChange = (event) => {
         setProfile({...profile, [event.target.name]: event.target.value});
