@@ -3,6 +3,7 @@ import S from 'styled-components';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { useParams } from 'react-router';
+import { Page404 } from './Page404';
 
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
 
@@ -17,43 +18,49 @@ function Profile(props) {
             })
             .catch(err => console.log(err))
     }, [])
-    return (
-        <Main>
-            <UserNameContainer>
-                {profileData.user && <DiscordAvatar src={`https://cdn.discordapp.com/avatars/300623558265143296/${profileData.user.avatar}.png`} />}
-                {profileData.user && <Heading><Username>{`${profileData.user.username}`}</Username></Heading>}
 
-            </UserNameContainer>
-            <AboutMeContainer>
-                <Label>About Me</Label>
-                <AboutMe>
-                    {profileData.profile && profileData.profile.about_me}
-                </AboutMe>
-            </AboutMeContainer>
-            <LeagueInformationContainer>
-                <Label>League of Legends information</Label>
-                <RankContainer>
-                    {profileData.profile && <RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${profileData.profile.rank}.png`} />}
-
-                </RankContainer>
-                <RankContainer>
-                    {profileData.profile && profileData.profile.champions.map(champion => {
-                        return (
-                            <ChampionImage src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion}.png`} />
-                        )
-                    })}
-                </RankContainer>
-                <RankContainer>
-                    {profileData.profile && profileData.profile.roles.map(role => {
-                        return (
-                            <ChampionImage src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_Diamond-${role}.png`} />
-                        )
-                    })}
-                </RankContainer>
-
-            </LeagueInformationContainer>
-        </Main>
-    )        
+    if(Object.keys(profileData).length === 0) {
+        return <Page404 />
+    } else {
+        return (
+            <Main>
+                <UserNameContainer>
+                    {profileData.user && <DiscordAvatar src={`https://cdn.discordapp.com/avatars/300623558265143296/${profileData.user.avatar}.png`} />}
+                    {profileData.user && <Heading><Username>{`${profileData.user.username}`}</Username></Heading>}
+    
+                </UserNameContainer>
+                <AboutMeContainer>
+                    <Label>About Me</Label>
+                    <AboutMe>
+                        {profileData.profile && profileData.profile.about_me}
+                    </AboutMe>
+                </AboutMeContainer>
+                <LeagueInformationContainer>
+                    <Label>League of Legends information</Label>
+                    <RankContainer>
+                        {profileData.profile && <RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${profileData.profile.rank}.png`} />}
+    
+                    </RankContainer>
+                    <RankContainer>
+                        {profileData.profile && profileData.profile.champions.map(champion => {
+                            return (
+                                <ChampionImage src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion}.png`} />
+                            )
+                        })}
+                    </RankContainer>
+                    <RankContainer>
+                        {profileData.profile && profileData.profile.roles.map(role => {
+                            return (
+                                <ChampionImage src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_Diamond-${role}.png`} />
+                            )
+                        })}
+                    </RankContainer>
+    
+                </LeagueInformationContainer>
+            </Main>
+        )        
+    }
+    
 }
 export default Profile;
 
