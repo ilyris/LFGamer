@@ -18,10 +18,6 @@ function Profile(props) {
             })
             .catch(err => console.log(err))
     }, [])
-
-    if(Object.keys(profileData).length === 0) {
-        return <Page404 />
-    } else {
         return (
             <Main>
                 <UserNameContainer>
@@ -59,8 +55,6 @@ function Profile(props) {
                 </LeagueInformationContainer>
             </Main>
         )        
-    }
-    
 }
 export default Profile;
 
