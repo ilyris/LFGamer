@@ -53,7 +53,7 @@ function Profile(props) {
 
             </LeagueInformationContainer>
         </Main>
-    )
+    )        
 }
 export default Profile;
 

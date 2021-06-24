@@ -13,15 +13,6 @@ import {roleArr} from './RoleImageExport'
 
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
 
-/* 
-***Bugs***
-
-- If the user refreshes the page, the discord data is lost and the page bombs, however, the FE don'es reach out to Discord
-So, I need to "cache the data" which isn't ideal because Discord data changes.
-
-SO, instead just on page load use the token we store in local_Storage (from discord) to reach out to our backend, pass that token and get the user data again
-Will also need to generate our own JWT for login purposes, because using their token causes issues.
-*/
 export function SetUpPage(props) {
     const dispatch = useDispatch();
     const history = useHistory();
