@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import S from 'styled-components';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -10,44 +10,43 @@ function Profile(props) {
     const params = useParams();
 
     const [profileData, setProfileData] = useState({});
-    const discordData = JSON.parse(useSelector(state => state.root.discordUserData))
-
     useEffect(() => {
-        axios.post(`${env_be_url}profile`,{user_id: params.id})
-        .then(async res => {
-            console.log(res.data)
-            return await setProfileData(res.data)
-        })
-        .catch(err => console.log(err))
-    }, [profileData])
+        axios.post(`${env_be_url}profile`, { user_id: params.id })
+            .then(async res => {
+                return await setProfileData(res.data)
+            })
+            .catch(err => console.log(err))
+    }, [])
     return (
         <Main>
             <UserNameContainer>
-                <DiscordAvatar src={`https://cdn.discordapp.com/avatars/300623558265143296/${discordData.avatar}.png`}/>
-                <Heading><Username>{`${discordData.username}`}</Username></Heading>
+                {profileData.user && <DiscordAvatar src={`https://cdn.discordapp.com/avatars/300623558265143296/${profileData.user.avatar}.png`} />}
+                {profileData.user && <Heading><Username>{`${profileData.user.username}`}</Username></Heading>}
+
             </UserNameContainer>
             <AboutMeContainer>
                 <Label>About Me</Label>
                 <AboutMe>
-                    {profileData.about_me}
+                    {profileData.profile && profileData.profile.about_me}
                 </AboutMe>
             </AboutMeContainer>
             <LeagueInformationContainer>
                 <Label>League of Legends information</Label>
                 <RankContainer>
-                    <RankImage  src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${profileData.rank}.png`} />
+                    {profileData.profile && <RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${profileData.profile.rank}.png`} />}
+
                 </RankContainer>
                 <RankContainer>
-                    {profileData.champions && profileData.champions.map(champion => {
-                        return(
-                            <ChampionImage  src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion}.png`} />
+                    {profileData.profile && profileData.profile.champions.map(champion => {
+                        return (
+                            <ChampionImage src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion}.png`} />
                         )
                     })}
                 </RankContainer>
                 <RankContainer>
-                    {profileData.roles && profileData.roles.map(role => {
-                        return(
-                            <ChampionImage  src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_Diamond-${role}.png`} />
+                    {profileData.profile && profileData.profile.roles.map(role => {
+                        return (
+                            <ChampionImage src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_Diamond-${role}.png`} />
                         )
                     })}
                 </RankContainer>

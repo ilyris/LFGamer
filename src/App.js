@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {ProtectedRoute} from './ProtectedRoute';
-import {useDispatch} from 'react-redux';
 import DesktopNavigation from './components/menus/DesktopNavigation';
 import HomePage from './components/pages/HomePage';
 import SetUpPage from './components/pages/SetUpPage';
@@ -12,10 +11,7 @@ import Profile from './components/pages/Profile';
 
 
 function App() {
-  const dispatch = useDispatch();
-  if(localStorage.getItem('discordUserData')) {
-    dispatch({type: 'SET_DISCORD_DATA', payload: localStorage.getItem('discordUserData')})
-  }
+
 
   return (
     <Router>

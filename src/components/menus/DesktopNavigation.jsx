@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { Link } from "react-router-dom";
 import S from 'styled-components';
@@ -11,19 +11,29 @@ const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/"
 
 const Desktopmenu = (props) => {
     const isLoggedIn = useSelector( state => state.root.isLoggedIn);
-    const discordData = useSelector(state => state.root.discordUserData);
-    let JSONDiscordData;
-    if(!Object.keys(discordData).length === 0) {
-        JSONDiscordData = JSON.parse(discordData)
-    }
-
     const dispatch = useDispatch();
+    const jwt = localStorage.getItem('token');
+    const [decodedJWT, setDecodedJWT] = useState({})
     const signOut = () => {
         if (isLoggedIn) {
             dispatch({ type: 'SANITIZE_USER', payload: false });
             localStorage.removeItem('token');
         }
     }
+    const decodeJWT = (jwt) => {
+        let token = {};
+        token.raw = jwt;
+        token.header = JSON.parse(window.atob(jwt.split('.')[0]));
+        token.payload = JSON.parse(window.atob(jwt.split('.')[1]));
+        return (token)
+    }
+    useEffect(() => {
+        if(!jwt) return
+        setDecodedJWT(decodeJWT(jwt))
+        console.log(decodeJWT(jwt))
+    }, [jwt])
+
+    
     return (
         <StyledHeader>
             <StyledNavigationContainer>
@@ -39,9 +49,9 @@ const Desktopmenu = (props) => {
                         <StyledLi>
                             <StyledLink  to="/">Courses</StyledLink> 
                         </StyledLi>
-                        {isLoggedIn && JSONDiscordData
+                        {isLoggedIn && decodedJWT.payload
                             ? <StyledLi>
-                                <StyledLink to={{ pathname: `/profile/${JSONDiscordData.user_id}`}}>Profile</StyledLink>
+                                <StyledLink to={{ pathname: `/profile/${decodedJWT.payload.user_id}`}}>Profile</StyledLink>
                               </StyledLi>
                             : null
                          }

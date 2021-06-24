@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {Link,} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
@@ -24,7 +24,7 @@ Will also need to generate our own JWT for login purposes, because using their t
 */
 export function SetUpPage(props) {
     const dispatch = useDispatch();
-
+    const history = useHistory();
     const [profile, setProfile] = useState({
         about_me: '',
     })
@@ -37,11 +37,9 @@ export function SetUpPage(props) {
     const userRank = useSelector(state => state.championSelections.selectedRank);
     const userLanes = useSelector(state => state.championSelections.selectedLanes);
     const userMicSetting = useSelector(state => state.championSelections.micEnabled);
-    const uid = 123;
 
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log(user)
         axios.post(`${env_be_url}setup`,{champions: userChampionOptions, rank:userRank, lanes:userLanes,mic:userMicSetting, aboutMe: profile.about_me, email: user.email})
         .then(res => {
             console.log(res.data);
@@ -54,27 +52,35 @@ export function SetUpPage(props) {
         dispatch({type: 'CLEAR_SELECTED_RANK', payload: []})
         dispatch({type: 'CLEAR_SELECTED_LANES', payload: []})
         dispatch({type: 'CLEAR_IS_MIC_ENABLED', payload: false})
-
+        history.push(`/profile/${user.user_id}`)
     }
     const onChange = (event) => {
         setProfile({...profile, [event.target.name]: event.target.value});
     }
     useEffect(() => {
-
             axios.get(`${env_be_url}login/user`)
             .then( async res => {
-                console.log(res.data);
                 // Hacky way to keep the users data accessible by the application, but would rather not store it in here and would like to have persistent state
                 // or just call to the Backend to fire the Discord calls to get the user data again.
-                localStorage.setItem('discordUserData', JSON.stringify({user_id: res.data.user_id, avatar: res.data.avatar, username: res.data.username, discriminator: res.data.discriminator}))
+                console.log(res.data)
                 await setUser(res.data);
                 await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data})
+
             })
             .catch(err => console.log(err));
 
             axios.get('https://ddragon.leagueoflegends.com/cdn/11.12.1/data/en_US/champion.json')
             .then(res => {
                 setChampionData(res.data.data);
+            })
+            .catch(err => console.log(err))
+
+            // On page reload, if the /user route returns nothing (because discord didn't redirect)
+            axios.get(`${env_be_url}setup`)
+            .then(async res => {
+                console.log(res.data)
+                await setUser(res.data)
+                await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data})
             })
             .catch(err => console.log(err))
     },[])
@@ -91,7 +97,7 @@ export function SetUpPage(props) {
                     </About>
                 </AboutContainer>
                 <ViewAccountContainer>
-                    <AccountLink to={`/profile/${uid}`}>View your account</AccountLink>
+                    <AccountLink to={`/profile/${user.user_id}`}>View your account</AccountLink>
                 </ViewAccountContainer>
                 <Form onSubmit={onSubmit}>
                     <Label> About You:
