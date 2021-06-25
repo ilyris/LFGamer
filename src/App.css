@@ -2,6 +2,8 @@
 
 .App {
   text-align: center;
+  height: 100%;
+  width: 100%;
 }
 html {
   font-size: 62.65%;
@@ -43,3 +45,23 @@ h1,h2,h3,h4,h5,h6 {
 p,li,ul,div,a {
   font-family: 'Open Sans', sans-serif;
 }
+.mainLoadingContainer{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 45%;
+    left: 45%;
+}
+
+.loadingBar {
+    width: 100px;
+    height: 5px;
+    position: relative;
+  }
+  .loadingBar::after {
+      content: '';
+      height: 5px;
+      position: absolute;
+      left: 0;
+      background-color: red;
+  }

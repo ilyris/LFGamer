@@ -17,7 +17,7 @@ export function Page404(props) {
                     </RedirectTextContainer>
                 </RedirectContainer>
                 <Heading>404</Heading>
-            </PageNotFoundContainer> 
+            </PageNotFoundContainer>
         </Main>
     )
 }
@@ -25,6 +25,7 @@ export function Page404(props) {
 const Main = S.main`
     display: flex;
     flex-flow: row wrap;
+    
 `;
 
 const PageNotFoundContainer = S.section`
@@ -34,6 +35,7 @@ const PageNotFoundContainer = S.section`
     justify-content: center;
     margin: 0 auto;
     position: relative;
+    overflow: hidden;
 `;
 
 const Heading = S.h2`

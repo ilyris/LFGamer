@@ -5,7 +5,7 @@ export const initialState = {
     loggedInUser: {},
     isLoggedIn: token ? true : false,
     riotAccount: false,
-    isLoading: false,
+    isLoading: true,
     discordUserData: discordData ? JSON.parse(discordData) : {},
     profileData: {}
 };

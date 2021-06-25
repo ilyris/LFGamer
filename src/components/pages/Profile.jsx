@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from 'react'
 import S from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useParams } from 'react-router';
 import { Page404 } from './Page404';
-
+import { Loader } from '../loaders/loader';
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
 
 function Profile(props) {
     const params = useParams();
-
+    const dispatch = useDispatch();
+    const isLoading = useSelector(state => state.root.isLoading);
     const [profileData, setProfileData] = useState({});
     useEffect(() => {
         axios.post(`${env_be_url}profile`, { user_id: params.id })
             .then(async res => {
-                return await setProfileData(res.data)
+                console.log('hello')
+                await setProfileData(res.data)
+                await dispatch({type: 'REMOVE_ISLOADING'});
+
             })
             .catch(err => console.log(err))
     }, [])
+    if(isLoading) {
+        return <Loader />
+    }
+    if(Object.keys(profileData).length === 0) {
+        return <Page404 />
+    }
         return (
             <Main>
                 <UserNameContainer>
