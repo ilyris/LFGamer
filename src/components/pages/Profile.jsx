@@ -16,16 +16,16 @@ function Profile(props) {
     useEffect(() => {
         axios.post(`${env_be_url}profile`, { user_id: params.id })
             .then(async res => {
-                console.log(res.data);
+
                 if(Object.keys(res.data).length == 0) {
+                    console.log('display 404')
                     await dispatch({type: 'REMOVE_ISLOADING'});
                     await setDisplay404(true);
                 } else {
+                    console.log('display profile data')
                     await dispatch({type: 'REMOVE_ISLOADING'});                    
                     await setProfileData(res.data);
                 }
-
-
             })
             .catch(err => console.log(err))
     }, [])
