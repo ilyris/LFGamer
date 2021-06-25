@@ -12,22 +12,29 @@ function Profile(props) {
     const dispatch = useDispatch();
     const isLoading = useSelector(state => state.root.isLoading);
     const [profileData, setProfileData] = useState({});
+    const [display404, setDisplay404] = useState(false);
     useEffect(() => {
         axios.post(`${env_be_url}profile`, { user_id: params.id })
             .then(async res => {
-                console.log('hello')
-                await setProfileData(res.data)
-                await dispatch({type: 'REMOVE_ISLOADING'});
+                console.log(res.data);
+                if(Object.keys(res.data).length == 0) {
+                    await dispatch({type: 'REMOVE_ISLOADING'});
+                    await setDisplay404(true);
+                } else {
+                    await dispatch({type: 'REMOVE_ISLOADING'});                    
+                    await setProfileData(res.data);
+                }
+
 
             })
             .catch(err => console.log(err))
     }, [])
+
     if(isLoading) {
         return <Loader />
-    }
-    if(Object.keys(profileData).length === 0) {
+    } else if(display404) {
         return <Page404 />
-    }
+    } else {
         return (
             <Main>
                 <UserNameContainer>
@@ -65,6 +72,7 @@ function Profile(props) {
                 </LeagueInformationContainer>
             </Main>
         )        
+    }
 }
 export default Profile;
 
@@ -133,6 +141,8 @@ const RankContainer = S.div`
     box-sizing: border-box;
     margin-top: 20px;
     height: fit-content;
+    flex: 1;
+    margin-right: 30px;
 `;
 
 const RankImage = S.img`
