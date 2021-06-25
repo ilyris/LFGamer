@@ -85,7 +85,7 @@ const StyledHeader = S.header`
       }
 `;
 const LogoImg = S.img`
-      width: 100px;
+      width: 165px;
       height: auto;
 `;
 const StyledNavigationContainer = S.nav`
