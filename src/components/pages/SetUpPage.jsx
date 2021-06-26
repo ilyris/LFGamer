@@ -53,7 +53,7 @@ export function SetUpPage(props) {
             axios.get(`${env_be_url}login/user`)
             .then( async res => {
                 console.log(res.data)
-                if(!res.data) {
+                if(Object.keys(res.data) === 0) {
                     history.push(`/`);
                 }
                 JSON.stringify(localStorage.setItem('discordData', res.data))
