@@ -53,6 +53,9 @@ export function SetUpPage(props) {
             axios.get(`${env_be_url}login/user`)
             .then( async res => {
                 console.log(res.data)
+                if(!res.data) {
+                    history.push(`/`);
+                }
                 JSON.stringify(localStorage.setItem('discordData', res.data))
                 await setUser(res.data);
                 await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data})
