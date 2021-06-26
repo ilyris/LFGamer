@@ -52,9 +52,8 @@ export function SetUpPage(props) {
     useEffect(() => {
             axios.get(`${env_be_url}login/user`)
             .then( async res => {
-                // Hacky way to keep the users data accessible by the application, but would rather not store it in here and would like to have persistent state
-                // or just call to the Backend to fire the Discord calls to get the user data again.
                 console.log(res.data)
+                localStorage.setItem('discordData', res.data);
                 await setUser(res.data);
                 await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data})
 
@@ -67,14 +66,8 @@ export function SetUpPage(props) {
             })
             .catch(err => console.log(err))
 
-            // On page reload, if the /user route returns nothing (because discord didn't redirect)
-            axios.get(`${env_be_url}setup`)
-            .then(async res => {
-                console.log(res.data)
-                await setUser(res.data)
-                await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data})
-            })
-            .catch(err => console.log(err))
+
+            console.log(localStorage.getItem('discordData'));
     },[])
 
     const champions = Object.values(championData);
