@@ -37,7 +37,9 @@ const Desktopmenu = (props) => {
     return (
         <StyledHeader>
             <StyledNavigationContainer>
-                <LogoImg src={Logo} />
+                <LinkedLogo to="/">
+                    <LogoImg src={Logo} />
+                </LinkedLogo>
                 <StyledNavigation>
                     <StyledUL>
                         <StyledLi>
@@ -87,6 +89,9 @@ const StyledHeader = S.header`
 const LogoImg = S.img`
       width: 165px;
       height: auto;
+`;
+const LinkedLogo = S(Link)`
+
 `;
 const StyledNavigationContainer = S.nav`
     display: flex;

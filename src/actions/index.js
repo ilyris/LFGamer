@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Replace localStorage instances with cookies, so we can pass those in and out of the server more securely.
 let authToken = localStorage.getItem("auth-token");
 
 export const setLoggedInUser = apiResponse => {

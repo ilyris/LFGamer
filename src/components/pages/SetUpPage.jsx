@@ -10,7 +10,7 @@ import ChampionCard from '../cards/ChampionCard';
 import SliderInput from '../form/SliderInput';
 import {rankedEmblemArr} from './RankImageExport'
 import {roleArr} from './RoleImageExport'
-
+import { decodeJWT } from '../../helperFuncs/cookie';
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
 
 export function SetUpPage(props) {
@@ -53,12 +53,18 @@ export function SetUpPage(props) {
             axios.get(`${env_be_url}login/user`)
             .then( async res => {
                 console.log(res.data)
-                if(Object.keys(res.data) === 0) {
-                    history.push(`/`);
+                if(Object.keys(res.data).length === 0) {
+                    let jwt = decodeJWT(localStorage.getItem('token'));
+                    history.push(`/profile/${jwt.payload.user_id}`);
+
+                    // get profile data if the user object is empty?
+ 
+                } else {
+                    JSON.stringify(localStorage.setItem('discordData', res.data))
+                    await setUser(res.data);
+                    await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data})                    
                 }
-                JSON.stringify(localStorage.setItem('discordData', res.data))
-                await setUser(res.data);
-                await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data})
+
 
             })
             .catch(err => console.log(err));
@@ -68,9 +74,6 @@ export function SetUpPage(props) {
                 setChampionData(res.data.data);
             })
             .catch(err => console.log(err))
-
-
-            console.log(localStorage.getItem('discordData'));
     },[])
 
     const champions = Object.values(championData);
