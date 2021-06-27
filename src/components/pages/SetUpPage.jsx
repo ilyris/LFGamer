@@ -11,6 +11,7 @@ import SliderInput from '../form/SliderInput';
 import {rankedEmblemArr} from './RankImageExport'
 import {roleArr} from './RoleImageExport'
 import { decodeJWT } from '../../helperFuncs/cookie';
+import { SubmitButton } from '../pageComponents/SubmitButton';
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
 
 export function SetUpPage(props) {
@@ -25,7 +26,7 @@ export function SetUpPage(props) {
     const [championData, setChampionData] = useState({});
 
     const riotAccount = useSelector( state => state.root.riotAccount);
-
+    const [showSetupPage, setShowSetupPage] = useState(false);
     // Grad selected Champions
     const userChampionOptions = useSelector(state => state.championSelections.selectedChampions);
     // Grab selected Rank
@@ -74,6 +75,7 @@ export function SetUpPage(props) {
  
                 } else {
                     // If there is data, it's their first time. Set the user data locally
+                    await setShowSetupPage(true)
                     await setUser(res.data);
 
                     // set their user data in our reducer
@@ -94,6 +96,9 @@ export function SetUpPage(props) {
 
     // Only get champion data ( a lot of useless info in here we don't need)
     const champions = Object.values(championData);
+    if(!showSetupPage) {
+        return null;
+    }
     return (
         <MainContainer>
             <PageIntroContainer>
@@ -143,9 +148,9 @@ export function SetUpPage(props) {
 
                         <SliderInput />
                     <FormButtonContainer>
-                        <Button>Save
-                            <StyledIconArrow icon={faArrowRight} />  
-                        </Button>
+                        <SubmitButton 
+                            text={'Save'}
+                        />
                     </FormButtonContainer>
                 </Form>
             </PageIntroContainer>
@@ -330,22 +335,22 @@ const FormButtonContainer = S.div`
     margin-top: 20px;
     width: 100%;
 `;
-const Button = S.button`
-    padding: 10px 30px;
-    border-radius: 40px;
-    color: #fff;
-    font-size: 20px;
-    position: relative;
-    transition: all ease 300ms;
-    background: linear-gradient(to right,rgba(118,238,116,1) 0%,rgba(0,152,142,1) 100%);
-    box-shadow:  2px 2px 12px 0px #494848c4;
-    border: none;
-    &:hover {
-        padding-right: 50px;
-        cursor: pointer;
-        ${StyledIconArrow} {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-`;
+// const Button = S.button`
+//     padding: 10px 30px;
+//     border-radius: 40px;
+//     color: #fff;
+//     font-size: 20px;
+//     position: relative;
+//     transition: all ease 300ms;
+//     background: linear-gradient(to right,rgba(118,238,116,1) 0%,rgba(0,152,142,1) 100%);
+//     box-shadow:  2px 2px 12px 0px #494848c4;
+//     border: none;
+//     &:hover {
+//         padding-right: 50px;
+//         cursor: pointer;
+//         ${StyledIconArrow} {
+//             transform: translateX(0);
+//             opacity: 1;
+//         }
+//     }
+// `;

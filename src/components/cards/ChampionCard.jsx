@@ -32,6 +32,7 @@ function ChampionCard(props) {
     // Store the champion name data into an array
     const onChampionClick = (e) => {
         dispatch({ type: action, payload: [...new Set(selectedOptions), e.target.getAttribute("data-name")] })
+        setUserInput('');
     }
 
     const onCloseClick = (e) => {

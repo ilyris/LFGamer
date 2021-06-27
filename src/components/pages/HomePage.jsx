@@ -2,17 +2,33 @@ import React from 'react';
 import {Link, } from 'react-router-dom';
 import S from 'styled-components';
 import image from '../../assets/Season_2019_-_Challenger_1.png';
-
+import {Maintitle} from '../pageComponents/MainTitle';
+import {SubTitle} from '../pageComponents/SubTitle';
+import {MainPageButton} from '../pageComponents/MainPageButton'
  function Homepage(props) {
     return (
         <HeroSection>
             <Container>
             <TextContainer>
-                <HeroTitle>Welcome to <ImportantText>LFGamer</ImportantText></HeroTitle>
-                <SubTitle>Your <ImportantText>League of Legends</ImportantText> duo gamer provider. You're a few clicks away from finding your duo gamer</SubTitle>
+                <Maintitle 
+                    title={'Welcome to '}
+                    importantTitleText={'LFGamer'}
+                />
+                <SubTitle 
+                    text1={'Your'}
+                    text={' League of Legends '}
+                    text1={`duo gamer provider. You're a few clicks away from finding your duo gamer`}
+
+                />
                 <ButtonContainer>
-                    <StyledLink>Gamers</StyledLink>
-                    <StyledLink>Coaches</StyledLink>
+                    <MainPageButton 
+                        text={'Gamers'}
+                        path={'/duo'}
+                    />
+                    <MainPageButton 
+                        text={'Coaches'}
+                        path={'/coaches'}
+                    />
                 </ButtonContainer>
             </TextContainer>
             <ImageContainer>
@@ -43,49 +59,14 @@ const TextContainer = S.div`
     margin-bottom: 100px;
     width: 40%;
 `;
-const ImportantText = S.span`
-    color: #76ee74;
-`;
-const HeroTitle = S.h2`
-    font-size: 50px;
-    color: #fff;
-    font-weight: 600;
-    width: 100%;
-    text-align: left;
-    line-height: 50px;
-`;
-const SubTitle = S.p`
-    font-size: 24px;
-    width: 100%;
-    text-align: left;
-    margin: 20px 0;
-    color: #fff;
-`;
 
 const ButtonContainer = S.div`
     display: flex;
-    // justify-content: space-between;
     width: 100%;
     margin-top: 20px;
     text-transform: uppercase;
 `;
-const StyledLink = S(Link)`
-    border-width: 3px;
-    border: 4px solid;
-    border-image-slice: 1;
-    border-style: solid;
-    border-image-source: linear-gradient(to right, rgba(118,238,116,1) 0%, rgba(0,152,142,1) 100%);
-    color: #fff;
-    padding: 10px 20px;
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: .5px;
-    margin-right: 50px;
-    transition: 120ms ease-in-out;
-    &:hover {
-       background: linear-gradient(to right, rgba(118,238,116,1) 0%, rgba(0,152,142,1) 100%);
-    }
-`;
+
 const ImageContainer = S.div`
     display: flex;
     justify-content: flex-end;
