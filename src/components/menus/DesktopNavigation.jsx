@@ -2,35 +2,29 @@ import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { Link } from "react-router-dom";
 import S from 'styled-components';
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faSearch, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import Logo from '../../assets/logo.svg';
+import { decodeJWT } from '../../helperFuncs/cookie';
 import '../../App.css';
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
 
 
 const Desktopmenu = (props) => {
-    const isLoggedIn = useSelector( state => state.root.isLoggedIn);
     const dispatch = useDispatch();
     const jwt = localStorage.getItem('token');
+
+    const isLoggedIn = useSelector( state => state.root.isLoggedIn);
+
     const [decodedJWT, setDecodedJWT] = useState({})
+
     const signOut = () => {
         if (isLoggedIn) {
             dispatch({ type: 'SANITIZE_USER', payload: false });
             localStorage.removeItem('token');
         }
     }
-    const decodeJWT = (jwt) => {
-        let token = {};
-        token.raw = jwt;
-        token.header = JSON.parse(window.atob(jwt.split('.')[0]));
-        token.payload = JSON.parse(window.atob(jwt.split('.')[1]));
-        return (token)
-    }
     useEffect(() => {
         if(!jwt) return
         setDecodedJWT(decodeJWT(jwt))
-        console.log(decodeJWT(jwt))
     }, [jwt])
 
     

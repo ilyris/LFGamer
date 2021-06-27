@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {ProtectedRoute} from './ProtectedRoute';
 import DesktopNavigation from './components/menus/DesktopNavigation';
 import HomePage from './components/pages/HomePage';
@@ -24,13 +24,8 @@ function App() {
             <Route exact path="/" component={HomePage} />
             {/* <ProtectedRoute exact path="/duo" component={SearchPage} IsLoggedIn={isLoggedIn}/>*/}
             <ProtectedRoute  path="/profile/:id" component={Profile} />
-            {/* <Route exact path="/login" component={LoginPage} /> */}
             <ProtectedRoute exact path="/setup" component={SetUpPage} />
-           {/* <Route exact path="/signup" render={props => <SignupForm {...props}/> } />
-            <Route exact path="/signup/interests" component={InterestListPage} />
-            <Route exact path="/signup/add-profile"  component={ProfileCreationPage} /> */}
             <Route component={Page404} />
-            {/* <Redirect to="/404" /> */}
           </Switch>
         </div>
     </Router>

@@ -15,25 +15,31 @@ const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/"
 
 export function SetUpPage(props) {
     const dispatch = useDispatch();
+
+    // use history to push user to routes
     const history = useHistory();
     const [profile, setProfile] = useState({
         about_me: '',
     })
-
     const [user, setUser] = useState('');
     const [championData, setChampionData] = useState({});
 
     const riotAccount = useSelector( state => state.root.riotAccount);
+
+    // Grad selected Champions
     const userChampionOptions = useSelector(state => state.championSelections.selectedChampions);
+    // Grab selected Rank
     const userRank = useSelector(state => state.championSelections.selectedRank);
+    // Grab selected Roles (Lanes)
     const userLanes = useSelector(state => state.championSelections.selectedLanes);
+    // Grab mic option (true || false)
     const userMicSetting = useSelector(state => state.championSelections.micEnabled);
 
     const onSubmit = (e) => {
         e.preventDefault();
         axios.post(`${env_be_url}setup`,{champions: userChampionOptions, rank:userRank, lanes:userLanes,mic:userMicSetting, aboutMe: profile.about_me, email: user.email})
         .then(res => {
-            console.log(res.data);
+            // Clear the setup page form
             setProfile({
                 about_me: '',
             })
@@ -41,6 +47,8 @@ export function SetUpPage(props) {
             dispatch({type: 'CLEAR_SELECTED_RANK', payload: []})
             dispatch({type: 'CLEAR_SELECTED_LANES', payload: []})
             dispatch({type: 'CLEAR_IS_MIC_ENABLED', payload: false})
+
+            // Push user to new route after submit
             history.push(`/profile/${user.user_id}`)
         })
         .catch(err => console.log(err))
@@ -50,18 +58,25 @@ export function SetUpPage(props) {
         setProfile({...profile, [event.target.name]: event.target.value});
     }
     useEffect(() => {
+        // After user discord login, get user_data from endpoint
             axios.get(`${env_be_url}login/user`)
             .then( async res => {
                 console.log(res.data)
+                // if dat ais empty, means they loged in past and we set the object to = {}
                 if(Object.keys(res.data).length === 0) {
+                    // Get user_id to redirect them
                     let jwt = decodeJWT(localStorage.getItem('token'));
+                    // Redirect them to their profile, since they shouldn't come to this page again
                     history.push(`/profile/${jwt.payload.user_id}`);
 
-                    // get profile data if the user object is empty?
+                    // Maybe set a flag in the database that they have submitted this form before, if they haven't let them come back
+                    // if they have, then they should redirect? 
  
                 } else {
-                    JSON.stringify(localStorage.setItem('discordData', res.data))
+                    // If there is data, it's their first time. Set the user data locally
                     await setUser(res.data);
+
+                    // set their user data in our reducer
                     await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data})                    
                 }
 
@@ -69,6 +84,7 @@ export function SetUpPage(props) {
             })
             .catch(err => console.log(err));
 
+            // get champion data from Riot Games
             axios.get('https://ddragon.leagueoflegends.com/cdn/11.12.1/data/en_US/champion.json')
             .then(res => {
                 setChampionData(res.data.data);
@@ -76,6 +92,7 @@ export function SetUpPage(props) {
             .catch(err => console.log(err))
     },[])
 
+    // Only get champion data ( a lot of useless info in here we don't need)
     const champions = Object.values(championData);
     return (
         <MainContainer>

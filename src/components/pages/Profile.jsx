@@ -8,22 +8,30 @@ import { Loader } from '../loaders/loader';
 const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
 
 function Profile(props) {
+    // get the dynamic id from the /profile route
     const params = useParams();
     const dispatch = useDispatch();
+
     const isLoading = useSelector(state => state.root.isLoading);
+
     const [profileData, setProfileData] = useState({});
     const [display404, setDisplay404] = useState(false);
+
     useEffect(() => {
         axios.post(`${env_be_url}profile`, { user_id: params.id })
             .then(async res => {
 
+                // check if our profile_Data object is empty
                 if(Object.keys(res.data).length == 0) {
-                    console.log('display 404')
+                    // if empty, there is no profile, so remove the loader
                     await dispatch({type: 'REMOVE_ISLOADING'});
+                    // set 404 page
                     await setDisplay404(true);
                 } else {
-                    console.log('display profile data')
+                    // Remove loader
                     await dispatch({type: 'REMOVE_ISLOADING'});                    
+
+                    // Display profile data
                     await setProfileData(res.data);
                 }
             })
