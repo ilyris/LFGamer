@@ -28,7 +28,6 @@ function SliderInput(props) {
 export default SliderInput;
 
 const MainContainer = S.div`
-    width: 100%;
     display: flex;
     justify-content: flex-start;
     margin: 50px 0;

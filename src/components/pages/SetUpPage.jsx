@@ -335,22 +335,3 @@ const FormButtonContainer = S.div`
     margin-top: 20px;
     width: 100%;
 `;
-// const Button = S.button`
-//     padding: 10px 30px;
-//     border-radius: 40px;
-//     color: #fff;
-//     font-size: 20px;
-//     position: relative;
-//     transition: all ease 300ms;
-//     background: linear-gradient(to right,rgba(118,238,116,1) 0%,rgba(0,152,142,1) 100%);
-//     box-shadow:  2px 2px 12px 0px #494848c4;
-//     border: none;
-//     &:hover {
-//         padding-right: 50px;
-//         cursor: pointer;
-//         ${StyledIconArrow} {
-//             transform: translateX(0);
-//             opacity: 1;
-//         }
-//     }
-// `;

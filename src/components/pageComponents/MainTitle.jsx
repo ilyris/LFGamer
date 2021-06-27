@@ -6,9 +6,9 @@ export function Maintitle(props) {
     return (
         <Title>
             {props.title}
-            <ImportantTitleText 
+            {props.importantTitleText && <ImportantTitleText 
                 text={props.importantTitleText}
-            />
+            />}
         </Title>
     )
 }
