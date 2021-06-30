@@ -13,7 +13,8 @@ import SliderInput from '../form/SliderInput';
 export function DuoPage(props) {
 
     const [championData, setChampionData] = useState({});
-
+    let rank;
+    let rankFile;
     // make specific reducer for champion being searched for
     const userChampionOptions = useSelector(state => state.championSelections.selectedChampions);
     // make specific reducer for Rank being searched for
@@ -22,12 +23,26 @@ export function DuoPage(props) {
     const userLanes = useSelector(state => state.championSelections.selectedLanes);
     // make specific reducer for communication being searched for
     const userMicSetting = useSelector(state => state.championSelections.micEnabled);
+    // hook for pages duo data
+    const [duoListings, setDuoListings] = useState([]);
 
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log('hello!!!')
+        axios.post(`${env_be_url}duo/search`, {champions: userChampionOptions, rank:userRank, lanes:userLanes,mic:userMicSetting})
+        .then(res => {
+            console.log(res.data);
+        })
+        .catch(err => console.log(err));
     }
     useEffect(() => {
+
+        // axios.get all duo form submissions
+        axios.get(`${env_be_url}duo`)
+        .then(async res => {
+            await setDuoListings(res.data)
+        })
+        .catch(err => console.log(err))
+
         // get champion data from Riot Games
         axios.get('https://ddragon.leagueoflegends.com/cdn/11.12.1/data/en_US/champion.json')
             .then(res => {
@@ -85,6 +100,19 @@ export function DuoPage(props) {
                     />
                 </FormButtonContainer>
             </Form>
+            <ListingContainer>
+                {duoListings && duoListings.map(listing => {
+                    let rank = rankedEmblemArr.filter(rank => rank.name == listing.rank)
+                    rank = rank[0].file;
+                    return(
+                        <ListingCard>
+                            <CardAvatar src={listing.avatar}/>
+                            <CardUsername>{`${listing.username}#${listing.discriminator}`}</CardUsername>
+                            <CardRank src={rank}/>
+                        </ListingCard>
+                    )
+                })}
+            </ListingContainer>
         </Main>
     )
 }
@@ -127,4 +155,37 @@ const FormButtonContainer = S.div`
     justify-content: flex-start;
     margin-top: 20px;
     width: 100%;
+`;
+
+// User Duo Listing
+const ListingContainer = S.div`
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    margin-top: 100px;
+`;
+const ListingCard = S.div`
+    flex: 1;
+    margin-right: 15px;
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    flex-flow: row wrap;
+`;
+const CardUsername = S.p`
+    font-size: 20px;
+    color: #fff;
+    font-weight: 500;
+    width: 100%;
+    text-align: right;
+`;
+const CardAvatar = S.img`
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    float: left;
+`;
+const CardRank = S.img`
+    width: 100px;
+    height: auto;
 `;
