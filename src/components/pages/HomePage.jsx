@@ -46,7 +46,7 @@ const HeroSection = S.section`
     background-color: #01000f;
 `;
 const Container = S.div`
-    widtH: 70%;
+    widtH: 75%;
     margin: 0 auto;
     display: flex;
     flex-flow: row wrap;

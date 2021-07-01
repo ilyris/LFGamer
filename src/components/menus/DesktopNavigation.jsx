@@ -81,7 +81,7 @@ const StyledHeader = S.header`
       }
 `;
 const LogoImg = S.img`
-      width: 165px;
+      width: 85px;
       height: auto;
 `;
 const LinkedLogo = S(Link)`
