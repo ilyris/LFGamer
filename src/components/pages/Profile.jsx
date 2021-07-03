@@ -46,7 +46,7 @@ function Profile(props) {
         return (
             <Main>
                 <UserNameContainer>
-                    {profileData.user ? <DiscordAvatar src={`https://cdn.discordapp.com/avatars/300623558265143296/${profileData.user.avatar}.png`} /> : null}
+                    {profileData.user ? <DiscordAvatar src={`https://cdn.discordapp.com/avatars/${profileData.user.discord_id}/${profileData.user.avatar}.png`} /> : null}
                     {profileData.user && <Heading><Username>{`${profileData.user.username}`}</Username></Heading>}
     
                 </UserNameContainer>

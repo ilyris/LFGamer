@@ -9,12 +9,11 @@ import { SubmitButton } from '../pageComponents/SubmitButton';
 import { env_be_url } from '../../globalVars';
 import { useSelector, useDispatch } from 'react-redux';
 import SliderInput from '../form/SliderInput';
-
+import Playercard from '../player/PlayerCard';
 export function DuoPage(props) {
 
     const [championData, setChampionData] = useState({});
-    let rank;
-    let rankFile;
+
     // make specific reducer for champion being searched for
     const userChampionOptions = useSelector(state => state.championSelections.selectedChampions);
     // make specific reducer for Rank being searched for
@@ -101,17 +100,8 @@ export function DuoPage(props) {
                 </FormButtonContainer>
             </Form>
             <ListingContainer>
-                {duoListings && duoListings.map(listing => {
-                    let rank = rankedEmblemArr.filter(rank => rank.name == listing.rank)
-                    rank = rank[0].file;
-                    return(
-                        <ListingCard>
-                            <CardAvatar src={listing.avatar}/>
-                            <CardUsername>{`${listing.username}#${listing.discriminator}`}</CardUsername>
-                            <CardRank src={rank}/>
-                        </ListingCard>
-                    )
-                })}
+                {duoListings && duoListings.map(listing =>  <Playercard listing={listing}/>)}
+               
             </ListingContainer>
         </Main>
     )
@@ -163,29 +153,4 @@ const ListingContainer = S.div`
     flex-flow: row wrap;
     width: 100%;
     margin-top: 100px;
-`;
-const ListingCard = S.div`
-    flex: 1;
-    margin-right: 15px;
-    border-radius: 15px;
-    padding: 15px;
-    display: flex;
-    flex-flow: row wrap;
-`;
-const CardUsername = S.p`
-    font-size: 20px;
-    color: #fff;
-    font-weight: 500;
-    width: 100%;
-    text-align: right;
-`;
-const CardAvatar = S.img`
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    float: left;
-`;
-const CardRank = S.img`
-    width: 100px;
-    height: auto;
 `;
