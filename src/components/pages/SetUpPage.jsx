@@ -103,7 +103,7 @@ export function SetUpPage(props) {
         <MainContainer>
             <PageIntroContainer>
                 <Heading>Welcome, <Username>{`${user.username}`}</Username></Heading>
-                <DiscordAvatar src={`https://cdn.discordapp.com/avatars/300623558265143296/${user.avatar}.png`}/>
+                <DiscordAvatar src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}/>
                 <AboutContainer>
                     <About>
                     Thanks for joining LFGamer, Here you can add information to your profile and connect your Riot games account to your LFGamer account.
