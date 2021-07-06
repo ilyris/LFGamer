@@ -153,7 +153,7 @@ const RoleContainer = S.div`
 
 `;
 const CardRole = S.img`
-    width: 35px;
+    width: 45px;
     height: auto;
 `;
 const InformationContainer = S.div`
