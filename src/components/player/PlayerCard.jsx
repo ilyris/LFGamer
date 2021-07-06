@@ -174,7 +174,7 @@ const ChampionContainer = S.div`
     width: 100%;
     display: flex;
     margin-top: 10px;
-    max-height: 100px;
+    min-height: 100px;
 `;
 const ChampionImg = S.img`
     border-radius: 50%;
