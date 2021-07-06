@@ -110,6 +110,8 @@ const ListingCard = S.div`
     box-shadow: 2px 2px 8px #00000061;
     position: relative;
     overflow: hidden;
+    min-height: 425px;
+    align-items: baseline;
     &:hover {
         ${Container} {
           transform:translateY(0);
@@ -172,11 +174,13 @@ const ChampionContainer = S.div`
     width: 100%;
     display: flex;
     margin-top: 10px;
+    max-height: 100px;
 `;
 const ChampionImg = S.img`
     border-radius: 50%;
     margin: 5px;
     max-width: 40px;
+    height: 40px;
 `;
 const Text = S.p`
     font-size: 18px;
