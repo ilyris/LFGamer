@@ -124,7 +124,7 @@ const Messages = (props) => {
 
 
     return(
-        <MessageContainer>
+        <MessageContainer data-user-id={props.activeMessageSessions.id}>
             <MessagedUserName onClick={minimizeMessage}>{props.activeMessageSessions.friendUsername}</MessagedUserName>
             <ExitButton ><FontAwesomeIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
