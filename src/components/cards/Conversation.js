@@ -35,15 +35,14 @@ import {env_be_url} from '../../globalVars/envURL';
         const res = await axios.get(`${env_be_url}message/${c.id}`);
         console.log(res.data);
         setMessage(res.data);
-        
+
         const dateArray = Date(res.data.created_at).split(' ');
         setMonth(dateArray[1]);
         setDate(dateArray[2]);
         if(loggedInUserId == res.data.senderId) { 
           setFromText('You: ');
         } else {
-          setFromText(res.data.username);
-
+          setFromText(`${res.data.username}: ` );
         }
       } catch(err) {
         console.log(err);
