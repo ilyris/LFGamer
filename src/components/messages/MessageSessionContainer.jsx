@@ -39,7 +39,7 @@ console.log(loggedInUser)
             }
         }
         getConversations();
-    }, [loggedInUser])
+    }, [])
     
     return (
         <MessageSessionsContainer>
