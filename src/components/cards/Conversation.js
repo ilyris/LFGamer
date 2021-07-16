@@ -32,6 +32,7 @@ import {env_be_url} from '../../globalVars/envURL';
 
   useEffect( () => {
     const getReceiverUser = async () => {
+      console.log(c)
       try {
         const res = await axios.post(`${env_be_url}login/user`, {user_id: c.receiverId});
         setUser(res.data);
@@ -46,18 +47,18 @@ import {env_be_url} from '../../globalVars/envURL';
   useEffect( () => {
     const getLastReceivedMessage = async () => {
       try {
-        const res = await axios.get(`${env_be_url}message/${c.cid}`);
-        setMessage(res.data[res.data.length - 1]);
-        const dateArray = Date(res.data[res.data.length - 1].updated_at).split(' ');
+        const res = await axios.get(`${env_be_url}message/${c.id}`);
+        console.log(res.data);
+        setMessage(res.data);
+        const dateArray = Date(res.data.created_at).split(' ');
         setMonth(dateArray[1]);
         setDate(dateArray[2]);
-        // if(loggedInUserId == res.data[res.data.length - 1].senderId) { 
-        //   setFromText('You: ');
-        // } else {
-        //   setFromText(res.data[res.data.length - 1].username);
+        if(loggedInUserId == res.data.senderId) { 
+          setFromText('You: ');
+        } else {
+          setFromText(res.data.username);
 
-        // }
-        console.log(res);
+        }
       } catch(err) {
         console.log(err);
       }

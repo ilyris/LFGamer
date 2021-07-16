@@ -38,10 +38,7 @@ console.log(loggedInUser)
                 console.log(err);
             }
         }
-        if(loggedInUser.id) {
-            getConversations();
-
-        }
+        getConversations();
     }, [loggedInUser.id])
     
     return (
