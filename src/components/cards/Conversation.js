@@ -16,7 +16,7 @@ import {env_be_url} from '../../globalVars/envURL';
 
   const handleOpenConversation = (e) => {
     const userId = e.target.getAttribute("data-user-id");
-      dispatch({type: 'SET_USER_CONNECTIONS', payload: userId})
+      dispatch({type: 'SET_USER_CONNECTIONS', payload: {userId: userId, friendUsername: user.username}})
   }
 
   useEffect( () => {

@@ -25,7 +25,7 @@ const Messages = (props) => {
     const socket = useSelector(state => state.messageConnections.socket);
     const activeMessages = useSelector(state => state.messageConnections.messages);
     const loggedInUserId = jwt.payload.user_id;
-    console.log(loggedInUserId)
+    console.log(activeMessages)
   
 
     const handleMessageInput = (event) => {
