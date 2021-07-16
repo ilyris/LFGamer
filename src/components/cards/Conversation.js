@@ -8,22 +8,25 @@ import {env_be_url} from '../../globalVars/envURL';
 
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState(null);
+  const [month, setMonth] = useState(null)
+  const [date, setDate] = useState(null)
+  const [fromText, setFromText] = useState('');
   console.log(c);
-  if(message) {
-    const dateArray = Date(message.updated_at).split(' ');
-    const month = dateArray[1];
-    const date = dateArray[2];
+  // if(message) {
+  //   const dateArray = Date(message.updated_at).split(' ');
+  //   const month = dateArray[1];
+  //   const date = dateArray[2];
 
-    let fromText;
+  //   let fromText;
 
-    if(loggedInUserId == message.senderId) {
-        fromText = "You: ";
-    }
-    else {
-        fromText = `${c.senderUsername}: `;
-    }
+  //   if(loggedInUserId == message.senderId) {
+  //       fromText = "You: ";
+  //   }
+  //   else {
+  //       fromText = `${c.senderUsername}: `;
+  //   }
 
-  }
+  // }
 
 
 
@@ -45,6 +48,15 @@ import {env_be_url} from '../../globalVars/envURL';
       try {
         const res = await axios.get(`${env_be_url}message/${c.cid}`);
         setMessage(res.data[res.data.length - 1]);
+        const dateArray = Date(res.data[res.data.length - 1].updated_at).split(' ');
+        setMonth(dateArray[1]);
+        setDate(dateArray[2]);
+        // if(loggedInUserId == res.data[res.data.length - 1].senderId) { 
+        //   setFromText('You: ');
+        // } else {
+        //   setFromText(res.data[res.data.length - 1].username);
+
+        // }
         console.log(res);
       } catch(err) {
         console.log(err);
@@ -69,7 +81,7 @@ import {env_be_url} from '../../globalVars/envURL';
               </ConversationTimestamp>
             </CardUsername>
             <LastMessage>
-              {fromText}
+              {/* {fromText} */}
               {message.text}
             </LastMessage>
           </div>
