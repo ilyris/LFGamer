@@ -31,7 +31,8 @@ const MainContainer = S.div`
     display: flex;
     justify-content: flex-start;
     margin: 50px 0;
-    
+    transform: translateY(50px);
+
 `;
 const Label = S.label`
     font-size: 20px;
@@ -40,9 +41,10 @@ const Label = S.label`
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+
 `;
 const SliderContainer = S.div`
-    background: ${props => props.userMicSetting ? 'linear-gradient(to right,rgba(118,238,116,1) 0%,rgba(0,152,142,1) 100%)' : ' red'};    
+    background: ${props => props.userMicSetting ? 'linear-gradient(to right,rgba(118,238,116,1) 0%,rgba(0,152,142,1) 100%)' : ' #b90000'};    
     position: relative;
     width: 49px;
     height: 25px;

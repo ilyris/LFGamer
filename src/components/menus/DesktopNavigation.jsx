@@ -5,7 +5,7 @@ import S from 'styled-components';
 import Logo from '../../assets/logo.svg';
 import { decodeJWT } from '../../helperFuncs/cookie';
 import '../../App.css';
-const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
+import {env_be_url} from '../../globalVars/envURL';
 
 
 const Desktopmenu = (props) => {

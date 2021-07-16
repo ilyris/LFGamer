@@ -2,7 +2,7 @@ import React from 'react';
 import {Link, } from 'react-router-dom';
 import S from 'styled-components';
 import image from '../../assets/Season_2019_-_Challenger_1.png';
-import {Maintitle} from '../pageComponents/MainTitle';
+import MainTitle from '../pageComponents/MainTitle';
 import {SubTitle} from '../pageComponents/SubTitle';
 import {MainPageButton} from '../pageComponents/MainPageButton'
  function Homepage(props) {
@@ -10,7 +10,7 @@ import {MainPageButton} from '../pageComponents/MainPageButton'
         <HeroSection>
             <Container>
             <TextContainer>
-                <Maintitle 
+                <MainTitle 
                     title={'Welcome to '}
                     importantTitleText={'LFGamer'}
                 />

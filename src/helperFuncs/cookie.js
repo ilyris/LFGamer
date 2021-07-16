@@ -8,6 +8,7 @@ function clearOutputCookieValue() {
 
 }
 const decodeJWT = (jwt) => {
+    if(!jwt) return;
     let token = {};
     token.raw = jwt;
     token.header = JSON.parse(window.atob(jwt.split('.')[0]));

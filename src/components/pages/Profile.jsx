@@ -5,7 +5,8 @@ import axios from 'axios';
 import { useParams } from 'react-router';
 import { Page404 } from './Page404';
 import { Loader } from '../loaders/loader';
-const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
+import {env_be_url} from '../../globalVars/envURL';
+
 
 function Profile(props) {
     // get the dynamic id from the /profile route

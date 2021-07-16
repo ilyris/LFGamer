@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import S from 'styled-components';
 import axios from 'axios';
-import { Maintitle } from '../pageComponents/MainTitle';
+import MainTitle from '../pageComponents/MainTitle';
 import ChampionCard from '../cards/ChampionCard';
 import { rankedEmblemArr } from './RankImageExport'
 import { roleArr } from './RoleImageExport'
@@ -10,62 +10,70 @@ import { env_be_url } from '../../globalVars';
 import { useSelector, useDispatch } from 'react-redux';
 import SliderInput from '../form/SliderInput';
 import Playercard from '../player/PlayerCard';
+import { useChampionData } from '../../customHooks/useChampionData';
+import { useSetLeagueInformation } from '../../customHooks/useSetLeagueInformation';
+import {DuoListing} from '../form/DuoListing';
+
 export function DuoPage(props) {
 
-    const [championData, setChampionData] = useState({});
+    const championData = useChampionData({});
+    const selectedLeagueInformation = useSetLeagueInformation();
+    const {champions, rank, lanes} = selectedLeagueInformation;
 
-    // make specific reducer for champion being searched for
-    const userChampionOptions = useSelector(state => state.championSelections.selectedChampions);
-    // make specific reducer for Rank being searched for
-    const userRank = useSelector(state => state.championSelections.selectedRank);
-    // make specific reducer for Role being searched for
-    const userLanes = useSelector(state => state.championSelections.selectedLanes);
-    // make specific reducer for communication being searched for
-    const userMicSetting = useSelector(state => state.championSelections.micEnabled);
     // hook for pages duo data
     const [duoListings, setDuoListings] = useState([]);
+    
+    // make specific reducer for communication being searched for
+    const userMicSetting = useSelector(state => state.championSelections.micEnabled);
+
+    const [isFormClosed, setIsFormClosed] = useState(true);
+
+    const getDuoListings = () => {
+        axios.get(`${env_be_url}duo`)
+        .then(async res => {
+            console.log(res.data)
+            await setDuoListings(res.data)
+        })
+        .catch(err => console.log(err))
+    }
 
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${env_be_url}duo/search`, {champions: userChampionOptions, rank:userRank, lanes:userLanes,mic:userMicSetting})
+        axios.post(`${env_be_url}duo/search`, {champions, rank, lanes, mic:userMicSetting})
         .then(res => {
             console.log(res.data);
         })
         .catch(err => console.log(err));
     }
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        setIsFormClosed(false)
+    }
     useEffect(() => {
-
-        // axios.get all duo form submissions
-        axios.get(`${env_be_url}duo`)
-        .then(async res => {
-            await setDuoListings(res.data)
-        })
-        .catch(err => console.log(err))
-
-        // get champion data from Riot Games
-        axios.get('https://ddragon.leagueoflegends.com/cdn/11.12.1/data/en_US/champion.json')
-            .then(res => {
-                setChampionData(res.data.data);
-            })
-            .catch(err => console.log(err))
+        getDuoListings();
     }, [])
 
     // Only get champion data ( a lot of useless info in here we don't need)
-    const champions = Object.values(championData);
+    const championsData = Object.values(championData);
 
     return (
         <Main>
             <TitleContainer>
-                <Maintitle
+                <MainTitle
                     title={'Search for your '}
                     importantTitleText={'Duo Gamer'}
                 />
             </TitleContainer>
+            <ListingButtonContainer>
+                <Button onClick={handleClick}>Add Post</Button>
+                <DuoListing isFormClosed={isFormClosed} setIsFormClosed={setIsFormClosed}/>
+            </ListingButtonContainer>
             <Form onSubmit={onSubmit}>
                 <SelectListContainer>
                     <ChampionCard
-                        rawData={champions}
-                        selectedOptions={userChampionOptions}
+                        rawData={championsData}
+                        selectedOptions={champions}
                         action={'SET_SELECTED_CHAMPIONS'}
                         placeHolder={"search gamers champion(s)"}
                         label={'Champions'}
@@ -74,7 +82,7 @@ export function DuoPage(props) {
                     />
                     <ChampionCard
                         rawData={rankedEmblemArr}
-                        selectedOptions={userRank}
+                        selectedOptions={rank}
                         action={'SET_SELECTED_RANK'}
                         label={'Rank'}
                         placeHolder={"Search Rank"}
@@ -83,7 +91,7 @@ export function DuoPage(props) {
                     />
                     <ChampionCard
                         rawData={roleArr}
-                        selectedOptions={userLanes}
+                        selectedOptions={lanes}
                         action={'SET_SELECTED_LANES'}
                         label={'Role(s)'}
                         placeHolder={"Search role(s)"}
@@ -113,6 +121,8 @@ const Main = S.main`
     flex-flow: row wrap;
     width: 75%;
     margin: 0 auto;
+    position: relative;
+    z-index: 100;
 `;
 const TitleContainer = S.div`
     width: 100%;
@@ -125,15 +135,6 @@ const Form = S.form`
     justify-content: space-between;
     margin-top: 50px;
 `;
-const Label = S.label`
-    font-size: 22px;
-    color: #fff;
-    display: flex;
-    flex-flow: row wrap;
-    width: 100%;
-    margin-top: 20px;
-`;
-
 const SelectListContainer = S.div`
     display: flex;
     justify-content: space-between;
@@ -153,4 +154,30 @@ const ListingContainer = S.div`
     flex-flow: row wrap;
     width: 100%;
     margin-top: 100px;
+`;
+
+// Duo Listing buttons
+const ListingButtonContainer = S.div`
+    width: 100%;
+    text-align: left;
+    margin-top: 50px;
+    z-index: 10;
+`;
+const Button = S.div`
+    padding: 10px 30px;
+    border-radius: 40px;
+    color: #fff;
+    font-size: 20px;
+    position: relative;
+    -webkit-transition: all ease 300ms;
+    transition: all ease 300ms;
+    background: linear-gradient(to right,rgba(118,238,116,1) 0%,rgba(0,152,142,1) 100%);
+    box-shadow: 2px 2px 12px 0px #494848c4;
+    border: none;
+    width: fit-content;
+    z-index: 10;
+
+    &:hover {
+        cursor: pointer;
+    }
 `;

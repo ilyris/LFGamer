@@ -2,10 +2,10 @@ import React from 'react'
 import S from 'styled-components';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-export function SubmitButton(props) {
-    
+
+export function SubmitButton(props) {    
     return (
-        <Button>{props.text}
+        <Button cancelButton={props.cancelButton} onClick={props.handleCancel}>{props.text}
             <StyledIconArrow icon={faArrowRight} />  
         </Button>
     )
@@ -29,7 +29,7 @@ const Button = S.button`
     font-size: 20px;
     position: relative;
     transition: all ease 300ms;
-    background: linear-gradient(to right,rgba(118,238,116,1) 0%,rgba(0,152,142,1) 100%);
+    background: ${props => props.cancelButton ? '#b90000' : 'linear-gradient(to right,rgba(118,238,116,1) 0%,rgba(0,152,142,1) 100%)' };
     box-shadow:  2px 2px 12px 0px #494848c4;
     border: none;
     &:hover {

@@ -12,7 +12,9 @@ import {rankedEmblemArr} from './RankImageExport'
 import {roleArr} from './RoleImageExport'
 import { decodeJWT } from '../../helperFuncs/cookie';
 import { SubmitButton } from '../pageComponents/SubmitButton';
-const env_be_url = process.env.REACT_APP_PROD_BE_URL || "http://localhost:8080/";
+import { useChampionData } from '../../customHooks/useChampionData';
+import {env_be_url} from '../../globalVars/envURL';
+import { useSetLeagueInformation } from '../../customHooks/useSetLeagueInformation';
 
 export function SetUpPage(props) {
     const dispatch = useDispatch();
@@ -23,22 +25,20 @@ export function SetUpPage(props) {
         about_me: '',
     })
     const [user, setUser] = useState('');
-    const [championData, setChampionData] = useState({});
+    const championData = useChampionData({});
 
     const riotAccount = useSelector( state => state.root.riotAccount);
     const [showSetupPage, setShowSetupPage] = useState(false);
-    // Grad selected Champions
-    const userChampionOptions = useSelector(state => state.championSelections.selectedChampions);
-    // Grab selected Rank
-    const userRank = useSelector(state => state.championSelections.selectedRank);
-    // Grab selected Roles (Lanes)
-    const userLanes = useSelector(state => state.championSelections.selectedLanes);
+
+    const selectedLeagueInformation = useSetLeagueInformation();
+    const {champions, rank, lanes} = selectedLeagueInformation;
+
     // Grab mic option (true || false)
     const userMicSetting = useSelector(state => state.championSelections.micEnabled);
 
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${env_be_url}setup`,{champions: userChampionOptions, rank:userRank, lanes:userLanes,mic:userMicSetting, aboutMe: profile.about_me, email: user.email})
+        axios.post(`${env_be_url}setup`,{champions, rank, lanes, mic:userMicSetting, aboutMe: profile.about_me, email: user.email})
         .then(res => {
             // Clear the setup page form
             console.log(res.data)
@@ -85,17 +85,10 @@ export function SetUpPage(props) {
 
             })
             .catch(err => console.log(err));
-
-            // get champion data from Riot Games
-            axios.get('https://ddragon.leagueoflegends.com/cdn/11.12.1/data/en_US/champion.json')
-            .then(res => {
-                setChampionData(res.data.data);
-            })
-            .catch(err => console.log(err))
     },[])
 
     // Only get champion data ( a lot of useless info in here we don't need)
-    const champions = Object.values(championData);
+    const championsData = Object.values(championData);
     if(!showSetupPage) {
         return null;
     }
@@ -118,8 +111,8 @@ export function SetUpPage(props) {
                     </Label>
                     <SelectListContainer>
                         <ChampionCard 
-                            rawData={champions}
-                            selectedOptions={userChampionOptions}
+                            rawData={championsData}
+                            selectedOptions={champions}
                             action={'SET_SELECTED_CHAMPIONS'}
                             placeHolder={"select your champion(s)"}
                             label={'Your Champion Pool'}
@@ -128,7 +121,7 @@ export function SetUpPage(props) {
                         />                    
                         <ChampionCard
                             rawData={rankedEmblemArr}
-                            selectedOptions={userRank}
+                            selectedOptions={rank}
                             action={'SET_SELECTED_RANK'}
                             label={'Your Rank'}
                             placeHolder={"Select your rank"}
@@ -137,7 +130,7 @@ export function SetUpPage(props) {
                         />
                         <ChampionCard
                             rawData={roleArr}
-                            selectedOptions={userLanes}
+                            selectedOptions={lanes}
                             action={'SET_SELECTED_LANES'}
                             label={'Your Roles'}
                             placeHolder={"Select your roles"}

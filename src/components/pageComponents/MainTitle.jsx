@@ -2,16 +2,15 @@ import React from 'react'
 import S from 'styled-components';
 import { ImportantTitleText } from './ImportantTitleText';
 
-export function Maintitle(props) {
+function MainTitle(props) {
     return (
         <Title>
             {props.title}
-            {props.importantTitleText && <ImportantTitleText 
-                text={props.importantTitleText}
-            />}
+            {props.importantTitleText && <ImportantTitleText text={props.importantTitleText} /> }
         </Title>
     )
 }
+export default MainTitle;
 
 const Title = S.h2`
     font-size: 50px;

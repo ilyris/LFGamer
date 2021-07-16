@@ -7,7 +7,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 export function PrimaryCtaLink(props) {
     
     return (
-        <Button>{props.text}
+        <Button onClick={props.handleClick}>{props.text}
             <StyledIconArrow icon={faArrowRight} />  
         </Button>
     )

@@ -1,16 +1,21 @@
 import React from 'react'
 import S from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { rankedEmblemArr } from '../pages/RankImageExport'
 import { roleArr } from '../pages/RoleImageExport'
 import {PrimaryCtaLink} from '../pageComponents/PrimaryCtaLink';
 
 export function Playercard(props) {
     const {listing} = props;
-    console.log(listing)
+    console.log(props);
+    const dispatch = useDispatch();
     // Filter our the rank file
     let rank = rankedEmblemArr.filter(rank => rank.name == listing.rank)
     rank = rank[0].file;
 
+    const messageUser = () => {
+        dispatch({type: 'SET_USER_CONNECTIONS', payload: listing.id})
+    }
     return(
         <PesudoContainer>
     <ListingCard >
@@ -72,7 +77,7 @@ export function Playercard(props) {
                 </Container>
             </ListingCard>
             <ButtonContainer>
-                <PrimaryCtaLink text={'Message'}/>
+                <PrimaryCtaLink handleClick={messageUser}text={'Message'}/>
             </ButtonContainer>
         </PesudoContainer>
         
