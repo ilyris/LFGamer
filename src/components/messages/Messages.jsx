@@ -91,23 +91,23 @@ const Messages = (props) => {
         event.target.parentElement.classList.toggle('minimize');
     }
 
-    useEffect( () => {
-        socket.on('update-messages', message => {
-            console.log(message);
-            dispatch({
-                type: "SET_MESSAGES",
-                payload: {
-                // senderId: loggedInUserId,
-                // receiverId: props.activeMessageSessions.id,
-                message: message,
-                sentAt: Date.now()
-                }
-            });
-        });
-        socket.on('typing', data => {
-            setUserTyping(data);
-        })
-    }, [])
+    // useEffect( () => {
+    //     socket.on('update-messages', message => {
+    //         console.log(message);
+    //         dispatch({
+    //             type: "SET_MESSAGES",
+    //             payload: {
+    //             // senderId: loggedInUserId,
+    //             // receiverId: props.activeMessageSessions.id,
+    //             message: message,
+    //             sentAt: Date.now()
+    //             }
+    //         });
+    //     });
+    //     socket.on('typing', data => {
+    //         setUserTyping(data);
+    //     })
+    // }, [])
 
         // Emit an event "prive-message" to the backend with the user id and the active session id
         // socket.emit('private-message', loggedInUserId, props.activeMessageSessions.id)
