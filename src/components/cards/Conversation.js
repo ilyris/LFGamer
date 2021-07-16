@@ -1,37 +1,71 @@
 import React, {useState, useEffect} from 'react';
 import S from 'styled-components';
 import axios from 'axios';
+import {env_be_url} from '../../globalVars/envURL';
 
  function Conversation({c,loggedInUserId}) {
     
-    const dateArray = Date(c.updated_at).split(' ');
-    const month = dateArray[1];
-    const date = dateArray[2];
-    let fromText;
 
-    if(loggedInUserId == c.uid) {
-        fromText = "You: ";
+  const [user, setUser] = useState(null);
+  const [message, setMessage] = useState(null);
+  console.log(c);
+  const dateArray = Date(message.updated_at).split(' ');
+  const month = dateArray[1];
+  const date = dateArray[2];
+  let fromText;
+
+  if(loggedInUserId == message.senderId) {
+      fromText = "You: ";
+  }
+  else {
+      fromText = `${c.senderUsername}: `;
+  }
+
+
+  useEffect( () => {
+    const getReceiverUser = async () => {
+      try {
+        const res = await axios.post(`${env_be_url}login/user`, {user_id: c.receiverId});
+        setUser(res.data);
+        console.log(res);
+      } catch(err) {
+        console.log(err);
+      }
     }
-    else {
-        fromText = `${c.senderUsername}: `;
+    getReceiverUser();
+  }, [c.receiverId]);
+
+  useEffect( () => {
+    const getLastReceivedMessage = async () => {
+      try {
+        const res = await axios.get(`${env_be_url}message/${c.cid}`);
+        setMessage(res.data[res.data.length - 1]);
+        console.log(res);
+      } catch(err) {
+        console.log(err);
+      }
     }
+    getLastReceivedMessage();
+  }, [c.cid]);
+
+
 
     return (
       <UserConversation>
         <AvatarContainer>
           <CardAvatar
-            src={`https://cdn.discordapp.com/avatars/${c.senderDiscordId}/${c.senderAvatar}.png`}
+            src={`https://cdn.discordapp.com/avatars/${user.dis}/${user.avatar}.png`}
           />
           <div>
             <CardUsername>
-              {c.senderUsername}
+              {user.username}
               <ConversationTimestamp>
                 {month} {date}
               </ConversationTimestamp>
             </CardUsername>
             <LastMessage>
               {fromText}
-              {c.text}
+              {message.text}
             </LastMessage>
           </div>
         </AvatarContainer>

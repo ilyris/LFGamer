@@ -27,7 +27,7 @@ function MessageSessionContainer(props) {
             setIsMin(true);
         }
     }
-
+console.log(loggedInUser)
     useEffect(() => {
         const getConversations = async () => {
             try {
@@ -45,6 +45,7 @@ function MessageSessionContainer(props) {
         <MessageSessionsContainer>
             <ConversationListContainer isMin={isMin} ref={containerListHeader}>
 
+                {/*  Change this data to signed in user*/}
                 <UsernameContainer onClick={minimizeMessage}>
                     <AvatarContainer>
                         <CardAvatar src={`https://cdn.discordapp.com/avatars/300623558265143296/3c2ea9607df17fbaaf14a92cbe7a1d5f.png`}/>
