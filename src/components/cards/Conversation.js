@@ -9,17 +9,22 @@ import {env_be_url} from '../../globalVars/envURL';
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState(null);
   console.log(c);
-  const dateArray = Date(message.updated_at).split(' ');
-  const month = dateArray[1];
-  const date = dateArray[2];
-  let fromText;
+  if(message) {
+    const dateArray = Date(message.updated_at).split(' ');
+    const month = dateArray[1];
+    const date = dateArray[2];
 
-  if(loggedInUserId == message.senderId) {
-      fromText = "You: ";
+    let fromText;
+
+    if(loggedInUserId == message.senderId) {
+        fromText = "You: ";
+    }
+    else {
+        fromText = `${c.senderUsername}: `;
+    }
+
   }
-  else {
-      fromText = `${c.senderUsername}: `;
-  }
+
 
 
   useEffect( () => {
