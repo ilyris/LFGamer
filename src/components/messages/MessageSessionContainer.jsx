@@ -29,6 +29,7 @@ function MessageSessionContainer(props) {
     }
 console.log(loggedInUser)
     useEffect(() => {
+        if(!loggedInUser) return;
         const getConversations = async () => {
             try {
                 const res = await axios.get(`${env_be_url}conversation/${loggedInUser.id}`);
@@ -39,7 +40,7 @@ console.log(loggedInUser)
             }
         }
         getConversations();
-    }, [])
+    }, [loggedInUser])
     
     return (
         <MessageSessionsContainer>
