@@ -25,9 +25,11 @@ const Messages = (props) => {
     const socket = useSelector(state => state.messageConnections.socket);
     const activeMessages = useSelector(state => state.messageConnections.messages);
     const loggedInUserId = jwt.payload.user_id;
-    console.log(activeMessages)
+    console.log(props.activeMessageSessions)
   
-
+    // let filterFriends = props.activeMessageSessions.filter( convo => {
+    //     return 
+    // })
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
 
@@ -123,7 +125,7 @@ const Messages = (props) => {
 
     return(
         <MessageContainer>
-            <MessagedUserName onClick={minimizeMessage}>Test User</MessagedUserName>
+            <MessagedUserName onClick={minimizeMessage}>{props.activeMessageSessions.friendUsername}</MessagedUserName>
             <ExitButton ><FontAwesomeIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {activeMessages.length > 0 ? activeMessages.map( (messages,index) => {

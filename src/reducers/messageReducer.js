@@ -12,6 +12,7 @@ export const messageReducer = (state = initialState, action) => {
         case 'SET_SOCKET':
             return  {...state, socket: action.payload};
         case 'SET_USER_CONNECTIONS':
+            console.log(action.payload);
             return  {...state, userConnections: [...state.userConnections, action.payload]};
         case 'SET_MESSAGES':
             console.log(state.messages);

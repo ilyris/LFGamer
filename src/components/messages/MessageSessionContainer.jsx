@@ -27,7 +27,7 @@ function MessageSessionContainer(props) {
             setIsMin(true);
         }
     }
-console.log(loggedInUser)
+console.log(convos)
     useEffect(() => {
         if(!loggedInUser) return;
         const getConversations = async () => {
@@ -152,29 +152,4 @@ const StyledIconArrow = S(FontAwesomeIcon)`
 const Conversations = S.section`
     display: flex;
     flex-flow: row wrap;    
-`;
-
-const UserConversation = S.div`
-    display: flex;
-    flex-flow: row wrap;
-    padding: 10px;
-    width: 100%;
-    &: hover {
-        cursor: pointer;
-        background-color: #49484824;
-    }
-    &:last-of-type {
-        padding-bottom: 10px;
-    }
-`;
-
-const LastMessage = S.p`
-    font-size: 12px;
-    color: #191818;
-    text-align: left;
-    padding-left: 10px;
-`;
-const ConversationTimestamp = S.p`
-    font-size: 12px;
-    padding-top: 4px;
 `;
