@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import S from 'styled-components';
 import axios from 'axios';
 import {env_be_url} from '../../globalVars/envURL';
 
  function Conversation({c,loggedInUserId}) {
-    
+    const dispatch = useDispatch();
 
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState(null);
@@ -13,7 +14,10 @@ import {env_be_url} from '../../globalVars/envURL';
   const [fromText, setFromText] = useState('');
   console.log(c);
 
-
+  const handleOpenConversation = (e) => {
+    const userId = e.target.getAttribute("data-user-id");
+      dispatch({type: 'SET_USER_CONNECTIONS', payload: userId})
+  }
 
   useEffect( () => {
     const getReceiverUser = async () => {
@@ -55,26 +59,30 @@ import {env_be_url} from '../../globalVars/envURL';
 
 
     return (
-      <UserConversation>
-        <AvatarContainer>
-          {user &&
-          <CardAvatar
-            src={`https://cdn.discordapp.com/avatars/${user.dis}/${user.avatar}.png`}
-          />}
-          <div>
-            <CardUsername>
-              {user && user.username}
-              <ConversationTimestamp>
-                {month} {date}
-              </ConversationTimestamp>
-            </CardUsername>
-            <LastMessage>
-              {fromText}
-              {message && message.text}
-            </LastMessage>
-          </div>
-        </AvatarContainer>
-      </UserConversation>
+      <>
+        {user &&
+        <UserConversation data-user-id={user.id} onClick={handleOpenConversation}>
+          <AvatarContainer>
+            {user &&
+            <CardAvatar
+              src={`https://cdn.discordapp.com/avatars/${user.dis}/${user.avatar}.png`}
+            />}
+            <div>
+              <CardUsername>
+                {user && user.username}
+                <ConversationTimestamp>
+                  {month} {date}
+                </ConversationTimestamp>
+              </CardUsername>
+              <LastMessage>
+                {fromText}
+                {message && message.text}
+              </LastMessage>
+            </div>
+          </AvatarContainer>
+        </UserConversation>
+        }
+      </>
     );
 }
 export default Conversation;
