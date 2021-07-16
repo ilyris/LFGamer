@@ -18,8 +18,9 @@ import {env_be_url} from '../../globalVars/envURL';
   useEffect( () => {
     const getReceiverUser = async () => {
       console.log(c)
+      let friendId = c.members.filter(id => id !== loggedInUserId)
       try {
-        const res = await axios.post(`${env_be_url}login/user`, {user_id: c.receiverId});
+        const res = await axios.post(`${env_be_url}login/user`, {user_id: friendId});
         setUser(res.data);
         console.log(res);
       } catch(err) {
