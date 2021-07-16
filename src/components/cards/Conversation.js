@@ -70,19 +70,20 @@ import {env_be_url} from '../../globalVars/envURL';
     return (
       <UserConversation>
         <AvatarContainer>
+          {user &&
           <CardAvatar
             src={`https://cdn.discordapp.com/avatars/${user.dis}/${user.avatar}.png`}
-          />
+          />}
           <div>
             <CardUsername>
-              {user.username}
+              {user && user.username}
               <ConversationTimestamp>
                 {month} {date}
               </ConversationTimestamp>
             </CardUsername>
             <LastMessage>
               {/* {fromText} */}
-              {message.text}
+              {message && message.text}
             </LastMessage>
           </div>
         </AvatarContainer>
