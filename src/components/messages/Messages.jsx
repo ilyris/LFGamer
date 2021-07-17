@@ -3,7 +3,7 @@ import S from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import '../../App.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faCircle } from "@fortawesome/free-solid-svg-icons";
 import {Link} from 'react-router-dom';
 import { decodeJWT } from '../../helperFuncs/cookie';
 
@@ -23,7 +23,6 @@ const Messages = (props) => {
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
     // const activeMessages = useSelector(state => state.messageConnections.messages);
-  
 
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
@@ -88,7 +87,18 @@ const Messages = (props) => {
     const minimizeMessage = (event) => {
         event.target.parentElement.classList.toggle('minimize');
     }
+    const messageTimestamp = (date) => {
+        const dateObj = new Date(date);
 
+        let dateString = dateObj.toDateString();
+        dateString = dateString.split(' ');
+        dateString = `${dateString[1]} ${dateString[2]}`;
+
+        let sentAt = dateObj.toLocaleTimeString().split(':');
+        sentAt = `${sentAt[0]}:${sentAt[2]}`;
+        
+        return [dateString, sentAt];
+    }
     // useEffect( () => {
     //     socket.on('update-messages', message => {
     //         console.log(message);
@@ -126,13 +136,14 @@ const Messages = (props) => {
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
-                    console.log(message);
+                    const  [dateString, sentAt] = messageTimestamp(message.created_at);
+
                     if(message.id == props.loggedInUserId ){
                         return (
                             <UserMessages isFromFriend={false} >
                                 <CardAvatar src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`} />
                                 <TitleAndContentMessageCotnainer>
-                                    <StyledUsername isFromFriend={false} >{message.username}</StyledUsername>
+                                    <StyledUsername isFromFriend={false} >{message.username} <StyledCircle icon={faCircle}/> <MessageTime>{sentAt}</MessageTime></StyledUsername>
                                     <StyledP>{message.text}</StyledP>
                                 </TitleAndContentMessageCotnainer>
                             </UserMessages>
@@ -209,6 +220,7 @@ const UserMessages = S.div`
     padding: 10px;
     display: flex;
     background-color: ${props => props.isFromFriend ? '#fff' : 'rgba(73, 72, 72, 0.14)'};
+    min-width: 100%;
 `;
 const CardAvatar = S.img`
     width: 45px;
@@ -220,11 +232,25 @@ const TitleAndContentMessageCotnainer = S.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    width: 100%;
 `;
 const StyledUsername = S.p`
     text-align: left;
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     color: #000;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+`;
+const StyledCircle = S(FontAwesomeIcon)`
+    font-size: .4rem;
+    color: #000;
+    margin: 0 5px;
+`;
+const MessageTime = S.span`
+    font-size: 1.2rem;
+    color: #0000007a;
+    font-weight: 100;
 `;
 const StyledP = S.p`
     text-align: left;

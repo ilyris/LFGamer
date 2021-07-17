@@ -79,8 +79,8 @@ function MessageSessionContainer(props) {
             </ConversationListContainer>
 
             {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users,index) => {
-                console.log(users);
-                return <Messages loggedInUserId={loggedInUser.id} conversationMessages={conversationMessages[index]} activeMessageSessions={users} key={index}/>
+                
+                return <Messages loggedInUserId={loggedInUser.id} convos={convos} conversationMessages={conversationMessages[index]} activeMessageSessions={users} key={index}/>
                 }) : null}
         </MessageSessionsContainer> 
     )
