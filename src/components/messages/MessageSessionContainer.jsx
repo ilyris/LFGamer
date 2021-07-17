@@ -17,7 +17,7 @@ function MessageSessionContainer(props) {
     const conversationMessages = useSelector(state => state.messageConnections.messages);
     const [convos, setConvos] = useState([]);
     const containerListHeader = useRef(null);
-
+    console.log(conversationMessages);
     const minimizeMessage = (event) => {
         event.stopPropagation();
         event.target.classList.toggle('isMin');
@@ -41,7 +41,6 @@ function MessageSessionContainer(props) {
         }
         getConversations();
     }, [loggedInUser])
-
     
     return (
         <MessageSessionsContainer>
