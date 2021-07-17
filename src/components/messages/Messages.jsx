@@ -169,12 +169,10 @@ const MessageContainer = S.div`
     position: relative;
 `;
 const MessagedUserName = S.h3`
-    font-size: 1.6rem;
     background-color: #494848;
     width: 100%;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
-    color: #fff;
     letter-spacing: 1px;
     line-height: 40px;
     text-transform: capitalize;
@@ -211,10 +209,14 @@ const StyledP = S.p`
     color: #000;
 `;
 const StyledLink = S(Link)`
-    font-size: 1.8rem;
-    color: #000;
+    font-size: 1.6rem;
+    color: #fff;
     font-weight: bold;
     text-decoration: none;
+
+    &: hover {
+        text-decoration: underline;
+    }
 `;
 const StyledInput = S.input`
     width: 200px;
