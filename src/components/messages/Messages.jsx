@@ -205,12 +205,14 @@ const UserMessages = S.div`
     box-sizing: border-box;
     margin: 0;
     padding: 10px;
+    display: flex;
     background-color: ${props => props.isFromFriend ? '#fff' : 'rgba(73, 72, 72, 0.14)'};
 `;
 const CardAvatar = S.img`
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
+    margin-right: 10px;
 `;
 const TitleAndContentMessageCotnainer = S.div`
     display: flex;
@@ -220,12 +222,12 @@ const TitleAndContentMessageCotnainer = S.div`
 const StyledUsername = S.p`
     text-align: left;
     font-size: 1.2rem;
-    color rgb(73, 72, 72);
+    color: #000;
 `;
 const StyledP = S.p`
     text-align: left;
-    font-size: 1.6rem;
-    color: '#000';
+    font-size: 1.4rem;
+    color: rgb(73, 72, 72);
 `;
 const StyledLink = S(Link)`
     font-size: 1.6rem;
