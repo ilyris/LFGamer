@@ -128,7 +128,7 @@ const Messages = (props) => {
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
                     if(message.id == props.loggedInUserId ){
                         return (
-                            <UserMessages>
+                            <UserMessages isFromFriend={false}>
                                 <TitleAndContentMessageCotnainer>
                                     <StyledP>{message.username}</StyledP>
                                     <StyledP>{message.text}</StyledP>
@@ -137,7 +137,7 @@ const Messages = (props) => {
                         )
                     } else {
                         return (
-                            <UserMessages style={{float: 'right'}}>
+                            <UserMessages isFromFriend={true}>
                                 <TitleAndContentMessageCotnainer>
                                     <StyledP>{message.username}</StyledP>
                                     <StyledP>{message.text}</StyledP>
@@ -200,11 +200,11 @@ const InnerMessagesContainer = S.div`
 `;
 const UserMessages = S.div`
     height: fit-content;
-    border-radius: 5px;
-    width: auto;
-    margin: 5px;
-    padding: 5px;
-    width: fit-content;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 10px;
+    background-color: ${props => props.isFromFriend ? '#fff' : 'rgba(73, 72, 72, 0.14);'};
 `;
 const TitleAndContentMessageCotnainer = S.div`
     display: flex;
