@@ -106,7 +106,7 @@ const AvatarContainer = S.div`
     align-items: center;
     justify-content: flex-start;
     pointer-events: none;
-
+    width: 100%;
 `;
 const CardAvatar = S.img`
     width: 50px;
