@@ -130,7 +130,7 @@ const Messages = (props) => {
                         return (
                             <UserMessages isFromFriend={false}>
                                 <TitleAndContentMessageCotnainer>
-                                    <StyledP>{message.username}</StyledP>
+                                    <StyledP isFromFriend={false}>{message.username}</StyledP>
                                     <StyledP>{message.text}</StyledP>
                                 </TitleAndContentMessageCotnainer>
                             </UserMessages>
@@ -204,7 +204,7 @@ const UserMessages = S.div`
     box-sizing: border-box;
     margin: 0;
     padding: 10px;
-    background-color: ${props => props.isFromFriend ? '#fff' : 'rgba(73, 72, 72, 0.14);'};
+    background-color: ${props => props.isFromFriend ? '#fff' : 'rgba(73, 72, 72, 0.14)'};
 `;
 const TitleAndContentMessageCotnainer = S.div`
     display: flex;
@@ -214,7 +214,7 @@ const TitleAndContentMessageCotnainer = S.div`
 const StyledP = S.p`
     text-align: left;
     font-size: 1.6rem;
-    color: #000;
+    color: ${props => props.isFromFriend ? '#000' : 'rgb(118, 238, 116)'};
 `;
 const StyledLink = S(Link)`
     font-size: 1.6rem;
