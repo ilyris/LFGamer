@@ -16,7 +16,7 @@ function MessageSessionContainer(props) {
     const loggedInUser = useSelector(state => state.root.loggedInUser);
     const [convos, setConvos] = useState([]);
     const containerListHeader = useRef(null);
-
+    console.log(loggedInUser)
     const minimizeMessage = (event) => {
         event.stopPropagation();
         event.target.classList.toggle('isMin');
@@ -48,7 +48,7 @@ function MessageSessionContainer(props) {
                 {/*  Change this data to signed in user*/}
                 <UsernameContainer onClick={minimizeMessage}>
                     <AvatarContainer>
-                        <CardAvatar src={`https://cdn.discordapp.com/avatars/300623558265143296/3c2ea9607df17fbaaf14a92cbe7a1d5f.png`}/>
+                        <CardAvatar src={`https://cdn.discordapp.com/avatars/${loggedInUser.dis}/${loggedInUser.avatar}.png`}/>
                         <CardUsername isheader={true}>{`Messaging`}</CardUsername>                          
                     </AvatarContainer>
                     <StyledIconArrow isMin={isMin} icon={faChevronDown} />
