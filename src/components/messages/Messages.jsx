@@ -11,7 +11,6 @@ import { decodeJWT } from '../../helperFuncs/cookie';
 // let authToken = localStorage.getItem('auth-token');
 
 const Messages = (props) => {
-    let jwt = decodeJWT(localStorage.getItem('token'));
 
     // local state
     const [messageInput, setMessageInput] = useState('');
@@ -23,7 +22,7 @@ const Messages = (props) => {
 
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
-    const activeMessages = useSelector(state => state.messageConnections.messages);
+    // const activeMessages = useSelector(state => state.messageConnections.messages);
   
 
     const handleMessageInput = (event) => {
@@ -129,6 +128,7 @@ const Messages = (props) => {
                     if(message.id == props.loggedInUserId ){
                         return (
                             <UserMessages isFromFriend={false} >
+                                <CardAvatar src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`} />
                                 <TitleAndContentMessageCotnainer>
                                     <StyledUsername isFromFriend={false} >{message.username}</StyledUsername>
                                     <StyledP>{message.text}</StyledP>
@@ -137,7 +137,8 @@ const Messages = (props) => {
                         )
                     } else {
                         return (
-                            <UserMessages isFromFriend={true} >
+                            <UserMessages isFromFriend={true}>
+                                 <CardAvatar src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`} />
                                 <TitleAndContentMessageCotnainer>
                                     <StyledUsername isFromFriend={true} >{message.username}</StyledUsername>
                                     <StyledP>{message.text}</StyledP>
@@ -205,6 +206,11 @@ const UserMessages = S.div`
     margin: 0;
     padding: 10px;
     background-color: ${props => props.isFromFriend ? '#fff' : 'rgba(73, 72, 72, 0.14)'};
+`;
+const CardAvatar = S.img`
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 `;
 const TitleAndContentMessageCotnainer = S.div`
     display: flex;
