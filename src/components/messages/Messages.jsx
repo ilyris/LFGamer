@@ -126,7 +126,7 @@ const Messages = (props) => {
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
-                    //if(props.convo.id)
+                    console.log(message);
                     if(message.id == props.loggedInUserId ){
                         return (
                             <UserMessages isFromFriend={false} >
