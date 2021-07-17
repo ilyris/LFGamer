@@ -96,7 +96,7 @@ const Messages = (props) => {
 
         let sentAt = dateObj.toLocaleTimeString().split(':');
         sentAt = `${sentAt[0]}:${sentAt[2]}`;
-        
+
         return [dateString, sentAt];
     }
     // useEffect( () => {
@@ -153,7 +153,7 @@ const Messages = (props) => {
                             <UserMessages isFromFriend={true}>
                                  <CardAvatar src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`} />
                                 <TitleAndContentMessageCotnainer>
-                                    <StyledUsername isFromFriend={true} >{message.username}</StyledUsername>
+                                    <StyledUsername isFromFriend={true} >{message.username} <StyledCircle icon={faCircle}/> <MessageTime>{sentAt}</MessageTime> </StyledUsername>
                                     <StyledP>{message.text}</StyledP>
                                 </TitleAndContentMessageCotnainer>
                             </UserMessages>
