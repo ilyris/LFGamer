@@ -12,7 +12,6 @@ import {env_be_url} from '../../globalVars/envURL';
   const [month, setMonth] = useState(null)
   const [date, setDate] = useState(null)
   const [fromText, setFromText] = useState('');
-  console.log(c);
 
   const handleOpenConversation = (e) => {
     const userId = e.target.getAttribute("data-user-id");

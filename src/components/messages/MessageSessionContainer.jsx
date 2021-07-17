@@ -27,7 +27,6 @@ function MessageSessionContainer(props) {
             setIsMin(true);
         }
     }
-console.log(convos)
     useEffect(() => {
         if(!loggedInUser) return;
         const getConversations = async () => {

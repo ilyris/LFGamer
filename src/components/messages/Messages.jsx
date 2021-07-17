@@ -228,7 +228,7 @@ const StyledInput = S.input`
     padding: 12px 10px 0 12px;
 `;
 const StyledButton = S.button`
-    background-color: #0077ff;
+    background: linear-gradient(to right, rgb(118, 238, 116) 0%, rgb(0, 152, 142) 100%);
     color: #fff;
     border: unset;
     padding: 3px;
@@ -238,7 +238,7 @@ const StyledButton = S.button`
     transition: all ease 120ms;
     &: hover {
         cursor: pointer;
-        background-color: #003c80;
+        background-color: rgb(118, 238, 116);
     }
 `;
 const StyledForm = S.form`
