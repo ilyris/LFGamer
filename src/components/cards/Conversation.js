@@ -23,7 +23,7 @@ import {env_be_url} from '../../globalVars/envURL';
       console.log(c)
       let friendId = c.members.filter(id => id !== loggedInUserId)
       try {
-        const res = await axios.post(`${env_be_url}login/user`, {user_id: friendId[0]});
+        const res = await axios.post(`${env_be_url}login/user`, {user_id: 1});
         setUser(res.data);
         console.log(res);
       } catch(err) {

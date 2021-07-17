@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faCircle } from "@fortawesome/free-solid-svg-icons";
 import {Link} from 'react-router-dom';
 import { decodeJWT } from '../../helperFuncs/cookie';
+import UserMessage from './UserMessage';
 
 
 // let authToken = localStorage.getItem('auth-token');
@@ -87,18 +88,7 @@ const Messages = (props) => {
     const minimizeMessage = (event) => {
         event.target.parentElement.classList.toggle('minimize');
     }
-    const messageTimestamp = (date) => {
-        const dateObj = new Date(date);
 
-        let dateString = dateObj.toDateString();
-        dateString = dateString.split(' ');
-        dateString = `${dateString[1]} ${dateString[2]}`;
-
-        let sentAt = dateObj.toLocaleTimeString().split(':');
-        sentAt = `${sentAt[0]}:${sentAt[2]}`;
-
-        return [dateString, sentAt];
-    }
     // useEffect( () => {
     //     socket.on('update-messages', message => {
     //         console.log(message);
@@ -135,31 +125,17 @@ const Messages = (props) => {
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
-                {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
-                    const  [dateString, sentAt] = messageTimestamp(message.created_at);
-
+                {props.conversationMessages.map( (message,index) => {
                     if(message.id == props.loggedInUserId ){
                         return (
-                            <UserMessages isFromFriend={false} >
-                                <CardAvatar src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`} />
-                                <TitleAndContentMessageCotnainer>
-                                    <StyledUsername isFromFriend={false} >{message.username} <StyledCircle icon={faCircle}/> <MessageTime>{sentAt}</MessageTime></StyledUsername>
-                                    <StyledP>{message.text}</StyledP>
-                                </TitleAndContentMessageCotnainer>
-                            </UserMessages>
+                            <UserMessage key={index} message={message} isFromFriend={false}/>
                         )
                     } else {
                         return (
-                            <UserMessages isFromFriend={true}>
-                                 <CardAvatar src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`} />
-                                <TitleAndContentMessageCotnainer>
-                                    <StyledUsername isFromFriend={true} >{message.username} <StyledCircle icon={faCircle}/> <MessageTime>{sentAt}</MessageTime> </StyledUsername>
-                                    <StyledP>{message.text}</StyledP>
-                                </TitleAndContentMessageCotnainer>
-                            </UserMessages>
+                            <UserMessage key={index} message={message} isFromFriend={true}/>
                         )
                     }
-                 }) : null}   
+                 })}   
             </InnerMessagesContainer>
             {userTyping ? <UserTypingMessageAlert>{userTyping}</UserTypingMessageAlert> : null}
             <StyledForm onSubmit={(event) => socketIOMessage(event,messageInput)}>
@@ -212,51 +188,7 @@ const InnerMessagesContainer = S.div`
     width: 100%;
     overflow-y: scroll;
 `;
-const UserMessages = S.div`
-    height: fit-content;
-    width: 100%;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 10px;
-    display: flex;
-    background-color: ${props => props.isFromFriend ? '#fff' : 'rgba(73, 72, 72, 0.14)'};
-    min-width: 100%;
-`;
-const CardAvatar = S.img`
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    margin-right: 10px;
-`;
-const TitleAndContentMessageCotnainer = S.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 100%;
-`;
-const StyledUsername = S.p`
-    text-align: left;
-    font-size: 1.6rem;
-    color: #000;
-    display: flex;
-    align-items: center;
-    font-weight: 600;
-`;
-const StyledCircle = S(FontAwesomeIcon)`
-    font-size: .4rem;
-    color: #000;
-    margin: 0 5px;
-`;
-const MessageTime = S.span`
-    font-size: 1.2rem;
-    color: #0000007a;
-    font-weight: 100;
-`;
-const StyledP = S.p`
-    text-align: left;
-    font-size: 1.4rem;
-    color: rgb(73, 72, 72);
-`;
+
 const StyledLink = S(Link)`
     font-size: 1.6rem;
     color: #fff;
