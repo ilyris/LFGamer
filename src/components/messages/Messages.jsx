@@ -30,6 +30,7 @@ const Messages = (props) => {
     // let filterFriends = props.activeMessageSessions.filter( convo => {
     //     return 
     // })
+
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
 
@@ -86,8 +87,8 @@ const Messages = (props) => {
     }
 
     // set up id to close message container out
-    const handleClose = (id) => {
-        console.log(id);
+    const handleClose = (e) => {
+        const id = e.target.parentElement.getAttribute('data-user-id');
         dispatch({type: "DELETE_MESSAGE_SESSION", payload: id}) ;
     }
     const minimizeMessage = (event) => {
@@ -127,7 +128,7 @@ const Messages = (props) => {
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
             <MessagedUserName onClick={minimizeMessage}>{props.activeMessageSessions.friendUsername}</MessagedUserName>
-            <ExitButton onClick={(e) => handleClose(e.target.parentElement.getAttribute('data-user-id'))}><FontAwesomeIcon icon={faTimes}/></ExitButton>
+            <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {activeMessages.length > 0 ? activeMessages.map( (messages,index) => {
                     return (
@@ -252,6 +253,9 @@ const UserTypingMessageAlert = S.p`
     padding: 2px 15px;
     font-size: 12px;
     margin: 0 0 10px 10px;
+`;
+const StyledIcon = S(FontAwesomeIcon)`
+    pointer-events: none;
 `;
 const ExitButton = S.div`
     font-size: 24px;
