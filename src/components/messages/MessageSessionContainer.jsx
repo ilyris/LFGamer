@@ -16,6 +16,7 @@ function MessageSessionContainer(props) {
     const loggedInUser = useSelector(state => state.root.loggedInUser);
     const conversationMessages = useSelector(state => state.messageConnections.messages);
     const [convos, setConvos] = useState([]);
+    const [allMessages, setAllMessages] = useState([]);
     const containerListHeader = useRef(null);
     console.log(conversationMessages);
     const minimizeMessage = (event) => {
@@ -42,8 +43,8 @@ function MessageSessionContainer(props) {
         const getMessages = async () => {
             try {
                 const res = await axios.get(`${env_be_url}message/getAllMessages/${loggedInUser.id}`); // needs to be scoped to loggedInUser
-                // join covo.id on message.convoId where loggedInUser is in members[]
                 console.log(res);
+                await setAllMessages(res.data);
             } catch(err) {
                 console.log(err);
             }
@@ -53,7 +54,6 @@ function MessageSessionContainer(props) {
     }, [loggedInUser])
 
 
-    // dispatch({type: 'SET_MESSAGES', payload: res.data});
 
     return (
         <MessageSessionsContainer>
@@ -77,7 +77,8 @@ function MessageSessionContainer(props) {
             </ConversationListContainer>
 
             {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users,index) => {
-                return <Messages loggedInUserId={loggedInUser.id} conversationMessages={conversationMessages} activeMessageSessions={users} key={index}/>
+                console.log(users);
+                return <Messages allMessages={allMessages} loggedInUserId={loggedInUser.id} conversationMessages={conversationMessages} activeMessageSessions={users} key={index}/>
                 }) : null}
         </MessageSessionsContainer> 
     )
