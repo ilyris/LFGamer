@@ -86,9 +86,9 @@ const Messages = (props) => {
     }
 
     // set up id to close message container out
-    // const handleClose = (id) => {
-    //     dispatch({type: "DELETE_MESSAGE_SESSION", payload: id}) ;
-    // }
+    const handleClose = (id) => {
+        dispatch({type: "DELETE_MESSAGE_SESSION", payload: id}) ;
+    }
     const minimizeMessage = (event) => {
         event.target.parentElement.classList.toggle('minimize');
     }
@@ -126,7 +126,7 @@ const Messages = (props) => {
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
             <MessagedUserName onClick={minimizeMessage}>{props.activeMessageSessions.friendUsername}</MessagedUserName>
-            <ExitButton ><FontAwesomeIcon icon={faTimes}/></ExitButton>
+            <ExitButton onClick={(e) => handleClose(e.target.parentElement.getAttribute('data-user-id'))}><FontAwesomeIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {activeMessages.length > 0 ? activeMessages.map( (messages,index) => {
                     return (
