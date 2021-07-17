@@ -67,7 +67,7 @@ const Messages = (props) => {
     //     })
     //     setMessageInput('');
     // }             
-    
+
     const socketIOMessage = (event,messageInputValue) => {
         event.preventDefault();
 
@@ -119,12 +119,14 @@ const Messages = (props) => {
         // Listen to the typing event and display that data.
 
 
+        // only show messages matching props.convo.id
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
+                    //if(props.convo.id)
                     if(message.id == props.loggedInUserId ){
                         return (
                             <UserMessages isFromFriend={false} >
