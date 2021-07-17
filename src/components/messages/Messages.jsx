@@ -178,7 +178,7 @@ const MessagedUserName = S.h3`
     text-transform: capitalize;
     text-align: left;
     padding-left: 10px;
-    min-width: 100.1%;
+    min-width: 100.3%;
     transition: 150ms ease-in-out all;
     &: hover {
         cursor: pointer;
