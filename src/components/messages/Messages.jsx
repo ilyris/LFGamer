@@ -130,7 +130,7 @@ const Messages = (props) => {
                         return (
                             <UserMessages isFromFriend={false} >
                                 <TitleAndContentMessageCotnainer>
-                                    <StyledP isFromFriend={false} isUsername={true}>{message.username}</StyledP>
+                                    <StyledUsername isFromFriend={false} >{message.username}</StyledUsername>
                                     <StyledP>{message.text}</StyledP>
                                 </TitleAndContentMessageCotnainer>
                             </UserMessages>
@@ -139,7 +139,7 @@ const Messages = (props) => {
                         return (
                             <UserMessages isFromFriend={true} >
                                 <TitleAndContentMessageCotnainer>
-                                    <StyledP isFromFriend={true} isUsername={true}>{message.username}</StyledP>
+                                    <StyledUsername isFromFriend={true} >{message.username}</StyledUsername>
                                     <StyledP>{message.text}</StyledP>
                                 </TitleAndContentMessageCotnainer>
                             </UserMessages>
@@ -211,10 +211,15 @@ const TitleAndContentMessageCotnainer = S.div`
     flex-direction: column;
     justify-content: flex-start;
 `;
+const StyledUsername = S.p`
+    text-align: left;
+    font-size: 1.2rem;
+    color rgb(73, 72, 72);
+`;
 const StyledP = S.p`
     text-align: left;
-    font-size: ${props => props.isUsername ? '1.2rem' : '1.6rem'};
-    color: ${props => props.isFromFriend ? '#000' : 'rgb(118, 238, 116)'};
+    font-size: 1.6rem;
+    color: '#000';
 `;
 const StyledLink = S(Link)`
     font-size: 1.6rem;
