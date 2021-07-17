@@ -139,7 +139,7 @@ const Messages = (props) => {
                         return (
                             <UserMessages isFromFriend={true} >
                                 <TitleAndContentMessageCotnainer>
-                                    <StyledP isUsername={true}>{message.username}</StyledP>
+                                    <StyledP isFromFriend={true} isUsername={true}>{message.username}</StyledP>
                                     <StyledP>{message.text}</StyledP>
                                 </TitleAndContentMessageCotnainer>
                             </UserMessages>
