@@ -37,7 +37,7 @@ function Profile(props) {
                 }
             })
             .catch(err => console.log(err))
-    }, [])
+    }, [params.id])
 
     if(isLoading) {
         return <Loader />
