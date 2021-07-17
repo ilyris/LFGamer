@@ -178,9 +178,11 @@ const MessagedUserName = S.h3`
     text-transform: capitalize;
     text-align: left;
     padding-left: 10px;
-
+    min-width: 100.1%;
+    transition: 150ms ease-in-out all;
     &: hover {
         cursor: pointer;
+        background-color: rgb(96 95 95); 
     }
 `;
 const InnerMessagesContainer = S.div`
