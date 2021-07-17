@@ -17,19 +17,14 @@ const Messages = (props) => {
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
     const [messages, setMessages] = useState('')
-
+    console.log(props.conversationMessages)
     // dispatch
     const dispatch = useDispatch();
 
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
     const activeMessages = useSelector(state => state.messageConnections.messages);
-    const loggedInUserId = jwt.payload.user_id;
-    console.log(props.activeMessageSessions)
   
-    // let filterFriends = props.activeMessageSessions.filter( convo => {
-    //     return 
-    // })
 
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
@@ -130,15 +125,26 @@ const Messages = (props) => {
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
-                {activeMessages.length > 0 ? activeMessages.map( (messages,index) => {
-                    return (
-                        <UserMessages>
-                            <TitleAndContentMessageCotnainer>
-                                {/* <StyledP><StyledLink to={{ pathname: `/profile/${loggedInUserId}`, state: { loggedInUser } }}>{loggedInUser.firstName} {loggedInUser.lastName}</StyledLink></StyledP> */}
-                                <StyledP>{messages.message}</StyledP>
-                            </TitleAndContentMessageCotnainer>
-                        </UserMessages>
-                    )
+                {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
+                    if(message.id == props.loggedInUserId ){
+                        return (
+                            <UserMessages>
+                                <TitleAndContentMessageCotnainer>
+                                    <StyledP>{message.username}</StyledP>
+                                    <StyledP>{message.text}</StyledP>
+                                </TitleAndContentMessageCotnainer>
+                            </UserMessages>
+                        )
+                    } else {
+                        return (
+                            <UserMessages style={{float: 'right'}}>
+                                <TitleAndContentMessageCotnainer>
+                                    <StyledP>{message.username}</StyledP>
+                                    <StyledP>{message.text}</StyledP>
+                                </TitleAndContentMessageCotnainer>
+                            </UserMessages>
+                        )
+                    }
                  }) : null}   
             </InnerMessagesContainer>
             {userTyping ? <UserTypingMessageAlert>{userTyping}</UserTypingMessageAlert> : null}

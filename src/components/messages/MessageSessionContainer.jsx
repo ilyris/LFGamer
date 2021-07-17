@@ -14,9 +14,10 @@ function MessageSessionContainer(props) {
     const activeMessageSessions = useSelector(state => state.messageConnections.userConnections); // All the active user sessions
     const socket = useSelector(state => state.messageConnections.socket);
     const loggedInUser = useSelector(state => state.root.loggedInUser);
+    const conversationMessages = useSelector(state => state.messageConnections.messages);
     const [convos, setConvos] = useState([]);
     const containerListHeader = useRef(null);
-    console.log(loggedInUser)
+
     const minimizeMessage = (event) => {
         event.stopPropagation();
         event.target.classList.toggle('isMin');
@@ -40,6 +41,7 @@ function MessageSessionContainer(props) {
         }
         getConversations();
     }, [loggedInUser])
+
     
     return (
         <MessageSessionsContainer>
@@ -63,7 +65,7 @@ function MessageSessionContainer(props) {
             </ConversationListContainer>
 
             {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users,index) => {
-                return <Messages activeMessageSessions={users} key={index}/>
+                return <Messages loggedInUserId={loggedInUser.id} conversationMessages={conversationMessages} activeMessageSessions={users} key={index}/>
                 }) : null}
         </MessageSessionsContainer> 
     )

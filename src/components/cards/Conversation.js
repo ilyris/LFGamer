@@ -8,7 +8,7 @@ import {env_be_url} from '../../globalVars/envURL';
     const dispatch = useDispatch();
 
   const [user, setUser] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [lastMessage, setLastMessage] = useState(null);
   const [month, setMonth] = useState(null)
   const [date, setDate] = useState(null)
   const [fromText, setFromText] = useState('');
@@ -34,25 +34,26 @@ import {env_be_url} from '../../globalVars/envURL';
   }, [c.receiverId]);
 
   useEffect( () => {
-    const getLastReceivedMessage = async () => {
+    const getMessages = async () => {
       try {
         const res = await axios.get(`${env_be_url}message/${c.id}`);
         console.log(res.data);
-        setMessage(res.data);
-
-        const dateArray = Date(res.data.created_at).split(' ');
+        await setLastMessage(res.data[res.data.length - 1]);
+        dispatch({type: 'SET_MESSAGES', payload: res.data});
+        // dispatch all messages to our global state
+        const dateArray = Date(res.data[res.data.length - 1].created_at).split(' ');
         setMonth(dateArray[1]);
         setDate(dateArray[2]);
-        if(loggedInUserId == res.data.senderId) { 
+        if(loggedInUserId == res.data[res.data.length - 1].senderId) { 
           setFromText('You: ');
         } else {
-          setFromText(`${res.data.username}: ` );
+          setFromText(`${res.data[res.data.length - 1].username}: ` );
         }
       } catch(err) {
         console.log(err);
       }
     }
-    getLastReceivedMessage();
+    getMessages();
   }, [c.cid]);
 
 
@@ -75,7 +76,7 @@ import {env_be_url} from '../../globalVars/envURL';
               </CardUsername>
               <LastMessage>
                 {fromText}
-                {message && message.text}
+                {lastMessage && lastMessage.text}
               </LastMessage>
             </div>
           </AvatarContainer>
