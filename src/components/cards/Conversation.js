@@ -122,6 +122,7 @@ const CardUsername = S.div`
     text-align: left;
     display: flex;
     justify-content: space-between;
+    width: 100%;
 `;
 const LastMessage = S.p`
     font-size: 12px;
