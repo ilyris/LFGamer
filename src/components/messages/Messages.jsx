@@ -87,6 +87,7 @@ const Messages = (props) => {
 
     // set up id to close message container out
     const handleClose = (id) => {
+        console.log(id);
         dispatch({type: "DELETE_MESSAGE_SESSION", payload: id}) ;
     }
     const minimizeMessage = (event) => {
