@@ -11,7 +11,12 @@ export const messageReducer = (state = initialState, action) => {
         case 'SET_SOCKET':
             return  {...state, socket: action.payload};
         case 'SET_USER_CONNECTIONS':
-            return  {...state, userConnections: [...state.userConnections, action.payload]};
+            const returnedSession = state.userConnections.find((session)=> session.userId === action.payload.userId)
+            if(returnedSession == undefined) {
+                return  {...state, userConnections: [...state.userConnections, action.payload]};
+            } else {
+                return state;
+            }
         case 'SET_MESSAGES':
             return  {...state, messages: [ ...state.messages, action.payload]};
             case 'DELETE_MESSAGE_SESSION':
