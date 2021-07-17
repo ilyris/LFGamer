@@ -127,7 +127,7 @@ const Messages = (props) => {
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
-            <MessagedUserName onClick={minimizeMessage}>{props.activeMessageSessions.friendUsername}</MessagedUserName>
+            <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {activeMessages.length > 0 ? activeMessages.map( (messages,index) => {
