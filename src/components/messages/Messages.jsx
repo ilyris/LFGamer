@@ -19,7 +19,7 @@ const Messages = (props) => {
     console.log(props.conversationMessages)
     // dispatch
     const dispatch = useDispatch();
-
+    console.log(props);
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
     // const activeMessages = useSelector(state => state.messageConnections.messages);

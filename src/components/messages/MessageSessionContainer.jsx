@@ -16,9 +16,11 @@ function MessageSessionContainer(props) {
     const loggedInUser = useSelector(state => state.root.loggedInUser);
     const conversationMessages = useSelector(state => state.messageConnections.messages);
     const [convos, setConvos] = useState([]);
-    const [allMessages, setAllMessages] = useState([]);
+    // const [allMessages, setAllMessages] = useState([]);
     const containerListHeader = useRef(null);
+
     console.log(conversationMessages);
+
     const minimizeMessage = (event) => {
         event.stopPropagation();
         event.target.classList.toggle('isMin');
@@ -40,16 +42,16 @@ function MessageSessionContainer(props) {
                 console.log(err);
             }
         }
-        const getMessages = async () => {
-            try {
-                const res = await axios.get(`${env_be_url}message/getAllMessages/${loggedInUser.id}`); // needs to be scoped to loggedInUser
-                console.log(res);
-                await setAllMessages(res.data);
-            } catch(err) {
-                console.log(err);
-            }
-        }
-        getMessages();
+        // const getMessages = async () => {
+        //     try {
+        //         const res = await axios.get(`${env_be_url}message/getAllMessages/${loggedInUser.id}`); // needs to be scoped to loggedInUser
+        //         console.log(res);
+        //         await setAllMessages(res.data);
+        //     } catch(err) {
+        //         console.log(err);
+        //     }
+        // }
+        // getMessages();
         getConversations();
     }, [loggedInUser])
 
@@ -78,7 +80,7 @@ function MessageSessionContainer(props) {
 
             {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users,index) => {
                 console.log(users);
-                return <Messages allMessages={allMessages} loggedInUserId={loggedInUser.id} conversationMessages={conversationMessages} activeMessageSessions={users} key={index}/>
+                return <Messages convo={convos[index]} loggedInUserId={loggedInUser.id} conversationMessages={conversationMessages} activeMessageSessions={users} key={index}/>
                 }) : null}
         </MessageSessionsContainer> 
     )
