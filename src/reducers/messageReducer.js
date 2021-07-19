@@ -20,10 +20,7 @@ export const messageReducer = (state = initialState, action) => {
         case 'SET_MESSAGES':
             return  {...state, messages: [...state.messages, action.payload]};
         case 'DELETE_MESSAGE_SESSION':
-            console.log(action.payload);
-            console.log(state.userConnections)
             return {...state, userConnections: [...state.userConnections.filter( session => {
-                console.log(session);
                 return session.userId !== action.payload.userId
             })]}
         default:

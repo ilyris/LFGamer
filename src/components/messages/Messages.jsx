@@ -82,8 +82,7 @@ const Messages = (props) => {
     // set up id to close message container out
     const handleClose = (e) => {
         const id = e.target.parentElement.getAttribute('data-user-id');
-        console.log(id);
-        dispatch({type: "DELETE_MESSAGE_SESSION", payload: {userId: id}}) ;
+        dispatch({type: "DELETE_MESSAGE_SESSION", payload: {userId: id}});
     }
     const minimizeMessage = (event) => {
         event.target.parentElement.classList.toggle('minimize');
@@ -120,11 +119,11 @@ const Messages = (props) => {
 
 
         // only show messages matching props.convo.id
-        function toTimestamp(strDate){
-            var datum = Date.parse(strDate);
-            // return datum/1000;
-            return Math.round(datum);
-         }
+    function toTimestamp(strDate){
+        var datum = Date.parse(strDate);
+        // return datum/1000;
+        return Math.round(datum);
+        }
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
@@ -132,6 +131,7 @@ const Messages = (props) => {
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {props.conversationMessages && props.conversationMessages.map( (message,index) => {
+                    console.log(message);
                     toTimestamp(message.created_at)
                     // timestampToDate(toTimestamp(message.created_at))
                     if(message.id == props.loggedInUserId ){
