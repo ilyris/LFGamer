@@ -134,15 +134,18 @@ const Messages = (props) => {
                     console.log(message);
                     toTimestamp(message.created_at)
                     // timestampToDate(toTimestamp(message.created_at))
-                    if(message.id == props.loggedInUserId ){
-                        return (
-                            <UserMessage key={index} message={message} isFromFriend={false}/>
-                        )
-                    } else {
-                        return (
-                            <UserMessage key={index} message={message} isFromFriend={true}/>
-                        )
+                    if(message.conversationId === props.activeMessageSessions.conversationId) {
+                        if(message.id == props.loggedInUserId ){
+                            return (
+                                <UserMessage key={index} message={message} isFromFriend={false}/>
+                            )
+                        } else {
+                            return (
+                                <UserMessage key={index} message={message} isFromFriend={true}/>
+                            )
+                        }                        
                     }
+
                  })}   
             </InnerMessagesContainer>
             {userTyping ? <UserTypingMessageAlert>{userTyping}</UserTypingMessageAlert> : null}
