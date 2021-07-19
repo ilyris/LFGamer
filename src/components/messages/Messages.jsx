@@ -82,6 +82,7 @@ const Messages = (props) => {
     // set up id to close message container out
     const handleClose = (e) => {
         const id = e.target.parentElement.getAttribute('data-user-id');
+        console.log(id);
         dispatch({type: "DELETE_MESSAGE_SESSION", payload: {userId: id}}) ;
     }
     const minimizeMessage = (event) => {
