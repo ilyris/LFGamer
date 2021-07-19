@@ -16,8 +16,7 @@ const Messages = (props) => {
     // local state
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
-    const [messages, setMessages] = useState('')
-    console.log(props.conversationMessages)
+    const [messages, setMessages] = useState('');
     // dispatch
     const dispatch = useDispatch();
     console.log(props);
@@ -83,7 +82,7 @@ const Messages = (props) => {
     // set up id to close message container out
     const handleClose = (e) => {
         const id = e.target.parentElement.getAttribute('data-user-id');
-        dispatch({type: "DELETE_MESSAGE_SESSION", payload: id}) ;
+        dispatch({type: "DELETE_MESSAGE_SESSION", payload: {userId: id}}) ;
     }
     const minimizeMessage = (event) => {
         event.target.parentElement.classList.toggle('minimize');
@@ -120,12 +119,20 @@ const Messages = (props) => {
 
 
         // only show messages matching props.convo.id
+        function toTimestamp(strDate){
+            var datum = Date.parse(strDate);
+            // return datum/1000;
+            return Math.round(datum);
+         }
+
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {props.conversationMessages.map( (message,index) => {
+                    toTimestamp(message.created_at)
+                    // timestampToDate(toTimestamp(message.created_at))
                     if(message.id == props.loggedInUserId ){
                         return (
                             <UserMessage key={index} message={message} isFromFriend={false}/>

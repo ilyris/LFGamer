@@ -19,7 +19,7 @@ function MessageSessionContainer(props) {
     // const [allMessages, setAllMessages] = useState([]);
     const containerListHeader = useRef(null);
 
-    console.log(conversationMessages);
+    console.log(activeMessageSessions);
 
     const minimizeMessage = (event) => {
         event.stopPropagation();
@@ -42,16 +42,6 @@ function MessageSessionContainer(props) {
                 console.log(err);
             }
         }
-        // const getMessages = async () => {
-        //     try {
-        //         const res = await axios.get(`${env_be_url}message/getAllMessages/${loggedInUser.id}`); // needs to be scoped to loggedInUser
-        //         console.log(res);
-        //         await setAllMessages(res.data);
-        //     } catch(err) {
-        //         console.log(err);
-        //     }
-        // }
-        // getMessages();
         getConversations();
     }, [loggedInUser])
 
@@ -61,7 +51,6 @@ function MessageSessionContainer(props) {
         <MessageSessionsContainer>
             <ConversationListContainer isMin={isMin} ref={containerListHeader}>
 
-                {/*  Change this data to signed in user*/}
                 <UsernameContainer onClick={minimizeMessage}>
                     <AvatarContainer>
                         <CardAvatar src={`https://cdn.discordapp.com/avatars/${loggedInUser.dis}/${loggedInUser.avatar}.png`}/>
@@ -70,6 +59,7 @@ function MessageSessionContainer(props) {
                     <StyledIconArrow isMin={isMin} icon={faChevronDown} />
                 </UsernameContainer> 
                 <Conversations>
+                    {/* Conversation_id comes from here, then maps to the sessions*/ }
                     {convos && convos.map(c => {
                         return <Conversation c={c} loggedInUserId={loggedInUser.id}/>
                     })}
@@ -80,7 +70,7 @@ function MessageSessionContainer(props) {
 
             {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users,index) => {
                 
-                return <Messages loggedInUserId={loggedInUser.id} convos={convos} conversationMessages={conversationMessages[index]} activeMessageSessions={users} key={index}/>
+                return <Messages loggedInUserId={loggedInUser.id} conversationMessages={conversationMessages[index]} activeMessageSessions={users} key={index}/>
                 }) : null}
         </MessageSessionsContainer> 
     )

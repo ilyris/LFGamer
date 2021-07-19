@@ -1,23 +1,44 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import axios from 'axios';
 import S from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { rankedEmblemArr } from '../pages/RankImageExport'
 import { roleArr } from '../pages/RoleImageExport'
 import {PrimaryCtaLink} from '../pageComponents/PrimaryCtaLink';
+import {env_be_url} from '../../globalVars/envURL';
 
 export function Playercard(props) {
     const {listing} = props;
-    console.log(props);
     const dispatch = useDispatch();
+    const loggedInUser = useSelector(state => state.root.loggedInUser);
     // Filter our the rank file
     let rank = rankedEmblemArr.filter(rank => rank.name == listing.rank)
     rank = rank[0].file;
 
-    const messageUser = () => {
-        dispatch({type: 'SET_USER_CONNECTIONS', payload: listing.id})
+    const messageUser = (e) => {
+        // Start a conversation
+    let conversationId;
+
+        axios.post(`${env_be_url}conversation/startConversation`, {senderId: loggedInUser.id, receiverId: listing.id})
+        .then((res) => {
+            console.log(res.data)
+            conversationId = res.data.id
+            dispatch({type: 'SET_USER_CONNECTIONS', payload: {userId: props.listing.id, friendUsername: props.listing.username, conversationId: res.data.id}})
+        })
+        .catch(err => console.log(err));
+        
+        if(conversationId) {
+            axios.get(`${env_be_url}message/${conversationId.id}`)
+            .then(res => {
+                dispatch({type: 'SET_MESSAGES', payload: res.data});
+            })
+            .catch(err => console.log(err));
+        }
+
+
     }
     return(
-        <PesudoContainer>
+        <PesudoContainer  >
     <ListingCard >
                 <UsernameContainer>
                     <CardAvatar src={`https://cdn.discordapp.com/avatars/${listing.discord_id}/${listing.avatar}.png`}/>
@@ -77,7 +98,7 @@ export function Playercard(props) {
                 </Container>
             </ListingCard>
             <ButtonContainer>
-                <PrimaryCtaLink handleClick={messageUser}text={'Message'}/>
+                <PrimaryCtaLink handleClick={(e) => messageUser(e)}text={'Message'}/>
             </ButtonContainer>
         </PesudoContainer>
         
@@ -200,4 +221,5 @@ const ButtonContainer = S.div`
     left: 0;
     bottom: -26px;
     z-index: 1000;
+    pointer-event: none;
 `;
