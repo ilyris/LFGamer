@@ -134,6 +134,9 @@ const Messages = (props) => {
                     console.log(message);
                     toTimestamp(message.created_at)
                     // timestampToDate(toTimestamp(message.created_at))
+                    console.log(message.conversationId)
+                    console.log(props.activeMessageSessions.conversationId)
+                    
                     if(message.conversationId === props.activeMessageSessions.conversationId) {
                         if(message.id == props.loggedInUserId ){
                             return (
