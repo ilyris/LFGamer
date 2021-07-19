@@ -23,7 +23,7 @@ export function Playercard(props) {
         .then((res) => {
             console.log(res.data)
             conversationId = res.data.id
-            dispatch({type: 'SET_USER_CONNECTIONS', payload: {userId: props.listing.id, friendUsername: props.listing.username, conversationId: res.data.id}})
+            dispatch({type: 'SET_USER_CONNECTIONS', payload: {userId: String(props.listing.id), friendUsername: props.listing.username, conversationId: res.data.id}})
         })
         .catch(err => console.log(err));
         
