@@ -123,7 +123,6 @@ const Messages = (props) => {
         // only show messages matching props.convo.id
     
         useEffect(() => {
-            if(!props.loggedInUserId) return;
             const getConversations = async () => {
                 try {
                     const res = await axios.post(`${env_be_url}conversation/getConversation`, {cid: props.activeMessageSessions.conversationId });
@@ -134,7 +133,7 @@ const Messages = (props) => {
                 }
             }
             getConversations();
-        }, [props.activeMessageSessions.conversationId])
+        }, [])
     
     function toTimestamp(strDate){
         var datum = Date.parse(strDate);
