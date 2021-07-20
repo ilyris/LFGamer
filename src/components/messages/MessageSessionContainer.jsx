@@ -69,9 +69,9 @@ function MessageSessionContainer(props) {
 
             </ConversationListContainer>
 
-            {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users,index) => {
+            {convos.length > 0 ? convos.map( (conversation,index) => {
                 // Certain we are incorrectly passing in the convo messages. 
-                return <Messages loggedInUserId={loggedInUser.id} conversationMessages={conversationMessages[index]} activeMessageSessions={users} key={index}/>
+                return <Messages conversation={conversation} loggedInUserId={loggedInUser.id} conversationMessages={conversationMessages.filter(messages => messages.conversationId != conversation.id)} activeMessageSessions={activeMessageSessions} key={index}/>
                 }) : null}
         </MessageSessionsContainer> 
     )
