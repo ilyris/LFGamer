@@ -20,6 +20,7 @@ function MessageSessionContainer(props) {
     const containerListHeader = useRef(null);
 
     console.log(activeMessageSessions);
+    console.log(convos);
 
     const minimizeMessage = (event) => {
         event.stopPropagation();
