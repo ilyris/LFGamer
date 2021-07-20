@@ -147,6 +147,7 @@ const Messages = (props) => {
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
+                    console.log(message);
                     toTimestamp(message.created_at)
                     // timestampToDate(toTimestamp(message.created_at))
                         if(message.id == props.loggedInUserId ){
