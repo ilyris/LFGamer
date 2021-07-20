@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faCircle } from "@fortawesome/free-solid-svg-icons";
 import {Link} from 'react-router-dom';
 import { decodeJWT } from '../../helperFuncs/cookie';
+import axios from 'axios';
+import { env_be_url } from '../../globalVars/envURL';
 import UserMessage from './UserMessage';
 
 
@@ -133,7 +135,7 @@ const Messages = (props) => {
                 }
             }
             getConversations();
-        }, [])
+        }, [props.activeMessageSessions.conversationId])
     
     function toTimestamp(strDate){
         var datum = Date.parse(strDate);
