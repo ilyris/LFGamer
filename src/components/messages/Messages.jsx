@@ -134,7 +134,7 @@ const Messages = (props) => {
                 }
             }
             getConversations();
-        }, [props.loggedInUserId])
+        }, [props.activeMessageSessions.conversationId])
     
     function toTimestamp(strDate){
         var datum = Date.parse(strDate);
