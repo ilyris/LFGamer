@@ -19,7 +19,7 @@ const Messages = (props) => {
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
     const [messages, setMessages] = useState('');
-    const [convoMessages, setConvoMessages] = useState([]);
+    // const [convoMessages, setConvoMessages] = useState([]);
 
     // dispatch
     const dispatch = useDispatch();
@@ -123,17 +123,17 @@ const Messages = (props) => {
 
         // only show messages matching props.convo.id
     
-        useEffect(() => {
-            const getConversations = async () => {
-                try {
-                    const res = await axios.post(`${env_be_url}conversation/getConversation`, {cid: props.activeMessageSessions.conversationId });
-                    setConvoMessages(res.data);
-                } catch(err) {
-                    console.log(err);
-                }
-            }
-            getConversations();
-        }, [props.activeMessageSessions.conversationId])
+        // useEffect(() => {
+        //     const getConversations = async () => {
+        //         try {
+        //             const res = await axios.post(`${env_be_url}conversation/getConversation`, {cid: props.activeMessageSessions.conversationId });
+        //             setConvoMessages(res.data);
+        //         } catch(err) {
+        //             console.log(err);
+        //         }
+        //     }
+        //     getConversations();
+        // }, [props.activeMessageSessions.conversationId])
     
     function toTimestamp(strDate){
         var datum = Date.parse(strDate);
@@ -146,7 +146,7 @@ const Messages = (props) => {
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
-                {convoMessages.length > 0 ? convoMessages.map( (message,index) => {
+                {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
                     toTimestamp(message.created_at)
                     // timestampToDate(toTimestamp(message.created_at))
                         if(message.id == props.loggedInUserId ){
