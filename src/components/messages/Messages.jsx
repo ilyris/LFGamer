@@ -17,6 +17,8 @@ const Messages = (props) => {
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
     const [messages, setMessages] = useState('');
+    const [convoMessages, setConvoMessages] = useState([]);
+
     // dispatch
     const dispatch = useDispatch();
     console.log(props);
@@ -119,11 +121,26 @@ const Messages = (props) => {
 
 
         // only show messages matching props.convo.id
+    
+        useEffect(() => {
+            if(!props.loggedInUserId) return;
+            const getConversations = async () => {
+                try {
+                    const res = await axios.post(`${env_be_url}conversation/getConversation`, {cid: props.activeMessageSessions.conversationId });
+                    setConvoMessages(res.data);
+                    console.log(res);
+                } catch(err) {
+                    console.log(err);
+                }
+            }
+            getConversations();
+        }, [props.loggedInUserId])
+    
     function toTimestamp(strDate){
         var datum = Date.parse(strDate);
         // return datum/1000;
         return Math.round(datum);
-        }
+    }
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
