@@ -14,7 +14,7 @@ import UserMessage from './UserMessage';
 // let authToken = localStorage.getItem('auth-token');
 
 const Messages = (props) => {
-
+    console.log(props);
     // local state
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
