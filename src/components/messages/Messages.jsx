@@ -148,13 +148,12 @@ const Messages = (props) => {
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
-                {props.conversationMessages && props.conversationMessages.map( (message,index) => {
+                {convoMessages && convoMessages.map( (message,index) => {
                     console.log(message);
                     toTimestamp(message.created_at)
                     // timestampToDate(toTimestamp(message.created_at))
                     console.log(message.conversationId)
                     console.log(props.activeMessageSessions.conversationId)
-                    if(message.conversationId === props.activeMessageSessions.conversationId) {
                         if(message.id == props.loggedInUserId ){
                             return (
                                 <UserMessage key={index} message={message} isFromFriend={false}/>
@@ -164,8 +163,6 @@ const Messages = (props) => {
                                 <UserMessage key={index} message={message} isFromFriend={true}/>
                             )
                         }                        
-                    }
-
                  })}   
             </InnerMessagesContainer>
             {userTyping ? <UserTypingMessageAlert>{userTyping}</UserTypingMessageAlert> : null}
