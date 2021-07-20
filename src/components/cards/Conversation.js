@@ -20,12 +20,10 @@ import {env_be_url} from '../../globalVars/envURL';
 
   useEffect( () => {
     const getReceiverUser = async () => {
-      console.log(c)
       let friendId = c.members.filter(id => id !== loggedInUserId)
       try {
         const res = await axios.post(`${env_be_url}login/user`, {user_id: friendId[0]});
         setUser(res.data);
-        console.log(res);
       } catch(err) {
         console.log(err);
       }
@@ -37,7 +35,6 @@ import {env_be_url} from '../../globalVars/envURL';
     const getMessages = async () => {
       try {
         const res = await axios.get(`${env_be_url}message/${c.id}`); // This is why we're only getting messages for a specific cid
-        console.log(res.data);
         await setLastMessage(res.data[res.data.length - 1]);
         dispatch({type: 'SET_MESSAGES', payload: res.data});
         // dispatch all messages to our global state

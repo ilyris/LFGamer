@@ -21,7 +21,6 @@ export function Playercard(props) {
 
         axios.post(`${env_be_url}conversation/startConversation`, {senderId: loggedInUser.id, receiverId: listing.id})
         .then((res) => {
-            console.log(res.data)
             conversationId = res.data.id
             dispatch({type: 'SET_USER_CONNECTIONS', payload: {userId: String(props.listing.id), friendUsername: props.listing.username, conversationId: res.data.id}})
         })

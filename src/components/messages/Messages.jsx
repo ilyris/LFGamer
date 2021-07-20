@@ -23,7 +23,6 @@ const Messages = (props) => {
 
     // dispatch
     const dispatch = useDispatch();
-    console.log(props);
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
     // const activeMessages = useSelector(state => state.messageConnections.messages);
@@ -129,7 +128,6 @@ const Messages = (props) => {
                 try {
                     const res = await axios.post(`${env_be_url}conversation/getConversation`, {cid: props.activeMessageSessions.conversationId });
                     setConvoMessages(res.data);
-                    console.log(res);
                 } catch(err) {
                     console.log(err);
                 }
@@ -149,11 +147,8 @@ const Messages = (props) => {
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {convoMessages && convoMessages.map( (message,index) => {
-                    console.log(message);
                     toTimestamp(message.created_at)
                     // timestampToDate(toTimestamp(message.created_at))
-                    console.log(message.conversationId)
-                    console.log(props.activeMessageSessions.conversationId)
                         if(message.id == props.loggedInUserId ){
                             return (
                                 <UserMessage key={index} message={message} isFromFriend={false}/>

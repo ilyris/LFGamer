@@ -12,15 +12,11 @@ function MessageSessionContainer(props) {
 
     const [isMin, setIsMin] = useState(true);
     const activeMessageSessions = useSelector(state => state.messageConnections.userConnections); // All the active user sessions
-    const socket = useSelector(state => state.messageConnections.socket);
     const loggedInUser = useSelector(state => state.root.loggedInUser);
     const conversationMessages = useSelector(state => state.messageConnections.messages);
     const [convos, setConvos] = useState([]);
-    // const [allMessages, setAllMessages] = useState([]);
     const containerListHeader = useRef(null);
 
-    console.log(activeMessageSessions);
-    console.log(convos);
 
     const minimizeMessage = (event) => {
         event.stopPropagation();
@@ -38,7 +34,6 @@ function MessageSessionContainer(props) {
             try {
                 const res = await axios.get(`${env_be_url}conversation/${loggedInUser.id}`);
                 setConvos(res.data);
-                console.log(res);
             } catch(err) {
                 console.log(err);
             }
