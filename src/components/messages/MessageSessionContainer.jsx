@@ -68,10 +68,13 @@ function MessageSessionContainer(props) {
                 // Certain we are incorrectly passing in the convo messages. 
                 let messages = [] 
                 conversationMessages.forEach( (message => {
+                    console.log(message.conversationId)
+                    console.log(users.conversationId)
                     if(message.conversationId == users.conversationId) {
                         messages.push(message);
                     }
                 }))
+                console.log(messages)
                 return <Messages loggedInUserId={loggedInUser.id} conversationMessages={messages} activeMessageSessions={users} key={index}/>
                 }) : null}
         </MessageSessionsContainer> 
