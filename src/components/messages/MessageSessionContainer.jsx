@@ -69,7 +69,7 @@ function MessageSessionContainer(props) {
                 let messages = [] 
                 console.log(conversationMessages)
                 conversationMessages.forEach( (message => {
-                    console.log(message)
+                    console.log(message[0].conversationId)
                     console.log(users.conversationId)
                     if(message.conversationId == users.conversationId) {
                         messages.push(message);
