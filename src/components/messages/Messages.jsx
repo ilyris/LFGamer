@@ -146,7 +146,7 @@ const Messages = (props) => {
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
-                {convoMessages && convoMessages.map( (message,index) => {
+                {convoMessages.length > 0 ? convoMessages.map( (message,index) => {
                     toTimestamp(message.created_at)
                     // timestampToDate(toTimestamp(message.created_at))
                         if(message.id == props.loggedInUserId ){
@@ -158,7 +158,7 @@ const Messages = (props) => {
                                 <UserMessage key={index} message={message} isFromFriend={true}/>
                             )
                         }                        
-                 })}   
+                 }) : null}   
             </InnerMessagesContainer>
             {userTyping ? <UserTypingMessageAlert>{userTyping}</UserTypingMessageAlert> : null}
             <StyledForm onSubmit={(event) => socketIOMessage(event,messageInput)}>
