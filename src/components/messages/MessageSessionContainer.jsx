@@ -44,7 +44,7 @@ function MessageSessionContainer(props) {
         else {
             console.log('logged in user id was empty')
         }
-    }, [])
+    }, [loggedInUser])
 
 
 
