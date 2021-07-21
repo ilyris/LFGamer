@@ -41,7 +41,7 @@ function MessageSessionContainer(props) {
             }
         }
         getConversations();
-    }, [loggedInUser])
+    }, [])
 
 
 
