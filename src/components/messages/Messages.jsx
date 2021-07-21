@@ -19,7 +19,7 @@ const Messages = (props) => {
     const [userTyping, setUserTyping] = useState('');
     // const [messages, setMessages] = useState('');
     // const [convoMessages, setConvoMessages] = useState([]);
-
+    console.log(props)
     // dispatch
     const dispatch = useDispatch();
     // Redux State
