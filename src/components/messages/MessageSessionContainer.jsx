@@ -39,7 +39,12 @@ function MessageSessionContainer(props) {
                 console.log(err);
             }
         }
-        getConversations();
+        if(!Object.keys(loggedInUser).length === 0)  {
+            getConversations();
+        }
+        else {
+            console.log('logged in user id was empty')
+        }
     }, [])
 
 
