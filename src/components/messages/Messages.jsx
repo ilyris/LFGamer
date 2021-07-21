@@ -14,11 +14,10 @@ import UserMessage from './UserMessage';
 // let authToken = localStorage.getItem('auth-token');
 
 const Messages = (props) => {
-    console.log(props);
     // local state
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
-    const [messages, setMessages] = useState('');
+    // const [messages, setMessages] = useState('');
     // const [convoMessages, setConvoMessages] = useState([]);
 
     // dispatch
@@ -70,23 +69,39 @@ const Messages = (props) => {
     //     setMessageInput('');
     // }             
 
-    const socketIOMessage = (event,messageInputValue) => {
-        event.preventDefault();
+    // const socketIOMessage = (event,messageInputValue) => {
+    //     event.preventDefault();
 
-        // When a user sends their message, emit an event to the chat API with the data {chatId / message}
-        socket.emit('private-message', {
-            // chatId: props.activeMessageSessions.id,
-            message:messageInputValue
-        });
-        setMessageInput('');
-        setUserTyping('');
+    //     // When a user sends their message, emit an event to the chat API with the data {chatId / message}
+    //     socket.emit('private-message', {
+    //         // chatId: props.activeMessageSessions.id,
+    //         message:messageInputValue
+    //     });
+    //     setMessageInput('');
+    //     setUserTyping('');
+    // }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        messageObject = {
+            conversationId: props.activeMessageSessions.conversationId,
+            senderId: props.loggedInUserId,
+            text: messageInput,
+        }
+        try {
+            const res = axios.post(`${env_be_url}/message`, messageObject);
+            dispatch({type: 'SET_MESSAGES', payload: res.data});
+
+        } catch(err) {
+            console.log(err)
+        }
     }
-
     // set up id to close message container out
     const handleClose = (e) => {
         const id = e.target.parentElement.getAttribute('data-user-id');
         dispatch({type: "DELETE_MESSAGE_SESSION", payload: {userId: id}});
     }
+
     const minimizeMessage = (event) => {
         event.target.parentElement.classList.toggle('minimize');
     }
@@ -147,7 +162,7 @@ const Messages = (props) => {
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
-                    toTimestamp(message.created_at)
+                    toTimestamp(message.created_at);
                     // timestampToDate(toTimestamp(message.created_at))
                         if(message.id == props.loggedInUserId ){
                             return (
@@ -161,7 +176,7 @@ const Messages = (props) => {
                  }) : null}   
             </InnerMessagesContainer>
             {userTyping ? <UserTypingMessageAlert>{userTyping}</UserTypingMessageAlert> : null}
-            <StyledForm onSubmit={(event) => socketIOMessage(event,messageInput)}>
+            <StyledForm onSubmit={(e) => handleSubmit(e)}>
                 <StyledInput contentEditable={true} onChange={handleMessageInput}  type="textarea" value={messageInput}></StyledInput>
                 <StyledButton>Send</StyledButton>
             </StyledForm>
