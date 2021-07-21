@@ -17,21 +17,23 @@ import { decodeJWT } from './helperFuncs/cookie';
 import {env_be_url} from './globalVars/envURL';
 
 function App() {
-  let jwt = decodeJWT(localStorage.getItem('token'));
+  const [jwt, setJWT] = useState(decodeJWT(localStorage.getItem('token')));
+  
 
   const dispatch = useDispatch();
   const socket = io("ws://localhost:8000");
 
   // client-side SOCKET
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log(socket.id); 
-      dispatch({type: 'SET_SOCKET', payload: socket});
-    });
-    socket.on("disconnect", () => {
-      console.log(socket.id); // undefined
-      socket.id = undefined;
-    });
+    setJWT(localStorage.getItem('token'))
+    // socket.on("connect", () => {
+    //   console.log(socket.id); 
+    //   dispatch({type: 'SET_SOCKET', payload: socket});
+    // });
+    // socket.on("disconnect", () => {
+    //   console.log(socket.id); // undefined
+    //   socket.id = undefined;
+    // });
   }, [])
 
   // Grab logged in user information
