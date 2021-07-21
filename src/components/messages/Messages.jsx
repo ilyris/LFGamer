@@ -30,7 +30,7 @@ const Messages = (props) => {
         setMessageInput(event.target.value);
 
         // When user types, emit the event to the chat API that a user is typing.
-        socket.emit('typing', {firstName: props.activeMessageSessions.firstName, lastName: props.activeMessageSessions.lastName});
+        // socket.emit('typing', {firstName: props.activeMessageSessions.firstName, lastName: props.activeMessageSessions.lastName});
     }
     // const sendMessage = (event,messageInputValue) => {
     //      if(messageInputValue == false) {
