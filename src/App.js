@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './App.css';
-import S from 'styled-components';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {ProtectedRoute} from './ProtectedRoute';
 import DesktopNavigation from './components/menus/DesktopNavigation';
