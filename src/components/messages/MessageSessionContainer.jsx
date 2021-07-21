@@ -65,7 +65,8 @@ function MessageSessionContainer(props) {
             </ConversationListContainer>
 
             {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users,index) => {
-                // Certain we are incorrectly passing in the convo messages. 
+                // Certain we are incorrectly passing in the convo messages.
+                let messages = []; 
                 conversationMessages.forEach( (message => {
                     if(message[0].conversationId == users.conversationId) {
                         messages.push(message);
