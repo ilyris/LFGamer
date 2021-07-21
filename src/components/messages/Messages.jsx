@@ -165,6 +165,8 @@ const Messages = (props) => {
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
                     toTimestamp(message.created_at);
                     // timestampToDate(toTimestamp(message.created_at))
+                    console.log(message);
+                    console.log(props.loggedInUserId)
                         if(message.id == props.loggedInUserId ){
                             return (
                                 <UserMessage key={index} message={message} isFromFriend={false}/>
