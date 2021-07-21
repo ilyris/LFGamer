@@ -24,7 +24,7 @@ function App() {
 
   // client-side SOCKET
   useEffect(() => {
-    setJWT(localStorage.getItem('token'))
+    setJWT(decodeJWT(localStorage.getItem('token')))
     // socket.on("connect", () => {
     //   console.log(socket.id); 
     //   dispatch({type: 'SET_SOCKET', payload: socket});
