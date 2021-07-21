@@ -28,7 +28,6 @@ function MessageSessionContainer(props) {
             setIsMin(true);
         }
     }
-    console.log(loggedInUser);
     useEffect(() => {
         console.log(loggedInUser);
         const getConversations = async () => {
@@ -52,7 +51,6 @@ function MessageSessionContainer(props) {
     return (
         <MessageSessionsContainer>
             <ConversationListContainer isMin={isMin} ref={containerListHeader}>
-
                 <UsernameContainer onClick={minimizeMessage}>
                     <AvatarContainer>
                         <CardAvatar src={`https://cdn.discordapp.com/avatars/${loggedInUser.dis}/${loggedInUser.avatar}.png`}/>
@@ -66,15 +64,14 @@ function MessageSessionContainer(props) {
                         return <Conversation c={c} loggedInUserId={loggedInUser.id}/>
                     })}
                 </Conversations>
- 
-
             </ConversationListContainer>
 
             {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users,index) => {
-                // Certain we are incorrectly passing in the convo messages. 
+                // create an empty array to push the conversation messages into
                 let messages = [];
+                // flatten out the array (might be a better way to handle this)
                 conversationMessages.flat().forEach( (message => {
-                    console.log(message);
+                    // check if the message contains the conversationId, so the correct users get the right messages.
                     if(message.conversationId == users.conversationId) {
                         messages.push(message);
                     }

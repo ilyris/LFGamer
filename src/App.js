@@ -37,7 +37,6 @@ function App() {
 
   // Grab logged in user information
     useEffect(() => {
-      console.log(jwt);
       if(!jwt) return;
       axios.post(`${env_be_url}login/user`, {user_id: jwt.payload.user_id})
       .then(res => {
