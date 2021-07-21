@@ -31,7 +31,7 @@ function MessageSessionContainer(props) {
     console.log(loggedInUser);
     useEffect(() => {
         console.log(loggedInUser);
-        const getConversations = async (loggedInUser) => {
+        const getConversations = async () => {
             try {
                 const res = await axios.get(`${env_be_url}conversation/${loggedInUser.id}`);
                 setConvos(res.data);
@@ -40,12 +40,12 @@ function MessageSessionContainer(props) {
             }
         }
         if(!Object.keys(loggedInUser).length === 0)  {
-            getConversations(loggedInUser);
-        }
-        else {
             console.log('logged in user id was empty')
         }
-    }, [loggedInUser])
+        else {
+            getConversations();
+        }
+    }, [loggedInUser.id])
 
 
 
