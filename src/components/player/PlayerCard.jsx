@@ -97,7 +97,7 @@ export function Playercard(props) {
                 </Container>
             </ListingCard>
             <ButtonContainer>
-                <PrimaryCtaLink handleClick={(e) => messageUser(e)}text={'Message'}/>
+                <PrimaryCtaLink handleClick={(e) => messageUser(e)} text={'Message'}/>
             </ButtonContainer>
         </PesudoContainer>
         
