@@ -74,6 +74,7 @@ function MessageSessionContainer(props) {
                 // Certain we are incorrectly passing in the convo messages. 
                 let messages = [];
                 conversationMessages.forEach( (message => {
+                    console.log(message);
                     if(message[0].conversationId == users.conversationId) {
                         messages.push(message);
                     }
