@@ -90,7 +90,8 @@ const Messages = (props) => {
         }
         try {
             const res = axios.post(`${env_be_url}message`, messageObject);
-            dispatch({type: 'SET_MESSAGES', payload: res.data});
+            console.log(res.data)
+            // dispatch({type: 'SET_MESSAGES', payload: res.data});
 
         } catch(err) {
             console.log(err)
