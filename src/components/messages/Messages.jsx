@@ -83,7 +83,7 @@ const Messages = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        messageObject = {
+        const messageObject = {
             conversationId: props.activeMessageSessions.conversationId,
             senderId: props.loggedInUserId,
             text: messageInput,
