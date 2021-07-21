@@ -30,7 +30,6 @@ function MessageSessionContainer(props) {
     }
     console.log(loggedInUser);
     useEffect(() => {
-        if(Object.keys(loggedInUser).length === 0) return;
         const getConversations = async () => {
             try {
                 console.log(loggedInUser.id)
