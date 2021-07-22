@@ -73,6 +73,9 @@ const Messages = (props) => {
     useEffect(() => {
         socket.on('getMessage', data => {
             setArrivalMessage({
+                username: data.username,
+                avatar: data.avatar,
+                discord_id: data.discord_id,
                 conversationId: data.conversationId,
                 sender: data.senderId,
                 text: data.text,
