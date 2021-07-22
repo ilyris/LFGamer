@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link, } from 'react-router-dom';
 import S from 'styled-components';
-import image from '../../assets/Season_2019_-_Challenger_1.png';
+import image from '../../assets/LFG_header_illustration.png';
 import MainTitle from '../pageComponents/MainTitle';
 import {SubTitle} from '../pageComponents/SubTitle';
 import {MainPageButton} from '../pageComponents/MainPageButton'
@@ -17,7 +17,7 @@ import {MainPageButton} from '../pageComponents/MainPageButton'
                 <SubTitle 
                     text1={'Your'}
                     text={' League of Legends '}
-                    text1={`duo gamer provider. You're a few clicks away from finding your duo gamer`}
+                    text2={`duo gamer provider. You're a few clicks away from finding your duo gamer`}
 
                 />
                 <ButtonContainer>
@@ -73,5 +73,5 @@ const ImageContainer = S.div`
     align-items: center;
 `;
 const HookGraphic =  S.img`
-    height: 350px;
+    height: 450px;
 `;
