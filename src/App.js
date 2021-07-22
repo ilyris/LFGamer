@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     setJWT(decodeJWT(localStorage.getItem('token')))
-    socketRef.current = io("ws://localhost:8000");
+    socketRef.current = io(`ws://${env_be_url}`);
     dispatch({type: 'SET_SOCKET', payload: socketRef.current});
   }, [])
 
