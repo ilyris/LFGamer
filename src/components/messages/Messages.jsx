@@ -23,6 +23,7 @@ const Messages = (props) => {
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
 
+    const scrollRef = useRef(null);
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
     }
@@ -84,6 +85,10 @@ const Messages = (props) => {
             dispatch({type: 'SET_MESSAGES', payload: arrivalMessage})
         }
     },[arrivalMessage, props.activeMessageSessions.userId])
+    
+    useEffect(() => {
+        scrollRef?.current.scrollIntoView({behavior: "smooth"})
+    },[props.conversationMessages])
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
@@ -93,15 +98,17 @@ const Messages = (props) => {
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
                     toTimestamp(message.created_at);
                     // timestampToDate(toTimestamp(message.created_at))
-                    console.log(message);
-                    console.log(props.loggedInUserId)
                         if(message.id == props.loggedInUserId ){
                             return (
-                                <UserMessage key={index} message={message} isFromFriend={false}/>
+                                <div ref={scrollRef}>
+                                    <UserMessage key={index} message={message} isFromFriend={false}/>
+                                </div>
                             )
                         } else {
                             return (
-                                <UserMessage key={index} message={message} isFromFriend={true}/>
+                                <div ref={scrollRef}>
+                                    <UserMessage key={index} message={message} isFromFriend={true}/>
+                                </div>
                             )
                         }                        
                  }) : null}   
