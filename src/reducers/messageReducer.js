@@ -13,6 +13,7 @@ export const messageReducer = (state = initialState, action) => {
             return  {...state, socket: action.payload};
         case 'SET_USER_CONNECTIONS':
             const returnedSession = state.userConnections.find((session)=> session.userId === action.payload.userId)
+            console.log(returnedSession);
             if(returnedSession == undefined) {
                 return  {...state, userConnections: [...state.userConnections, action.payload]};
             } else {
