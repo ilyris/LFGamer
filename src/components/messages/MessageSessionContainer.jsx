@@ -68,6 +68,7 @@ console.log(activeMessageSessions);
             </ConversationListContainer>
 
             {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users,index) => {
+                console.log(users);
                 // create an empty array to push the conversation messages into
                 let messages = [];
                 // flatten out the array (might be a better way to handle this)
