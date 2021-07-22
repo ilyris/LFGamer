@@ -39,11 +39,12 @@ function App() {
     }, [jwt])
 
 useEffect(() => {
+  if(!jwt) return;
     socketRef.current.emit("addUser", jwt.payload.user_id)
     socketRef.current.on("getUsers", users => {
         console.log(users);
     })
-}, [jwt.payload.user_id])
+}, [])
 
   return (
     <Router>
