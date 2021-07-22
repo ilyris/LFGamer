@@ -25,58 +25,8 @@ const Messages = (props) => {
 
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
-
-        // When user types, emit the event to the chat API that a user is typing.
-        // socket.emit('typing', {firstName: props.activeMessageSessions.firstName, lastName: props.activeMessageSessions.lastName});
     }
-    // const sendMessage = (event,messageInputValue) => {
-    //      if(messageInputValue == false) {
-    //          event.preventDefault();
-    //          return;
-    //      } 
-    //     event.preventDefault();
-    //     // need an axios call to post these messages.
-    //     axios.post(`${process.env.REACT_APP_API_LOCAL || process.env.REACT_APP_API_URL}/send-message`, {
-    //         senderId: loggedInUserId,
-    //         receiverId: props.activeMessageSessions.id,
-    //         message: messageInputValue,
-    //         sentAt: Date.now()
-    //     }, {
-    //         headers: {
-    //             "content-type": "application/json", // Tell the server we are sending this over as JSON
-    //             "authorization": authToken // Send the token in the header from the client.
-    //         }
-    //     })
-        
-    //     .then(response => {
-    //         console.log(response);
-    //         dispatch({
-    //             type: "SET_MESSAGES",
-    //             payload: {
-    //               senderId: loggedInUserId,
-    //               receiverId: props.activeMessageSessions.id,
-    //               message: messageInputValue,
-    //               sentAt: Date.now()
-    //             }
-    //           });
-    //     })
-    //     .catch(error => {
-    //         console.log(error);
-    //     })
-    //     setMessageInput('');
-    // }             
 
-    // const socketIOMessage = (event,messageInputValue) => {
-    //     event.preventDefault();
-
-    //     // When a user sends their message, emit an event to the chat API with the data {chatId / message}
-    //     socket.emit('private-message', {
-    //         // chatId: props.activeMessageSessions.id,
-    //         message:messageInputValue
-    //     });
-    //     setMessageInput('');
-    //     setUserTyping('');
-    // }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -134,7 +84,7 @@ const Messages = (props) => {
             dispatch({type: 'SET_MESSAGES', payload: arrivalMessage})
         }
     },[arrivalMessage, props.activeMessageSessions.userId])
-    
+
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
