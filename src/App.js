@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     setJWT(decodeJWT(localStorage.getItem('token')))
-    socketRef.current = io(`ws://${env_be_url}`);
+    socketRef.current = io(`ws://lfgamer-backend.herokuapp.com/`);
     dispatch({type: 'SET_SOCKET', payload: socketRef.current});
   }, [])
 
