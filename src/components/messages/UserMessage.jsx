@@ -5,7 +5,7 @@ import { faCircle } from "@fortawesome/free-solid-svg-icons";
 function UserMessage({message,isFromFriend}) {
 
     const messageTimestamp = (date) => {
-      CONSOLE.LOG(date);
+      console.log(date);
         const dateObj = new Date(date);
 
         let dateString = dateObj.toDateString();
