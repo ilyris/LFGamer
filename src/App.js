@@ -24,7 +24,15 @@ function App() {
 
   useEffect(() => {
     setJWT(decodeJWT(localStorage.getItem('token')))
-    socketRef.current = io(`wss://lfgamer-backend.herokuapp.com/`);
+    socketRef.current = io(`wss://lfgamer-backend.herokuapp.com/`,{
+      reconnectionDelay: 1000,
+      reconnection: true,
+      reconnectionAttemps: 10,
+      transports: ['websocket'],
+      agent: false,
+      upgrade: false,
+      rejectUnauthorized: false
+    });
     dispatch({type: 'SET_SOCKET', payload: socketRef.current});
   }, [])
 
