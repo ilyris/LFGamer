@@ -80,7 +80,7 @@ console.log(activeMessageSessions);
                 if(messages.length > 0) {
                     return <Messages loggedInUserId={loggedInUser.id} conversationMessages={messages} activeMessageSessions={users} key={index}/>
                 } else {
-                    return null;
+                    return <Messages loggedInUserId={loggedInUser.id} activeMessageSessions={users} key={index}/>
                 }
                 }) : null}
         </MessageSessionsContainer> 
