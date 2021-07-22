@@ -46,7 +46,7 @@ function MessageSessionContainer(props) {
     }, [loggedInUser.id])
 
 
-
+console.log(activeMessageSessions);
 
 
     return (
