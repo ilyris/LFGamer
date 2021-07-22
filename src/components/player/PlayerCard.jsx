@@ -22,6 +22,8 @@ export function Playercard(props) {
         axios.post(`${env_be_url}conversation/startConversation`, {senderId: loggedInUser.id, receiverId: listing.id})
         .then((res) => {
             conversationId = res.data.id
+            console.log(res);
+            // This should be handled by the socket, so when we read a message came in the chat box displays.
             dispatch({type: 'SET_USER_CONNECTIONS', payload: {userId: String(props.listing.id), friendUsername: props.listing.username, conversationId: res.data.id}})
         })
         .catch(err => console.log(err));
@@ -29,6 +31,7 @@ export function Playercard(props) {
         if(conversationId) {
             axios.get(`${env_be_url}message/${conversationId.id}`)
             .then(res => {
+                console.log(res)
                 dispatch({type: 'SET_MESSAGES', payload: res.data});
             })
             .catch(err => console.log(err));
