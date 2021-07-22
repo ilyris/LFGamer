@@ -9,6 +9,7 @@ export const initialState = {
 export const messageReducer = (state = initialState, action) => {
     switch(action.type) {
         case 'SET_SOCKET':
+            console.log(action.payload)
             return  {...state, socket: action.payload};
         case 'SET_USER_CONNECTIONS':
             const returnedSession = state.userConnections.find((session)=> session.userId === action.payload.userId)

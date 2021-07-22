@@ -17,14 +17,11 @@ const Messages = (props) => {
     // local state
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
-    // const [messages, setMessages] = useState('');
-    // const [convoMessages, setConvoMessages] = useState([]);
-    console.log(props)
+    const [arrivalMessage, setArrivalMessage] = useState(null);
     // dispatch
     const dispatch = useDispatch();
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
-    // const activeMessages = useSelector(state => state.messageConnections.messages);
 
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
@@ -88,6 +85,14 @@ const Messages = (props) => {
             senderId: props.loggedInUserId,
             text: messageInput,
         }
+
+        socket.emit("send-message", {
+            senderId: props.loggedInUserId,
+            receiverId: props.activeMessageSessions.userId,
+            conversationId: props.activeMessageSessions.conversationId,
+            text: messageInput
+
+        })
         try {
             const res = await axios.post(`${env_be_url}message`, messageObject);
             console.log(res.data)
@@ -107,49 +112,6 @@ const Messages = (props) => {
         event.target.parentElement.classList.toggle('minimize');
     }
 
-    // useEffect( () => {
-    //     socket.on('update-messages', message => {
-    //         console.log(message);
-    //         dispatch({
-    //             type: "SET_MESSAGES",
-    //             payload: {
-    //             // senderId: loggedInUserId,
-    //             // receiverId: props.activeMessageSessions.id,
-    //             message: message,
-    //             sentAt: Date.now()
-    //             }
-    //         });
-    //     });
-    //     socket.on('typing', data => {
-    //         setUserTyping(data);
-    //     })
-    // }, [])
-
-        // Emit an event "prive-message" to the backend with the user id and the active session id
-        // socket.emit('private-message', loggedInUserId, props.activeMessageSessions.id)
-
-        // listen to the message-received event and bring in the data it sends on that event.
-        // socket.on(`message-received-${props.activeMessageSessions.id}`, data => {
-        //     console.log(data)
-        //     setMessages(data.message);
-        // })
-
-        // Listen to the typing event and display that data.
-
-
-        // only show messages matching props.convo.id
-    
-        // useEffect(() => {
-        //     const getConversations = async () => {
-        //         try {
-        //             const res = await axios.post(`${env_be_url}conversation/getConversation`, {cid: props.activeMessageSessions.conversationId });
-        //             setConvoMessages(res.data);
-        //         } catch(err) {
-        //             console.log(err);
-        //         }
-        //     }
-        //     getConversations();
-        // }, [props.activeMessageSessions.conversationId])
     
     function toTimestamp(strDate){
         var datum = Date.parse(strDate);
@@ -157,6 +119,22 @@ const Messages = (props) => {
         return Math.round(datum);
     }
 
+    useEffect(() => {
+        socket.on('getMessage', data => {
+            setArrivalMessage({
+                conversationId: data.conversationId,
+                sender: data.senderId,
+                text: data.text,
+                // created_at: data.created_at
+            })
+        })
+    }, [])
+    useEffect(() => {
+        if(arrivalMessage && props.activeMessageSessions.userId == arrivalMessage.sender) {
+            dispatch({type: 'SET_MESSAGES', payload: arrivalMessage})
+        }
+    },[arrivalMessage, props.activeMessageSessions.userId])
+    
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>

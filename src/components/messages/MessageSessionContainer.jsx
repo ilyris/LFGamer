@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import {  useSelector } from 'react-redux';
 import S from'styled-components';
 import axios from 'axios';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,7 +17,6 @@ function MessageSessionContainer(props) {
     const [convos, setConvos] = useState([]);
     const containerListHeader = useRef(null);
 
-
     const minimizeMessage = (event) => {
         event.stopPropagation();
         event.target.classList.toggle('isMin');
@@ -28,8 +27,8 @@ function MessageSessionContainer(props) {
             setIsMin(true);
         }
     }
+
     useEffect(() => {
-        console.log(loggedInUser);
         const getConversations = async () => {
             try {
                 const res = await axios.get(`${env_be_url}conversation/${loggedInUser.id}`);
@@ -45,6 +44,8 @@ function MessageSessionContainer(props) {
             getConversations();
         }
     }, [loggedInUser.id])
+
+
 
 
 

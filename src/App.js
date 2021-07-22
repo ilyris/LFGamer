@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, {useState, useEffect, useRef } from 'react';
+import {  useDispatch } from 'react-redux';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {ProtectedRoute} from './ProtectedRoute';
@@ -17,22 +17,15 @@ import {env_be_url} from './globalVars/envURL';
 
 function App() {
   const [jwt, setJWT] = useState(decodeJWT(localStorage.getItem('token')));
+  const socketRef = useRef();
   
 
   const dispatch = useDispatch();
-  const socket = io("ws://localhost:8000");
 
-  // client-side SOCKET
   useEffect(() => {
     setJWT(decodeJWT(localStorage.getItem('token')))
-    // socket.on("connect", () => {
-    //   console.log(socket.id); 
-    //   dispatch({type: 'SET_SOCKET', payload: socket});
-    // });
-    // socket.on("disconnect", () => {
-    //   console.log(socket.id); // undefined
-    //   socket.id = undefined;
-    // });
+    socketRef.current = io("ws://localhost:8000");
+    dispatch({type: 'SET_SOCKET', payload: socketRef.current});
   }, [])
 
   // Grab logged in user information
@@ -44,6 +37,13 @@ function App() {
       })
       .catch(err => console.log(err))
     }, [jwt])
+
+useEffect(() => {
+    socketRef.current.emit("addUser", jwt.payload.user_id)
+    socketRef.current.on("getUsers", users => {
+        console.log(users);
+    })
+}, [jwt.payload.user_id])
 
   return (
     <Router>
