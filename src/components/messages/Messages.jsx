@@ -76,7 +76,7 @@ const Messages = (props) => {
                 conversationId: data.conversationId,
                 sender: data.senderId,
                 text: data.text,
-                // created_at: data.created_at
+                created_at: Date.now()
             })
         })
     }, [])
@@ -85,7 +85,7 @@ const Messages = (props) => {
             dispatch({type: 'SET_MESSAGES', payload: arrivalMessage})
         }
     },[arrivalMessage, props.activeMessageSessions.userId])
-    
+
     useEffect(() => {
         scrollRef?.current.scrollIntoView({behavior: "smooth"})
     },[props.conversationMessages])
