@@ -36,18 +36,20 @@ import {env_be_url} from '../../globalVars/envURL';
       try {
         const res = await axios.get(`${env_be_url}message/${c.id}`); // This is why we're only getting messages for a specific cid
         console.log(res.data)
-        if(res.data == undefined) return;
-        await setLastMessage(res.data[res.data.length - 1]);
-        dispatch({type: 'SET_MESSAGES', payload: res.data});
-        // dispatch all messages to our global state
-        const dateArray = Date(res.data[res.data.length - 1].created_at).split(' ');
-        setMonth(dateArray[1]);
-        setDate(dateArray[2]);
-        if(loggedInUserId == res.data[res.data.length - 1].senderId) { 
-          setFromText('You: ');
-        } else {
-          setFromText(`${res.data[res.data.length - 1].username}: ` );
+        if(res.data.length > 0) {
+          await setLastMessage(res.data[res.data.length - 1]);
+          dispatch({type: 'SET_MESSAGES', payload: res.data});
+          // dispatch all messages to our global state
+          const dateArray = Date(res.data[res.data.length - 1].created_at).split(' ');
+          setMonth(dateArray[1]);
+          setDate(dateArray[2]);
+          if(loggedInUserId == res.data[res.data.length - 1].senderId) { 
+            setFromText('You: ');
+          } else {
+            setFromText(`${res.data[res.data.length - 1].username}: ` );
+          }
         }
+
       } catch(err) {
         console.log(err);
       }
