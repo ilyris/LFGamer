@@ -90,6 +90,7 @@ const Messages = (props) => {
     },[arrivalMessage, props.activeMessageSessions.userId])
 
     useEffect(() => {
+        if(!scrollRef.current) return; 
         scrollRef?.current.scrollIntoView({behavior: "smooth"})
     },[props.conversationMessages])
 
