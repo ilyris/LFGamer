@@ -3,9 +3,8 @@ import S from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 function UserMessage({message,isFromFriend}) {
-
+console.log(message.text);
     const messageTimestamp = (date) => {
-      console.log(date);
         const dateObj = new Date(date);
 
         let dateString = dateObj.toDateString();

@@ -85,6 +85,7 @@ const Messages = (props) => {
     }, [])
     useEffect(() => {
         if(arrivalMessage && props.activeMessageSessions.userId == arrivalMessage.sender) {
+            console.log(arrivalMessage);
             dispatch({type: 'SET_MESSAGES', payload: arrivalMessage})
         }
     },[arrivalMessage, props.activeMessageSessions.userId])
