@@ -13,6 +13,7 @@ import UserMessage from './UserMessage';
 // let authToken = localStorage.getItem('auth-token');
 
 const Messages = (props) => {
+    console.log(props);
     // local state
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
@@ -30,6 +31,7 @@ const Messages = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(props.activeMessageSessions)
         const messageObject = {
             conversationId: props.activeMessageSessions.conversationId,
             senderId: props.loggedInUserId,
