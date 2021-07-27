@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import S from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
@@ -16,22 +16,32 @@ function UserMessage({message,isFromFriend}) {
 
         return [dateString, sentAt];
     }
-
     const  [ sentAt] = messageTimestamp(message.created_at);
+    const scrollRef = useRef(null);
+
+    useEffect(() => {
+      console.log(scrollRef.current)
+      console.log(!scrollRef.current)
+
+      if(!scrollRef.current) return; 
+      scrollRef.current.scrollIntoView({behavior: "smooth"})
+  },[message])
 
   return (
-    <UserMessages isFromFriend={isFromFriend}>
-      <CardAvatar
-        src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`}
-      />
-      <TitleAndContentMessageCotnainer>
-        <StyledUsername isFromFriend={isFromFriend}>
-          {message.username} <StyledCircle icon={faCircle} />{" "}
-          <MessageTime>{sentAt}</MessageTime>
-        </StyledUsername>
-        <StyledP>{message.text}</StyledP>
-      </TitleAndContentMessageCotnainer>
-    </UserMessages>
+    <div ref={scrollRef}>
+      <UserMessages  isFromFriend={isFromFriend}>
+        <CardAvatar
+          src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`}
+        />
+        <TitleAndContentMessageCotnainer>
+          <StyledUsername isFromFriend={isFromFriend}>
+            {message.username} <StyledCircle icon={faCircle} />{" "}
+            <MessageTime>{sentAt}</MessageTime>
+          </StyledUsername>
+          <StyledP>{message.text}</StyledP>
+        </TitleAndContentMessageCotnainer>
+      </UserMessages>
+    </div>
   );
 }
 export default UserMessage;
