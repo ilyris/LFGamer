@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
-import {  useSelector } from 'react-redux';
+import {  useSelector, useDispatch} from 'react-redux';
 import S from'styled-components';
 import axios from 'axios';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,7 +15,11 @@ function MessageSessionContainer(props) {
     const loggedInUser = useSelector(state => state.root.loggedInUser);
     const conversationMessages = useSelector(state => state.messageConnections.messages);
     const [convos, setConvos] = useState([]);
+    const [arrivalConvo, setArrivalConvo] = useState(null)
     const containerListHeader = useRef(null);
+
+    const dispatch = useDispatch();
+    const socket = useSelector(state => state.messageConnections.socket);
 
     const minimizeMessage = (event) => {
         event.stopPropagation();
@@ -45,8 +49,16 @@ function MessageSessionContainer(props) {
         }
     }, [loggedInUser.id])
 
-
-console.log(activeMessageSessions);
+    useEffect(() => {
+        if(socket == null) return;
+        socket.on('getMessage', async data => {
+            dispatch({type: 'SET_USER_CONNECTIONS', payload: {
+                userId: String(data.senderId),
+                friendUsername: data.username,
+                conversationId: data.conversationId
+            }})
+        })
+    }, [dispatch, socket])
 
 
     return (
@@ -61,14 +73,13 @@ console.log(activeMessageSessions);
                 </UsernameContainer> 
                 <Conversations>
                     {/* Conversation_id comes from here, then maps to the sessions*/ }
-                    {convos && convos.map(c => {
-                        return <Conversation c={c} loggedInUserId={loggedInUser.id}/>
+                    {convos && convos.map( (c,index) => {
+                        return <Conversation c={c} loggedInUserId={loggedInUser.id} key={index}/>
                     })}
                 </Conversations>
             </ConversationListContainer>
 
             {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users,index) => {
-                console.log(users);
                 // create an empty array to push the conversation messages into
                 let messages = [];
                 // flatten out the array (might be a better way to handle this)

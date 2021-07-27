@@ -3,9 +3,8 @@ import S from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import '../../App.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import {Link} from 'react-router-dom';
-import { decodeJWT } from '../../helperFuncs/cookie';
 import axios from 'axios';
 import { env_be_url } from '../../globalVars/envURL';
 import UserMessage from './UserMessage';
@@ -46,7 +45,6 @@ const Messages = (props) => {
         })
         try {
             const res = await axios.post(`${env_be_url}message`, messageObject);
-            console.log(res.data)
             dispatch({type: 'SET_MESSAGES', payload: res.data});
             setMessageInput('');
         } catch(err) {
@@ -71,7 +69,7 @@ const Messages = (props) => {
     }
 
     useEffect(() => {
-        socket.on('getMessage', data => {
+        socket.on('getMessage', (data) => {
             setArrivalMessage({
                 username: data.username,
                 avatar: data.avatar,
@@ -82,13 +80,16 @@ const Messages = (props) => {
                 created_at: Date.now()
             })
         })
+        return () => {
+            setArrivalMessage(null);
+        }
     }, [])
+
     useEffect(() => {
         if(arrivalMessage && props.activeMessageSessions.userId == arrivalMessage.sender) {
-            console.log(arrivalMessage);
             dispatch({type: 'SET_MESSAGES', payload: arrivalMessage})
         }
-    },[arrivalMessage, props.activeMessageSessions.userId])
+    },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
 
     useEffect(() => {
         if(!scrollRef.current) return; 

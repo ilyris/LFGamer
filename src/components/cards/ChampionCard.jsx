@@ -31,7 +31,6 @@ function ChampionCard(props) {
 
     // Store the champion name data into an array
     const onChampionClick = (e) => {
-        console.log(e.target.getAttribute("data-name"));
         dispatch({ type: action, payload: [...new Set(selectedOptions), e.target.getAttribute("data-name")] })
         setUserInput('');
     }
@@ -94,9 +93,9 @@ function ChampionCard(props) {
         <ChampionSelectionContainer ref={inputAndDataList}>
             <UserSelectionContainer >
                 <SelectedChampionContainer >
-                    {selectedOptions && selectedOptions.map(champion => {
+                    {selectedOptions && selectedOptions.map( (champion) => {
                         return (
-                            <SelectedChampTags data-name={champion} >
+                            <SelectedChampTags data-name={champion}>
                                 {champion} 
                                 | 
                                 <RemoveButton data-name={champion} onClick={onCloseClick} icon={faTimes} />
@@ -118,11 +117,12 @@ function ChampionCard(props) {
             {selectedOptions.length >= lengthCheck ? <NoMoreText>No more selections please</NoMoreText> : null}
             <ChampionContainer displayList={displayList} selectedOptions={selectedOptions} lengthCheck={lengthCheck}>
                 {selectedOptions.length < lengthCheck ?
-                    dataList.map(data => {
+                    dataList.map( (data, i) => {
                         return (
                             <DisplayListCard
                                 onChampionClick={onChampionClick}
                                 data={data}
+                                key={i}
                             />
                         )
                     }) : null

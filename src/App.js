@@ -13,7 +13,7 @@ import { io } from "socket.io-client";
 import MessageSessionContainer from './components/messages/MessageSessionContainer';
 import axios from 'axios';
 import { decodeJWT } from './helperFuncs/cookie';
-import {env_be_url} from './globalVars/envURL';
+import {env_be_url, env_ws_url} from './globalVars/envURL';
 
 function App() {
   const [jwt, setJWT] = useState(decodeJWT(localStorage.getItem('token')));
@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     setJWT(decodeJWT(localStorage.getItem('token')))
-    socketRef.current = io(`wss://lfgamer-backend.herokuapp.com`,{
+    socketRef.current = io(`${env_ws_url}`,{
       reconnectionDelay: 1000,
       reconnection: true,
       reconnectionAttemps: 10,
@@ -67,7 +67,7 @@ useEffect(() => {
             <ProtectedRoute exact path="/setup" component={SetUpPage} />
             <Route component={Page404} />
           </Switch>
-          <MessageSessionContainer />
+          {!jwt ? null : <MessageSessionContainer /> }
         </div>
     </Router>
 

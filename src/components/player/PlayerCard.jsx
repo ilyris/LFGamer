@@ -23,7 +23,7 @@ export function Playercard(props) {
         .then((res) => {
             console.log(res);
             // This should be handled by the socket, so when we read a message came in the chat box displays.
-            dispatch({type: 'SET_USER_CONNECTIONS', payload: {userId: String(props.listing.id), friendUsername: props.listing.username, conversationId: res.data.id}})
+            dispatch({type: 'SET_USER_CONNECTIONS', payload: {userId: String(props.listing.id), friendUsername: props.listing.username, conversationId: res.data[0].id}})
             if(res.data.id) {
                 axios.get(`${env_be_url}message/${res.data.id}`)
                 .then(res => {
@@ -54,13 +54,13 @@ export function Playercard(props) {
                         <LabelContainer>
                             <LabelContainerText>Roles:</LabelContainerText>
                         <RoleContainer>
-                            {roleArr.map( role => {
+                            {roleArr.map( (role,i) => {
                                 let doesContain = false;
                                 listing.roles.map(userRole => {
                                     if(role.name == userRole) doesContain = true;
                                 }) 
                                 if(doesContain) {
-                                    return <CardRole src={role.file}/>
+                                    return <CardRole src={role.file} key={i}/>
                                 }
                             })}
                         </RoleContainer>
@@ -70,8 +70,8 @@ export function Playercard(props) {
                         <LabelContainer> 
                             <LabelContainerText>Champions</LabelContainerText>
                             <ChampionContainer>
-                                {listing.champions.map(champion => {
-                                    return <ChampionImg src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion}.png`}/>
+                                {listing.champions.map((champion,i) => {
+                                    return <ChampionImg key={i} src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion}.png`}/>
                                 })}
                             </ChampionContainer>
                         </LabelContainer>
@@ -105,7 +105,8 @@ export function Playercard(props) {
         
     )
 }
-export default Playercard
+export default Playercard;
+
 const Container = S.div`
     width: 100%;
     height: 100%;
