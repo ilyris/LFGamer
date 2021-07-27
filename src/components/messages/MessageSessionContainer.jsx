@@ -20,7 +20,6 @@ function MessageSessionContainer(props) {
 
     const dispatch = useDispatch();
     const socket = useSelector(state => state.messageConnections.socket);
-    console.log(activeMessageSessions)
     const minimizeMessage = (event) => {
         event.stopPropagation();
         event.target.classList.toggle('isMin');
@@ -52,7 +51,6 @@ function MessageSessionContainer(props) {
     useEffect(() => {
         if(socket == null) return;
         socket.on('getMessage', data => {
-            console.log(data)
             dispatch({type: 'SET_USER_CONNECTIONS', payload: {
                 userId: String(data.senderId),
                 friendUsername: data.username,

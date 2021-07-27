@@ -35,7 +35,6 @@ import {env_be_url} from '../../globalVars/envURL';
     const getMessages = async () => {
       try {
         const res = await axios.get(`${env_be_url}message/${c.id}`); // This is why we're only getting messages for a specific cid
-        console.log(res.data)
         if(res.data.length > 0) {
           await setLastMessage(res.data[res.data.length - 1]);
           dispatch({type: 'SET_MESSAGES', payload: res.data});
