@@ -34,7 +34,7 @@ function App() {
       rejectUnauthorized: false
     });
     dispatch({type: 'SET_SOCKET', payload: socketRef.current});
-  }, [])
+  }, [dispatch])
 
   // Grab logged in user information
     useEffect(() => {
@@ -44,7 +44,7 @@ function App() {
         dispatch({type:'SET_LOGGEDIN_USER', payload: res.data})
       })
       .catch(err => console.log(err))
-    }, [jwt])
+    }, [jwt, dispatch])
 
 useEffect(() => {
   if(!jwt) return;
@@ -52,7 +52,7 @@ useEffect(() => {
     socketRef.current.on("getUsers", users => {
         console.log(users);
     })
-}, [])
+}, [jwt])
 
   return (
     <Router>

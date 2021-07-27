@@ -85,7 +85,7 @@ export function SetUpPage(props) {
 
             })
             .catch(err => console.log(err));
-    },[])
+    },[dispatch, history])
 
     // Only get champion data ( a lot of useless info in here we don't need)
     const championsData = Object.values(championData);

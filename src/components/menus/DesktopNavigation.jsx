@@ -11,7 +11,6 @@ import {env_be_url} from '../../globalVars/envURL';
 const Desktopmenu = (props) => {
     const dispatch = useDispatch();
     const jwt = localStorage.getItem('token');
-
     const isLoggedIn = useSelector( state => state.root.isLoggedIn);
 
     const [decodedJWT, setDecodedJWT] = useState({})

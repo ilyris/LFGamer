@@ -17,7 +17,7 @@ function UserMessage({message,isFromFriend}) {
         return [dateString, sentAt];
     }
 
-    const  [dateString, sentAt] = messageTimestamp(message.created_at);
+    const  [ sentAt] = messageTimestamp(message.created_at);
 
   return (
     <UserMessages isFromFriend={isFromFriend}>

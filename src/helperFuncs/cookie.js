@@ -2,11 +2,11 @@ const cookieValue = document.cookie ? document.cookie.split(';').find(row => row
 
 
 
-function clearOutputCookieValue() {
-  let output = document.cookie;
-  output = "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+// function clearOutputCookieValue() {
+//   let output = document.cookie;
+//   output = "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
 
-}
+// }
 const decodeJWT = (jwt) => {
     if(!jwt) return;
     let token = {};
@@ -16,4 +16,4 @@ const decodeJWT = (jwt) => {
     return (token)
 }
 
-export { cookieValue, clearOutputCookieValue, decodeJWT };
+export { cookieValue, decodeJWT };

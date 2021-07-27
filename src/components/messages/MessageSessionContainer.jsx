@@ -46,7 +46,7 @@ function MessageSessionContainer(props) {
         else {
             getConversations();
         }
-    }, [loggedInUser.id])
+    }, [loggedInUser])
 
     useEffect(() => {
         if(socket == null) return;
