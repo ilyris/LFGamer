@@ -17,9 +17,12 @@ function MessageSessionContainer(props) {
     const [convos, setConvos] = useState([]);
     const [arrivalConvo, setArrivalConvo] = useState(null)
     const containerListHeader = useRef(null);
+    
 
     const dispatch = useDispatch();
     const socket = useSelector(state => state.messageConnections.socket);
+    const scrollRef = useRef(null);
+
     const minimizeMessage = (event) => {
         event.stopPropagation();
         event.target.classList.toggle('isMin');
@@ -59,6 +62,11 @@ function MessageSessionContainer(props) {
         })
     }, [dispatch, socket])
 
+    useEffect(() => {
+        if(!scrollRef.current) return; 
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+
+    },[conversationMessages])
 
     return (
         <MessageSessionsContainer>
@@ -88,7 +96,15 @@ function MessageSessionContainer(props) {
                         messages.push(message);
                     }
                 }))
-                    return <Messages loggedInUserId={loggedInUser.id} conversationMessages={messages} activeMessageSessions={users} key={index}/>
+                    return (
+                        <Messages 
+                            loggedInUserId={loggedInUser.id} 
+                            conversationMessages={messages} 
+                            activeMessageSessions={users} 
+                            key={index}
+                            scrollRef={scrollRef}
+                        />
+                    )
                 }) : null}
         </MessageSessionsContainer> 
     )
