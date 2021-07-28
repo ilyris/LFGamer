@@ -73,7 +73,7 @@ function MessageSessionContainer(props) {
         elScrollRefs.current.map( ref => {
             ref.current.scrollIntoView({behavior: 'smooth'});
         }) 
-    },[props.conversationMessages])
+    },[conversationMessages])
 
     return (
         <MessageSessionsContainer>
