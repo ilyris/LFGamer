@@ -101,6 +101,7 @@ const Messages = (props) => {
 
     useEffect(() => {
         if(!elScrollRefs.current.length == 0) return;
+        console.log(elScrollRefs)
         elScrollRefs.current.map( ref => {
             ref.current.scrollIntoView({behavior: 'smooth'});
         }) 
