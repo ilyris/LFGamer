@@ -21,7 +21,7 @@ function MessageSessionContainer(props) {
 
     const dispatch = useDispatch();
     const socket = useSelector(state => state.messageConnections.socket);
-    const elScrollRefs = useRef([]);
+    // const elScrollRefs = useRef([]);
 
     const minimizeMessage = (event) => {
         event.stopPropagation();
@@ -62,15 +62,15 @@ function MessageSessionContainer(props) {
         })
     }, [dispatch, socket])
 
-    useEffect(() => {
-        console.log(elScrollRefs)
-        elScrollRefs.current = elScrollRefs.current.slice(0, conversationMessages.length)
-        elScrollRefs.current.map( ref => {
-            if(ref == null) return;
-            // ref.current.scrollIntoView({behavior: 'smooth'});
-            ref.scrollTop = ref.scrollHeight
-        }) 
-    },[conversationMessages.length])
+    // useEffect(() => {
+    //     console.log(elScrollRefs)
+    //     elScrollRefs.current = elScrollRefs.current.slice(0, conversationMessages.length)
+    //     elScrollRefs.current.map( ref => {
+    //         if(ref == null) return;
+    //         // ref.current.scrollIntoView({behavior: 'smooth'});
+    //         ref.scrollTop = ref.scrollHeight
+    //     }) 
+    // },[conversationMessages.length])
 
     return (
         <MessageSessionsContainer>
@@ -107,7 +107,7 @@ function MessageSessionContainer(props) {
                             activeMessageSessions={users} 
                             key={users.conversationId}
                             cid={users.conversationId}
-                            scrollRef={el => elScrollRefs.current[index] = el}
+                            // scrollRef={el => elScrollRefs.current[index] = el}
                         />
                     )
                 }) : null}

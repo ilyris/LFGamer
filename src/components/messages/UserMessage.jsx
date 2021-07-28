@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React from "react";
 import S from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";

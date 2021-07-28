@@ -20,7 +20,7 @@ const Messages = (props) => {
     const [arrivalMessage, setArrivalMessage] = useState(null);
     // dispatch
     const dispatch = useDispatch();
-
+    const scrollRef = useRef(null);
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
 
@@ -93,13 +93,16 @@ const Messages = (props) => {
         }
     },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
 
-
+    useEffect(() => {
+        console.log(scrollRef)
+        scrollRef.current.scrollIntoView({behavior: 'smooth'}); 
+    },[props.conversationMessages])
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
-            <InnerMessagesContainer ref={props.scrollRef} style={{transition: 'all ease 120ms', scrollBehavior: 'smooth'}} >
+            <InnerMessagesContainer data-cid={props.cid} ref={scrollRef} style={{transition: 'all ease 120ms', scrollBehavior: 'smooth'}} >
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
                     toTimestamp(message.created_at);
                     // timestampToDate(toTimestamp(message.created_at))
