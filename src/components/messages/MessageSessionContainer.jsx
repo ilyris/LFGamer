@@ -24,9 +24,9 @@ function MessageSessionContainer(props) {
     const socket = useSelector(state => state.messageConnections.socket);
     const elScrollRefs = useRef([]);
 
-    if(elScrollRefs.current.length !== props.conversationMessages.length) {
+    if(elScrollRefs.current.length !== conversationMessages.length) {
         //add or remove refs
-        elScrollRefs.current = Array(props.conversationMessages.length).fill().map( (_, i) => elScrollRefs.current[i] || createRef())
+        elScrollRefs.current = Array(conversationMessages.length).fill().map( (_, i) => elScrollRefs.current[i] || createRef())
     }
 
     const minimizeMessage = (event) => {
