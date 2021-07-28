@@ -95,8 +95,9 @@ const Messages = (props) => {
 
     useEffect(() => {
         console.log(scrollRef)
+        console.log(props.conversationMessages)
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    },[props.conversationMessages])
+    },[])
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
