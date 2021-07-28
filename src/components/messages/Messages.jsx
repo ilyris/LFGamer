@@ -24,11 +24,11 @@ const Messages = (props) => {
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
 
-    // const elScrollRefs = useRef([]);
+    const elScrollRefs = useRef([]);
 
-    // if(elScrollRefs.current.length !== props.conversationMessages.length) {
+    // if(elScrollRefs.current.length !== conversationMessages.length) {
     //     //add or remove refs
-    //     elScrollRefs.current = Array(props.conversationMessages.length).fill().map( (_, i) => elScrollRefs.current[i] || createRef())
+    //     elScrollRefs.current = Array(conversationMessages.length).fill().map( (_, i) => elScrollRefs.current[i] || createRef())
     // }
 
     const handleMessageInput = (event) => {
@@ -99,29 +99,31 @@ const Messages = (props) => {
         }
     },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
 
-    // useEffect(() => {
-    //     console.log(elScrollRefs)
-    //     elScrollRefs.current.map( ref => {
-    //         ref.current.scrollIntoView({behavior: 'smooth'});
-    //     }) 
-    // },[props.conversationMessages])
+    useEffect(() => {
+        console.log(elScrollRefs)
+        elScrollRefs.current = elScrollRefs.current.slice(0, conversationMessages.length)
+        elScrollRefs.current.map( ref => {
+            if(ref == null) return;
+            ref.scrollIntoView({behavior: 'smooth'});
+        }) 
+    },[props.conversationMessages.length])
 
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
-            <InnerMessagesContainer ref={props.scrollRef} style={{transition: 'all ease 120ms', scrollBehavior: 'smooth'}} data-cid={props.cid}>
+            <InnerMessagesContainer  >
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
                     toTimestamp(message.created_at);
                     // timestampToDate(toTimestamp(message.created_at))
                         if(message.id == props.loggedInUserId ){
                             return (
-                                    <UserMessage key={index} message={message} isFromFriend={false}/>
+                                    <UserMessage scrollRef={el => elScrollRefs.current[index] = el} key={index} message={message} isFromFriend={false}/>
                             )
                         } else {
                             return (
-                                    <UserMessage key={index} message={message} isFromFriend={true}/>
+                                    <UserMessage scrollRef={el => elScrollRefs.current[index] = el} key={index} message={message} isFromFriend={true}/>
                             )
                         }                        
                  }) : null}   

@@ -67,15 +67,7 @@ function MessageSessionContainer(props) {
         })
     }, [dispatch, socket])
 
-    useEffect(() => {
-        console.log(elScrollRefs)
-        elScrollRefs.current = elScrollRefs.current.slice(0, conversationMessages.length)
-        elScrollRefs.current.map( ref => {
-            if(ref == null) return;
-            // ref.current.scrollIntoView({behavior: 'smooth'});
-            ref.scrollTop = ref.scrollHeight
-        }) 
-    },[conversationMessages.length])
+
 
     return (
         <MessageSessionsContainer>
@@ -111,8 +103,6 @@ function MessageSessionContainer(props) {
                             conversationMessages={messages} 
                             activeMessageSessions={users} 
                             key={users.conversationId}
-                            cid={users.conversationId}
-                            scrollRef={el => elScrollRefs.current[index] = el}
                         />
                     )
                 }) : null}
