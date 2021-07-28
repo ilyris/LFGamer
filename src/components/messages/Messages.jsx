@@ -8,7 +8,6 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import { env_be_url } from '../../globalVars/envURL';
 import UserMessage from './UserMessage';
-import { createRef } from 'react';
 
 
 // let authToken = localStorage.getItem('auth-token');
@@ -24,12 +23,12 @@ const Messages = (props) => {
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
 
-    const elScrollRefs = useRef([]);
+    // const elScrollRefs = useRef([]);
 
-    if(elScrollRefs.current.length !== props.conversationMessages.length) {
-        //add or remove refs
-        elScrollRefs.current = Array(props.conversationMessages.length).fill().map( (_, i) => elScrollRefs.current[i] || createRef())
-    }
+    // if(elScrollRefs.current.length !== props.conversationMessages.length) {
+    //     //add or remove refs
+    //     elScrollRefs.current = Array(props.conversationMessages.length).fill().map( (_, i) => elScrollRefs.current[i] || createRef())
+    // }
 
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
@@ -99,29 +98,29 @@ const Messages = (props) => {
         }
     },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
 
-    useEffect(() => {
-        console.log(elScrollRefs)
-        elScrollRefs.current.map( ref => {
-            ref.current.scrollIntoView({behavior: 'smooth'});
-        }) 
-    },[props.conversationMessages])
+    // useEffect(() => {
+    //     console.log(elScrollRefs)
+    //     elScrollRefs.current.map( ref => {
+    //         ref.current.scrollIntoView({behavior: 'smooth'});
+    //     }) 
+    // },[props.conversationMessages])
 
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
-            <InnerMessagesContainer >
+            <InnerMessagesContainer ref={scrollRef} style={{transition: 'all ease 120ms', scrollBehavior: 'smooth'}}>
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
                     toTimestamp(message.created_at);
                     // timestampToDate(toTimestamp(message.created_at))
                         if(message.id == props.loggedInUserId ){
                             return (
-                                    <UserMessage scrollRef={elScrollRefs.current[index]}  key={index} message={message} isFromFriend={false}/>
+                                    <UserMessage key={index} message={message} isFromFriend={false}/>
                             )
                         } else {
                             return (
-                                    <UserMessage scrollRef={elScrollRefs.current[index]} key={index} message={message} isFromFriend={true}/>
+                                    <UserMessage key={index} message={message} isFromFriend={true}/>
                             )
                         }                        
                  }) : null}   

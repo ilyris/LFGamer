@@ -7,6 +7,7 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
 import Messages from './Messages';
 import {env_be_url} from '../../globalVars/envURL';
 import Conversation from '../cards/Conversation'
+import { createRef } from 'react';
 
 function MessageSessionContainer(props) {
 
@@ -21,6 +22,12 @@ function MessageSessionContainer(props) {
 
     const dispatch = useDispatch();
     const socket = useSelector(state => state.messageConnections.socket);
+    const elScrollRefs = useRef([]);
+
+    if(elScrollRefs.current.length !== props.conversationMessages.length) {
+        //add or remove refs
+        elScrollRefs.current = Array(props.conversationMessages.length).fill().map( (_, i) => elScrollRefs.current[i] || createRef())
+    }
 
     const minimizeMessage = (event) => {
         event.stopPropagation();
@@ -61,6 +68,12 @@ function MessageSessionContainer(props) {
         })
     }, [dispatch, socket])
 
+    useEffect(() => {
+        console.log(elScrollRefs)
+        elScrollRefs.current.map( ref => {
+            ref.current.scrollIntoView({behavior: 'smooth'});
+        }) 
+    },[props.conversationMessages])
 
     return (
         <MessageSessionsContainer>
@@ -96,6 +109,7 @@ function MessageSessionContainer(props) {
                             conversationMessages={messages} 
                             activeMessageSessions={users} 
                             key={index}
+                            scrollRef={elScrollRefs.current[index]}
                         />
                     )
                 }) : null}
