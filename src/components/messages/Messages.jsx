@@ -8,6 +8,7 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import { env_be_url } from '../../globalVars/envURL';
 import UserMessage from './UserMessage';
+import { createRef } from 'react';
 
 
 // let authToken = localStorage.getItem('auth-token');
@@ -17,7 +18,6 @@ const Messages = (props) => {
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
     const [arrivalMessage, setArrivalMessage] = useState(null);
-     
     // dispatch
     const dispatch = useDispatch();
 
@@ -28,7 +28,7 @@ const Messages = (props) => {
 
     if(elScrollRefs.current.length !== props.conversationMessages.length) {
         //add or remove refs
-        elScrollRefs.current = Array(props.conversationMessages.length).fill().map( (_, i) => elRefs.current[i])
+        elScrollRefs.current = Array(props.conversationMessages.length).fill().map( (_, i) => elScrollRefs.current[i] || createRef())
     }
 
     const handleMessageInput = (event) => {
@@ -100,13 +100,13 @@ const Messages = (props) => {
     },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
 
     useEffect(() => {
-        console.log(scrollRef.current)
-        console.log(!scrollRef.current)
-
-        if(!scrollRef.current) return; 
-        scrollRef.current.scrollIntoView({behavior: 'smooth'});
-
+        if(!elScrollRefs.current.length == 0) return;
+        elScrollRefs.current.map( ref => {
+            ref.current.scrollIntoView({behavior: 'smooth'});
+        }) 
+        
     },[props.conversationMessages])
+
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
@@ -118,11 +118,11 @@ const Messages = (props) => {
                     // timestampToDate(toTimestamp(message.created_at))
                         if(message.id == props.loggedInUserId ){
                             return (
-                                    <UserMessage ref={elScrollRefs.current[i]}  key={index} message={message} isFromFriend={false}/>
+                                    <UserMessage ref={elScrollRefs.current[index]}  key={index} message={message} isFromFriend={false}/>
                             )
                         } else {
                             return (
-                                    <UserMessage ref={elScrollRefs.current[i]} key={index} message={message} isFromFriend={true}/>
+                                    <UserMessage ref={elScrollRefs.current[index]} key={index} message={message} isFromFriend={true}/>
                             )
                         }                        
                  }) : null}   
