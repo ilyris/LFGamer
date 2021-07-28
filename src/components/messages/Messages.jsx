@@ -95,7 +95,7 @@ const Messages = (props) => {
 
     useEffect(() => {
         console.log(scrollRef)
-        scrollRef.scrollTop = scrollRef.scrollHeight
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     },[props.conversationMessages])
 
     return(
