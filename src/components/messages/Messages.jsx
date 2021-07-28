@@ -98,8 +98,9 @@ const Messages = (props) => {
         console.log(!scrollRef.current)
 
         if(!scrollRef.current) return; 
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-
+        // scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        scrollRef.current.scrollIntoView({behavior: 'smooth'});
+        
     },[props.conversationMessages])
 
     return(
