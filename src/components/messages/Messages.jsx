@@ -24,7 +24,7 @@ const Messages = (props) => {
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
 
-    const scrollRef = useRef(null);
+    // const scrollRef = useRef(null);
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
     }
@@ -93,15 +93,15 @@ const Messages = (props) => {
         }
     },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
 
-    useEffect(() => {
-        console.log(scrollRef.current)
-        console.log(!scrollRef.current)
+    // useEffect(() => {
+    //     console.log(scrollRef.current)
+    //     console.log(!scrollRef.current)
 
-        if(!scrollRef.current) return; 
-        // scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        scrollRef.current.scrollIntoView({behavior: 'smooth'});
-        
-    },[props.conversationMessages])
+    //     if(!scrollRef.current) return; 
+    //     // scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    //     scrollRef.current.scrollIntoView({behavior: 'smooth'});
+
+    // },[props.conversationMessages])
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
@@ -113,11 +113,11 @@ const Messages = (props) => {
                     // timestampToDate(toTimestamp(message.created_at))
                         if(message.id == props.loggedInUserId ){
                             return (
-                                    <UserMessage  scrollRef={scrollRef} key={index} message={message} isFromFriend={false}/>
+                                    <UserMessage  key={index} message={message} isFromFriend={false}/>
                             )
                         } else {
                             return (
-                                    <UserMessage scrollRef={scrollRef} key={index} message={message} isFromFriend={true}/>
+                                    <UserMessage key={index} message={message} isFromFriend={true}/>
                             )
                         }                        
                  }) : null}   

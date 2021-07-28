@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import S from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
@@ -16,8 +16,18 @@ function UserMessage({message,isFromFriend, scrollRef}) {
 
         return [dateString, sentAt];
     }
-    const  [ sentAt] = messageTimestamp(message.created_at);
+    const  [sentAt] = messageTimestamp(message.created_at);
+    const scrollRef = useRef(null);
 
+    useEffect(() => {
+      console.log(scrollRef.current)
+      console.log(!scrollRef.current)
+
+      if(!scrollRef.current) return; 
+      // scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      scrollRef.current.scrollIntoView({behavior: 'smooth'});
+
+  },[message])
 
   return (
     <div ref={scrollRef}>
