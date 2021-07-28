@@ -21,7 +21,6 @@ function MessageSessionContainer(props) {
 
     const dispatch = useDispatch();
     const socket = useSelector(state => state.messageConnections.socket);
-    const scrollRef = useRef(null);
 
     const minimizeMessage = (event) => {
         event.stopPropagation();
@@ -62,11 +61,6 @@ function MessageSessionContainer(props) {
         })
     }, [dispatch, socket])
 
-    useEffect(() => {
-        if(!scrollRef.current) return; 
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-
-    },[conversationMessages])
 
     return (
         <MessageSessionsContainer>

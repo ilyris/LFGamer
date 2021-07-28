@@ -3,7 +3,7 @@ import S from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 
-function UserMessage({message,isFromFriend}) {
+function UserMessage({message,isFromFriend, scrollRef}) {
     const messageTimestamp = (date) => {
         const dateObj = new Date(date);
 
@@ -20,7 +20,7 @@ function UserMessage({message,isFromFriend}) {
 
 
   return (
-    <div>
+    <div ref={scrollRef}>
       <UserMessages  isFromFriend={isFromFriend}>
         <CardAvatar
           src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`}
