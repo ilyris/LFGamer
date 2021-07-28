@@ -16,7 +16,6 @@ function MessageSessionContainer(props) {
     const loggedInUser = useSelector(state => state.root.loggedInUser);
     const conversationMessages = useSelector(state => state.messageConnections.messages);
     const [convos, setConvos] = useState([]);
-    const [arrivalConvo, setArrivalConvo] = useState(null)
     const containerListHeader = useRef(null);
     
 
@@ -71,6 +70,7 @@ function MessageSessionContainer(props) {
     useEffect(() => {
         console.log(elScrollRefs)
         elScrollRefs.current.map( ref => {
+            if(ref.current == null) return;
             // ref.current.scrollIntoView({behavior: 'smooth'});
             ref.current.scrollTop = ref.current.scrollHeight
         }) 
