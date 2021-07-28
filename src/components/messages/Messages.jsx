@@ -100,7 +100,6 @@ const Messages = (props) => {
     },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
 
     useEffect(() => {
-        if(!elScrollRefs.current.length == 0) return;
         console.log(elScrollRefs)
         elScrollRefs.current.map( ref => {
             ref.current.scrollIntoView({behavior: 'smooth'});
