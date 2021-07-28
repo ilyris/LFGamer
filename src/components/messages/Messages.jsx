@@ -22,7 +22,7 @@ const Messages = (props) => {
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
 
-    // const scrollRef = useRef(null);
+    const scrollRef = useRef(null);
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
     }
@@ -91,16 +91,17 @@ const Messages = (props) => {
         }
     },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
 
-    // useEffect(() => {
-    //     console.log(scrollRef.current)
-    //     console.log(!scrollRef.current)
+    useEffect(() => {
+        console.log(scrollRef.current)
+        console.log(!scrollRef.current)
 
-    //     if(!scrollRef.current) return; 
-    //     scrollRef.current.scrollIntoView({behavior: "smooth"})
-    // },[props.conversationMessages])
+        if(!scrollRef.current) return; 
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        
+    },[props.conversationMessages])
 
     return(
-        <MessageContainer data-user-id={props.activeMessageSessions.userId}>
+        <MessageContainer ref={scrollRef} data-user-id={props.activeMessageSessions.userId}>
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer>
