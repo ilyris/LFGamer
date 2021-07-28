@@ -101,12 +101,12 @@ const Messages = (props) => {
 
     useEffect(() => {
         console.log(elScrollRefs)
-        elScrollRefs.current = elScrollRefs.current.slice(0, conversationMessages.length)
+        elScrollRefs.current = elScrollRefs.current.slice(0, props.conversationMessages.length)
         elScrollRefs.current.map( ref => {
             if(ref == null) return;
             ref.scrollIntoView({behavior: 'smooth'});
         }) 
-    },[messages.length])
+    },[props.conversationMessages])
 
 
     return(
