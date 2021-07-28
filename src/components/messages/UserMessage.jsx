@@ -5,21 +5,24 @@ import { faCircle } from "@fortawesome/free-solid-svg-icons";
 
 function UserMessage({message,isFromFriend}) {
     const messageTimestamp = (date) => {
+        // create new dateObj
         const dateObj = new Date(date);
-
         let dateString = dateObj.toDateString();
         dateString = dateString.split(' ');
+        // Split out the date string(month / day)
         dateString = `${dateString[1]} ${dateString[2]}`;
-
+      
+        // Grab the hour / minutes
         let sentAt = dateObj.toLocaleTimeString().split(':');
-        sentAt = `${sentAt[0]}:${sentAt[2]}`;
 
+        // Grab the Abbr
+        const sentAtTimeAbbr = sentAt[2].split(' ')[1]
+        sentAt = `${sentAt[0]}:${sentAt[1]} ${sentAtTimeAbbr}`;
         return [dateString, sentAt];
     }
-    const  [sentAt] = messageTimestamp(message.created_at);
+    const  [dateString,sentAt] = messageTimestamp(message.created_at);
 
   return (
-    <div >
       <UserMessages isFromFriend={isFromFriend}>
         <CardAvatar
           src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`}
@@ -27,12 +30,11 @@ function UserMessage({message,isFromFriend}) {
         <TitleAndContentMessageCotnainer>
           <StyledUsername isFromFriend={isFromFriend}>
             {message.username} <StyledCircle icon={faCircle} />{" "}
-            <MessageTime>{sentAt}</MessageTime>
+            <MessageTime>{dateString} {sentAt}</MessageTime>
           </StyledUsername>
           <StyledP>{message.text}</StyledP>
         </TitleAndContentMessageCotnainer>
       </UserMessages>
-    </div>
   );
 }
 export default UserMessage;

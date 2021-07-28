@@ -54,6 +54,11 @@ function MessageSessionContainer(props) {
     useEffect(() => {
         if(socket == null) return;
         socket.on('getMessage', data => {
+            console.log(data);
+            // pass message data to our global message state
+            dispatch({type: 'SET_MESSAGES', payload: data});
+
+            // Strip user information and create a connection with it.
             dispatch({type: 'SET_USER_CONNECTIONS', payload: {
                 userId: String(data.senderId),
                 friendUsername: data.username,
@@ -62,15 +67,6 @@ function MessageSessionContainer(props) {
         })
     }, [dispatch, socket])
 
-    // useEffect(() => {
-    //     console.log(elScrollRefs)
-    //     elScrollRefs.current = elScrollRefs.current.slice(0, conversationMessages.length)
-    //     elScrollRefs.current.map( ref => {
-    //         if(ref == null) return;
-    //         // ref.current.scrollIntoView({behavior: 'smooth'});
-    //         ref.scrollTop = ref.scrollHeight
-    //     }) 
-    // },[conversationMessages.length])
 
     return (
         <MessageSessionsContainer>
@@ -90,7 +86,7 @@ function MessageSessionContainer(props) {
                 </Conversations>
             </ConversationListContainer>
 
-            {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users,index) => {
+            {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users) => {
                 // create an empty array to push the conversation messages into
                 let messages = [];
                 // flatten out the array (might be a better way to handle this)

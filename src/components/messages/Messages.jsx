@@ -13,10 +13,11 @@ import UserMessage from './UserMessage';
 // let authToken = localStorage.getItem('auth-token');
 
 const Messages = (props) => {
+    console.log(props.conversationMessages);
     // local state
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
-    const [arrivalMessage, setArrivalMessage] = useState(null);
+    // const [arrivalMessage, setArrivalMessage] = useState(null);
     // dispatch
     const dispatch = useDispatch();
     const scrollRef = useRef(null);
@@ -31,19 +32,23 @@ const Messages = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Send message to our listening socket on our server.
+        socket.emit("send-message", {
+            senderId: props.loggedInUserId,
+            receiverId: props.activeMessageSessions.userId,
+            conversationId: props.activeMessageSessions.conversationId,
+            text: messageInput,
+            created_at: Date.now()
+
+        })
+
+        // create a message object to send to the backend
         const messageObject = {
             conversationId: props.activeMessageSessions.conversationId,
             senderId: props.loggedInUserId,
             text: messageInput,
         }
-
-        socket.emit("send-message", {
-            senderId: props.loggedInUserId,
-            receiverId: props.activeMessageSessions.userId,
-            conversationId: props.activeMessageSessions.conversationId,
-            text: messageInput
-
-        })
         try {
             const res = await axios.post(`${env_be_url}message`, messageObject);
             dispatch({type: 'SET_MESSAGES', payload: res.data});
@@ -63,40 +68,34 @@ const Messages = (props) => {
     }
 
     
-    function toTimestamp(strDate){
-        var datum = Date.parse(strDate);
-        // return datum/1000;
-        return Math.round(datum);
-    }
+
+
+    // useEffect(() => {
+    //     socket.on('getMessage', (data) => {
+    //         setArrivalMessage({
+    //             username: data.username,
+    //             avatar: data.avatar,
+    //             discord_id: data.discord_id,
+    //             conversationId: data.conversationId,
+    //             sender: data.senderId,
+    //             text: data.text,
+    //             created_at: Date.now()
+    //         })
+    //     })
+    //     return () => {
+    //         setArrivalMessage(null);
+    //     }
+    // }, [])
+
+    // useEffect(() => {
+    //     if(arrivalMessage && props.activeMessageSessions.userId == arrivalMessage.sender) {
+    //         dispatch({type: 'SET_MESSAGES', payload: arrivalMessage})
+    //     }
+    // },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
 
     useEffect(() => {
-        socket.on('getMessage', (data) => {
-            setArrivalMessage({
-                username: data.username,
-                avatar: data.avatar,
-                discord_id: data.discord_id,
-                conversationId: data.conversationId,
-                sender: data.senderId,
-                text: data.text,
-                created_at: Date.now()
-            })
-        })
-        return () => {
-            setArrivalMessage(null);
-        }
-    }, [])
-
-    useEffect(() => {
-        if(arrivalMessage && props.activeMessageSessions.userId == arrivalMessage.sender) {
-            dispatch({type: 'SET_MESSAGES', payload: arrivalMessage})
-        }
-    },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
-
-    useEffect(() => {
-        console.log(scrollRef)
-        console.log(props.conversationMessages)
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    },[ props.conversationMessages])
+    },[ props.conversationMessages.length])
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
@@ -104,8 +103,6 @@ const Messages = (props) => {
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer data-cid={props.cid} ref={scrollRef} style={{transition: 'all ease 120ms', scrollBehavior: 'smooth'}} >
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
-                    toTimestamp(message.created_at);
-                    // timestampToDate(toTimestamp(message.created_at))
                         if(message.id == props.loggedInUserId ){
                             return (
                                     <UserMessage key={index} message={message} isFromFriend={false}/>
