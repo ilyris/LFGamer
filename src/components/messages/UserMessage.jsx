@@ -17,20 +17,9 @@ function UserMessage({message,isFromFriend, scrollRef}) {
         return [dateString, sentAt];
     }
     const  [sentAt] = messageTimestamp(message.created_at);
-    const scrollRef = useRef(null);
-
-    useEffect(() => {
-      console.log(scrollRef.current)
-      console.log(!scrollRef.current)
-
-      if(!scrollRef.current) return; 
-      // scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      scrollRef.current.scrollIntoView({behavior: 'smooth'});
-
-  },[message])
 
   return (
-    <div ref={scrollRef}>
+    <div>
       <UserMessages  isFromFriend={isFromFriend}>
         <CardAvatar
           src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`}
