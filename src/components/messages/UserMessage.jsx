@@ -19,7 +19,7 @@ function UserMessage({message,isFromFriend, scrollRef}) {
     const  [sentAt] = messageTimestamp(message.created_at);
 
   return (
-    <div>
+    <div ref={scrollRef}>
       <UserMessages  isFromFriend={isFromFriend}>
         <CardAvatar
           src={`https://cdn.discordapp.com/avatars/${message.discord_id}/${message.avatar}.png`}

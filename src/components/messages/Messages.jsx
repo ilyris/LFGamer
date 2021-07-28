@@ -104,7 +104,6 @@ const Messages = (props) => {
         elScrollRefs.current.map( ref => {
             ref.current.scrollIntoView({behavior: 'smooth'});
         }) 
-        
     },[props.conversationMessages])
 
 
@@ -118,11 +117,11 @@ const Messages = (props) => {
                     // timestampToDate(toTimestamp(message.created_at))
                         if(message.id == props.loggedInUserId ){
                             return (
-                                    <UserMessage ref={elScrollRefs.current[index]}  key={index} message={message} isFromFriend={false}/>
+                                    <UserMessage scrollRef={elScrollRefs.current[index]}  key={index} message={message} isFromFriend={false}/>
                             )
                         } else {
                             return (
-                                    <UserMessage ref={elScrollRefs.current[index]} key={index} message={message} isFromFriend={true}/>
+                                    <UserMessage scrollRef={elScrollRefs.current[index]} key={index} message={message} isFromFriend={true}/>
                             )
                         }                        
                  }) : null}   
