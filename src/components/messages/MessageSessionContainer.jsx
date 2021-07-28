@@ -71,7 +71,8 @@ function MessageSessionContainer(props) {
     useEffect(() => {
         console.log(elScrollRefs)
         elScrollRefs.current.map( ref => {
-            ref.current.scrollIntoView({behavior: 'smooth'});
+            // ref.current.scrollIntoView({behavior: 'smooth'});
+            ref.current.scrollTop = scrollRef.current.scrollHeight
         }) 
     },[conversationMessages])
 
