@@ -96,7 +96,6 @@ function MessageSessionContainer(props) {
                             conversationMessages={messages} 
                             activeMessageSessions={users} 
                             key={index}
-                            scrollRef={scrollRef}
                         />
                     )
                 }) : null}
