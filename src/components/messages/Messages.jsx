@@ -104,7 +104,7 @@ const Messages = (props) => {
         <MessageContainer data-user-id={props.activeMessageSessions.userId}>
             <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
-            <InnerMessagesContainer style={{transition: 'all ease-in-out 120ms'}} ref={scrollRef}>
+            <InnerMessagesContainer style={{transition: 'all ease-in-out 120ms', scrollBehavior: 'smooth'}} ref={scrollRef}>
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
                     toTimestamp(message.created_at);
                     // timestampToDate(toTimestamp(message.created_at))
