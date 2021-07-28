@@ -106,7 +106,7 @@ const Messages = (props) => {
             if(ref == null) return;
             ref.scrollIntoView({behavior: 'smooth'});
         }) 
-    },[props.conversationMessages.length])
+    },[messages.length])
 
 
     return(
