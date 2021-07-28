@@ -109,7 +109,7 @@ function MessageSessionContainer(props) {
                             loggedInUserId={loggedInUser.id} 
                             conversationMessages={messages} 
                             activeMessageSessions={users} 
-                            key={index}
+                            key={users.conversationId}
                             scrollRef={elScrollRefs.current[index]}
                         />
                     )
