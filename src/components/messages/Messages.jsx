@@ -95,7 +95,7 @@ const Messages = (props) => {
 
     useEffect(() => {
         console.log(scrollRef)
-        scrollRef.current.scrollIntoView({behavior: 'smooth'}); 
+        scrollRef.scrollTop = scrollRef.scrollHeight
     },[props.conversationMessages])
 
     return(
