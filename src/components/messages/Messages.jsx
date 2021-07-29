@@ -125,6 +125,7 @@ const Messages = (props) => {
             setUserTyping(data);
         })
         socket.on("getUsers", users => {
+            console.log(users);
             users.forEach(user => {
                 console.log(user)
                 console.log(user.userId == props.activeMessageSessions.userId)
@@ -135,7 +136,7 @@ const Messages = (props) => {
                 }
             })
         })
-    })
+    },[])
 
     useEffect(() => {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
