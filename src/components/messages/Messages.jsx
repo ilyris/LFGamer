@@ -32,8 +32,7 @@ const Messages = (props) => {
 
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
-
-        socket.emit('typing', {username: props.activeMessageSessions.friendUsername});
+        socket.emit('typing', {receiverId: props.activeMessageSessions.userId});
     }
 
     const handleSubmit = async (e) => {
@@ -65,6 +64,7 @@ const Messages = (props) => {
             dispatch({type: 'SET_MESSAGES', payload: res.data});
             setMessageInput('');
             setUserTyping('');
+            setIsMessageRead(true);
         } catch(err) {
             console.log(err)
         }
@@ -83,7 +83,8 @@ const Messages = (props) => {
     function useOutsideAlerter(ref, hook) {
         useEffect(() => {
             function handleClickOutside(event) {
-
+                console.log(event.target);
+                console.log(ref.current.getAttribute('data-user-id'));
                 if (ref.current.contains(event.target)) {
                     hook(true);
                 }
@@ -94,7 +95,7 @@ const Messages = (props) => {
                 // Unbind the event listener on clean up
                 document.removeEventListener("mousedown", handleClickOutside);
             };
-        }, [ref]);
+        }, [ref,  props.conversationMessages.length]);
     }
 
     // useEffect(() => {
@@ -125,7 +126,8 @@ const Messages = (props) => {
         socket.on('typing', data => {
             setUserTyping(data);
         })
-    }, [])
+    })
+
     useEffect(() => {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         if(props.conversationMessages.length == 0) return;
