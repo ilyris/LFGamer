@@ -136,7 +136,7 @@ const Messages = (props) => {
                 }
             })
         })
-    },[])
+    })
 
     useEffect(() => {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
