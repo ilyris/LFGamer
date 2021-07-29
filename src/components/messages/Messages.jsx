@@ -126,7 +126,8 @@ const Messages = (props) => {
     }, [])
     useEffect(() => {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        if(props.conversationMessages == 'undefined') return;
+        console.log(props.conversationMessages);
+        if(props.conversationMessages.length == 0) return;
         if(props.conversationMessages[props.conversationMessages.length - 1].read) {
             setIsMessageRead(true);
         } else {
