@@ -153,7 +153,13 @@ const Messages = (props) => {
                         }                        
                  }) : null}   
             </InnerMessagesContainer>
-            {userTyping ? <UserTypingMessageAlert>{userTyping}</UserTypingMessageAlert> : null}
+            {userTyping ? 
+                <UserTypingMessageAlertContainer>
+                    <TypingDot></TypingDot>
+                    <TypingDot></TypingDot>
+                    <TypingDot></TypingDot>
+                </UserTypingMessageAlertContainer> 
+            : null}
             <StyledForm onSubmit={(e) => handleSubmit(e)}>
                 <StyledInput contentEditable={true} onChange={handleMessageInput}  type="textarea" value={messageInput}></StyledInput>
                 <StyledButton>Send</StyledButton>
@@ -176,6 +182,20 @@ const breatheAnimation = keyframes`
   }
   0% {
     background-color:rgb(96 95 95);
+  }
+`;
+const typingAnimation = keyframes`
+0% {
+    transform: translateY(0px);
+    background-color: #19181859;
+  }
+  28% {
+    transform: translateY(-3px);
+    background-color: #19181859; 
+  }
+  44% {
+    transform: translateY(0px);
+    background-color: #19181859; 
   }
 `
 
@@ -209,9 +229,9 @@ const MessagedUserName = S.h3`
     min-width: 100.3%;
     transition: 150ms ease-in-out all;
     animation-name: ${props => props.read ? '' : breatheAnimation};
-    
     animation-duration: 800ms;
     animation-iteration-count: infinite;
+
     &: hover {
         cursor: pointer;
         background-color: rgb(96 95 95); 
@@ -266,10 +286,36 @@ const StyledForm = S.form`
     justify-content: space-between;
     border-top: 1px solid #000;
 `;
-const UserTypingMessageAlert = S.p`
-    border-radius: 15px;
-    font-size: 11px;
-    margin: 10px 10px;
+const UserTypingMessageAlertContainer = S.div`
+    margin: 10px;
+    display: flex;
+    padding: 8px 5px;
+    border-radius: 10px;
+    background-color: #cecdcd;
+`;
+const TypingDot = S.span`
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #595959;
+    animation-name: ${typingAnimation};
+    animation-duration: 1.8s;
+    animation-iteration-count: infinite;
+    margin-right: 2px;
+
+    &:nth-child(1) {
+        animation-delay: 200ms;
+      }
+    &:nth-child(2) {
+        animation-delay: 300ms;
+      }
+    &:nth-child(3) {
+        animation-delay: 400ms;
+      }
+    &:last-child {
+        margin-right: 0;
+      }
+
 `;
 const StyledIcon = S(FontAwesomeIcon)`
     pointer-events: none;
