@@ -128,7 +128,6 @@ const Messages = (props) => {
     }, [])
     useEffect(() => {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        console.log(props.conversationMessages);
         if(props.conversationMessages.length == 0) return;
         if(props.conversationMessages[props.conversationMessages.length - 1].read) {
             setIsMessageRead(true);
@@ -156,13 +155,15 @@ const Messages = (props) => {
                         }                        
                  }) : null}   
             </InnerMessagesContainer>
-            {userTyping ? 
-                <UserTypingMessageAlertContainer>
-                    <TypingDot></TypingDot>
-                    <TypingDot></TypingDot>
-                    <TypingDot></TypingDot>
-                </UserTypingMessageAlertContainer> 
-            : null}
+            <div style={{height: '25px', margin: '10px'}}>
+                {userTyping ? 
+                    <UserTypingMessageAlertContainer>
+                        <TypingDot></TypingDot>
+                        <TypingDot></TypingDot>
+                        <TypingDot></TypingDot>
+                    </UserTypingMessageAlertContainer> 
+                : null}
+            </div>
             <StyledForm onSubmit={(e) => handleSubmit(e)}>
                 <StyledInput contentEditable={true} onChange={handleMessageInput}  type="textarea" value={messageInput}></StyledInput>
                 <StyledButton>Send</StyledButton>
@@ -290,7 +291,6 @@ const StyledForm = S.form`
     border-top: 1px solid #000;
 `;
 const UserTypingMessageAlertContainer = S.div`
-    margin: 10px;
     display: flex;
     padding: 8px 5px;
     border-radius: 10px;
