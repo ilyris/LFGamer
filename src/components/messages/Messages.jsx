@@ -59,7 +59,9 @@ const Messages = (props) => {
         }
 
         try {
+            console.log(messageObject)
             const res = await axios.post(`${env_be_url}message`, messageObject);
+            console.log(res);
             dispatch({type: 'SET_MESSAGES', payload: res.data});
             setMessageInput('');
             setUserTyping('');
