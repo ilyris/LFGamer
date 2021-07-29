@@ -128,11 +128,10 @@ const Messages = (props) => {
             users.forEach(user => {
                 console.log(user)
                 console.log(user.userId == props.activeMessageSessions.userId)
+                // This is a bad idea as we loop through everyone, I should just set them as online in the BE
+                // Then pass that over and use it.
                 if(user.userId == props.activeMessageSessions.userId) {
                     setIsOnline(true);
-                }else {
-                    setIsOnline(false);
-
                 }
             })
         })
