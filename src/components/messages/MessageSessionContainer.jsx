@@ -7,7 +7,6 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
 import Messages from './Messages';
 import {env_be_url} from '../../globalVars/envURL';
 import Conversation from '../cards/Conversation'
-import { createRef } from 'react';
 
 function MessageSessionContainer(props) {
 
@@ -17,7 +16,7 @@ function MessageSessionContainer(props) {
     const conversationMessages = useSelector(state => state.messageConnections.messages);
     const [convos, setConvos] = useState([]);
     const containerListHeader = useRef(null);
-    
+
 
     const dispatch = useDispatch();
     const socket = useSelector(state => state.messageConnections.socket);

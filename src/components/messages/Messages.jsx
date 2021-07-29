@@ -18,7 +18,7 @@ const Messages = (props) => {
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
     const [isMessageRead, setIsMessageRead] = useState(false);
-    // const [arrivalMessage, setArrivalMessage] = useState(null);
+    const [isOnline, setIsOnline] = useState(false);
 
     // dispatch
     const dispatch = useDispatch();
@@ -83,8 +83,6 @@ const Messages = (props) => {
     function useOutsideAlerter(ref, hook) {
         useEffect(() => {
             function handleClickOutside(event) {
-                console.log(event.target);
-                console.log(ref.current.getAttribute('data-user-id'));
                 if (ref.current.contains(event.target)) {
                     hook(true);
                 }
@@ -126,7 +124,17 @@ const Messages = (props) => {
         socket.on('typing', data => {
             setUserTyping(data);
         })
-    })
+        socket.on("getUsers", users => {
+            users.forEach(user => {
+                if(user.userId == props.activeMessageSessions.userId) {
+                    setIsOnline(true);
+                }else {
+                    setIsOnline(false);
+
+                }
+            })
+        })
+    },[socket])
 
     useEffect(() => {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -142,7 +150,11 @@ const Messages = (props) => {
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId} ref={messageSessionRef}>
-            <MessagedUserName onClick={minimizeMessage} read={isMessageRead}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
+            <MessagedUserName onClick={minimizeMessage} read={isMessageRead} isOnline={isOnline}>
+                <StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>
+                    {props.activeMessageSessions.friendUsername}
+                </StyledLink>
+            </MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer data-cid={props.cid} ref={scrollRef} style={{transition: 'all ease 120ms', scrollBehavior: 'smooth'}} >
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
@@ -237,12 +249,28 @@ const MessagedUserName = S.h3`
     animation-name: ${props => props.read ? '' : breatheAnimation};
     animation-duration: 800ms;
     animation-iteration-count: infinite;
+    position: relative;
+    display: flex;
+    align-items: center;
 
     &: hover {
         cursor: pointer;
         background-color: rgb(96 95 95); 
     }
+
+    &::before {
+        content: '';
+        width: 10px;
+        height: 10px;
+        background-color: ${props => props.isOnline ?'#76ee74' : 'gray'} ;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 0;
+        margin-right: 5px;
+        font-weight: 100;
+    }
 `;
+
 const InnerMessagesContainer = S.div`
     background-color: #fff;
     height: 300px;
