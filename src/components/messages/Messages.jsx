@@ -126,6 +126,8 @@ const Messages = (props) => {
         })
         socket.on("getUsers", users => {
             users.forEach(user => {
+                console.log(user)
+                console.log(user.userId == props.activeMessageSessions.userId)
                 if(user.userId == props.activeMessageSessions.userId) {
                     setIsOnline(true);
                 }else {
