@@ -83,4 +83,5 @@ const StyledP = S.p`
     text-align: left;
     font-size: 1.4rem;
     color: rgb(73, 72, 72);
+    word-break: break-word;
 `;

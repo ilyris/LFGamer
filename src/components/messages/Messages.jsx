@@ -18,7 +18,7 @@ const Messages = (props) => {
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
     const [isMessageRead, setIsMessageRead] = useState(false);
-    const [isOnline, setIsOnline] = useState(false);
+    // const [isOnline, setIsOnline] = useState(false);
 
     // dispatch
     const dispatch = useDispatch();
@@ -124,19 +124,7 @@ const Messages = (props) => {
         socket.on('typing', data => {
             setUserTyping(data);
         })
-        socket.on("getUsers", users => {
-            console.log(users);
-            users.forEach(user => {
-                console.log(user)
-                console.log(user.userId == props.activeMessageSessions.userId)
-                // This is a bad idea as we loop through everyone, I should just set them as online in the BE
-                // Then pass that over and use it.
-                if(user.userId == props.activeMessageSessions.userId) {
-                    setIsOnline(true);
-                }
-            })
-        })
-    })
+    }, [socket])
 
     useEffect(() => {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -152,7 +140,7 @@ const Messages = (props) => {
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId} ref={messageSessionRef}>
-            <MessagedUserName onClick={minimizeMessage} read={isMessageRead} isOnline={isOnline}>
+            <MessagedUserName onClick={minimizeMessage} read={isMessageRead} isOnline={props.isOnline}>
                 <StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>
                     {props.activeMessageSessions.friendUsername}
                 </StyledLink>

@@ -16,7 +16,7 @@ function MessageSessionContainer(props) {
     const conversationMessages = useSelector(state => state.messageConnections.messages);
     const [convos, setConvos] = useState([]);
     const containerListHeader = useRef(null);
-
+    const [onlineUsers, setOnlineUsers] = useState([]);
 
     const dispatch = useDispatch();
     const socket = useSelector(state => state.messageConnections.socket);
@@ -66,6 +66,13 @@ function MessageSessionContainer(props) {
         })
     }, [dispatch, socket])
 
+    useEffect(() => {
+        if(socket == null) return;
+        socket.on("getUsers", users => {
+            setOnlineUsers(users);
+        })
+    }, [socket, onlineUsers])
+
 
     return (
         <MessageSessionsContainer>
@@ -86,6 +93,7 @@ function MessageSessionContainer(props) {
             </ConversationListContainer>
 
             {activeMessageSessions.length > 0 ? activeMessageSessions.map( (users) => {
+                console.log(users);
                 // create an empty array to push the conversation messages into
                 let messages = [];
                 // flatten out the array (might be a better way to handle this)
@@ -95,6 +103,10 @@ function MessageSessionContainer(props) {
                         messages.push(message);
                     }
                 }))
+                let online = false;
+                onlineUsers.forEach(user => {
+                    if(user.userId == users.userId) return online = true       
+                })
                     return (
                         <Messages 
                             loggedInUserId={loggedInUser.id} 
@@ -102,6 +114,7 @@ function MessageSessionContainer(props) {
                             activeMessageSessions={users} 
                             key={users.conversationId}
                             cid={users.conversationId}
+                            isOnline={online}
                             // scrollRef={el => elScrollRefs.current[index] = el}
                         />
                     )
