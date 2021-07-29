@@ -17,7 +17,7 @@ const Messages = (props) => {
     // local state
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
-    const [isMessageRead, setIsMessageRead] = useState(props.conversationMessages[props.conversationMessages.length - 1].read || false);
+    const [isMessageRead, setIsMessageRead] = useState(false);
     // const [arrivalMessage, setArrivalMessage] = useState(null);
 
     // dispatch
