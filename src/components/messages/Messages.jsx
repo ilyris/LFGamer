@@ -1,5 +1,5 @@
 import React,{useState, useEffect, useRef} from 'react';
-import S from 'styled-components';
+import S, {keyframes } from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import '../../App.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,22 +13,28 @@ import UserMessage from './UserMessage';
 // let authToken = localStorage.getItem('auth-token');
 
 const Messages = (props) => {
-    console.log(props.conversationMessages);
+    
     // local state
     const [messageInput, setMessageInput] = useState('');
     const [userTyping, setUserTyping] = useState('');
+    const [isMessageRead, setIsMessageRead] = useState(props.conversationMessages[props.conversationMessages.length - 1].read);
     // const [arrivalMessage, setArrivalMessage] = useState(null);
+
     // dispatch
     const dispatch = useDispatch();
     const scrollRef = useRef(null);
+    const messageSessionRef = useRef(null);
+
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
 
+    useOutsideAlerter(messageSessionRef,setIsMessageRead)
 
     const handleMessageInput = (event) => {
         setMessageInput(event.target.value);
-    }
 
+        socket.emit('typing', {username: props.activeMessageSessions.friendUsername});
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,6 +45,7 @@ const Messages = (props) => {
             receiverId: props.activeMessageSessions.userId,
             conversationId: props.activeMessageSessions.conversationId,
             text: messageInput,
+            read: false,
             created_at: Date.now()
 
         })
@@ -47,12 +54,15 @@ const Messages = (props) => {
         const messageObject = {
             conversationId: props.activeMessageSessions.conversationId,
             senderId: props.loggedInUserId,
+            read: false,
             text: messageInput,
         }
+
         try {
             const res = await axios.post(`${env_be_url}message`, messageObject);
             dispatch({type: 'SET_MESSAGES', payload: res.data});
             setMessageInput('');
+            setUserTyping('');
         } catch(err) {
             console.log(err)
         }
@@ -68,7 +78,22 @@ const Messages = (props) => {
     }
 
     
+    function useOutsideAlerter(ref, hook) {
+        useEffect(() => {
+            function handleClickOutside(event) {
 
+                if (ref.current.contains(event.target)) {
+                    hook(true);
+                }
+            }
+            // Bind the event listener
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                // Unbind the event listener on clean up
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, [ref]);
+    }
 
     // useEffect(() => {
     //     socket.on('getMessage', (data) => {
@@ -94,12 +119,26 @@ const Messages = (props) => {
     // },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
 
     useEffect(() => {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+        // Listen to the typing event and display that data.
+        socket.on('typing', data => {
+            setUserTyping(data);
+        })
+    }, [])
+    useEffect(() => {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+
+        if(props.conversationMessages[props.conversationMessages.length - 1].read) {
+            setIsMessageRead(true);
+        } else {
+            setIsMessageRead(false);
+        }
+        setUserTyping('');
+
     },[ props.conversationMessages.length])
 
     return(
-        <MessageContainer data-user-id={props.activeMessageSessions.userId}>
-            <MessagedUserName onClick={minimizeMessage}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
+        <MessageContainer data-user-id={props.activeMessageSessions.userId} ref={messageSessionRef}>
+            <MessagedUserName onClick={minimizeMessage} read={isMessageRead}><StyledLink to={`/profile/${props.activeMessageSessions.userId}`}>{props.activeMessageSessions.friendUsername}</StyledLink></MessagedUserName>
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer data-cid={props.cid} ref={scrollRef} style={{transition: 'all ease 120ms', scrollBehavior: 'smooth'}} >
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
@@ -125,6 +164,21 @@ const Messages = (props) => {
 
 export default Messages;
 
+const breatheAnimation = keyframes`
+0% {
+    background-color: #494848;
+  }
+  100% {
+    background-color: rgb(96 95 95);
+  }
+  50% {
+    background-color: #494848;
+  }
+  0% {
+    background-color:rgb(96 95 95);
+  }
+`
+
 const MessageContainer = S.div`
     width: 300px;
     border: 1px solid #000;
@@ -140,6 +194,7 @@ const MessageContainer = S.div`
     max-width: 500px;
     transition: all ease-in-out 300ms;
     position: relative;
+
 `;
 const MessagedUserName = S.h3`
     background-color: #494848;
@@ -153,6 +208,10 @@ const MessagedUserName = S.h3`
     padding-left: 10px;
     min-width: 100.3%;
     transition: 150ms ease-in-out all;
+    animation-name: ${props => props.read ? '' : breatheAnimation};
+    
+    animation-duration: 800ms;
+    animation-iteration-count: infinite;
     &: hover {
         cursor: pointer;
         background-color: rgb(96 95 95); 
@@ -208,11 +267,9 @@ const StyledForm = S.form`
     border-top: 1px solid #000;
 `;
 const UserTypingMessageAlert = S.p`
-    background-color: #ddd;
     border-radius: 15px;
-    padding: 2px 15px;
-    font-size: 12px;
-    margin: 0 0 10px 10px;
+    font-size: 11px;
+    margin: 10px 10px;
 `;
 const StyledIcon = S(FontAwesomeIcon)`
     pointer-events: none;
@@ -231,3 +288,4 @@ const ExitButton = S.div`
         color: #000;
     }
 `;
+
