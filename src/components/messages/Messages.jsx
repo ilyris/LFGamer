@@ -156,17 +156,18 @@ const Messages = (props) => {
                                     <UserMessage key={index} message={message} isFromFriend={true}/>
                             )
                         }                        
-                 }) : null}   
+                 }) : null}  
+                <div style={{height: '25px', margin: '2px 10px', width: '28px'}}>
+                    {userTyping ? 
+                        <UserTypingMessageAlertContainer>
+                            <TypingDot></TypingDot>
+                            <TypingDot></TypingDot>
+                            <TypingDot></TypingDot>
+                        </UserTypingMessageAlertContainer> 
+                    : null}
+                </div>
             </InnerMessagesContainer>
-            <div style={{height: '25px', margin: '2px 10px'}}>
-                {userTyping ? 
-                    <UserTypingMessageAlertContainer>
-                        <TypingDot></TypingDot>
-                        <TypingDot></TypingDot>
-                        <TypingDot></TypingDot>
-                    </UserTypingMessageAlertContainer> 
-                : null}
-            </div>
+
             <StyledForm onSubmit={(e) => handleSubmit(e)}>
                 <StyledInput contentEditable={true} onChange={handleMessageInput}  type="textarea" value={messageInput}></StyledInput>
                 <StyledButton>Send</StyledButton>
