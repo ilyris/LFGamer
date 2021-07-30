@@ -64,7 +64,16 @@ export function SetUpPage(props) {
     const handleLeagueConnect = async (event) => {
         event.preventDefault();
         try {
-            const res = await axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${profile.league_alias}?api_key=RGAPI-4f0bd1b1-9d04-4c8f-9554-aebff2dbabea`);
+            const res = await axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${profile.league_alias}?api_key=RGAPI-4f0bd1b1-9d04-4c8f-9554-aebff2dbabea`,
+                { header: 
+                    {
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36",
+                        "Accept-Language": "en-US,en;q=0.9",
+                        "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
+                        "Origin": "https://developer.riotgames.com"
+                    }
+                }
+            );
             console.log(res.data);
         } 
         catch(err) {
