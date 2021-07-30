@@ -49,7 +49,6 @@ function Profile(props) {
                 <UserNameContainer>
                     {profileData.user ? <DiscordAvatar src={`https://cdn.discordapp.com/avatars/${profileData.user.discord_id}/${profileData.user.avatar}.png`} /> : null}
                     {profileData.user && <Heading><Username>{`${profileData.user.username}`}</Username></Heading>}
-    
                 </UserNameContainer>
                 <AboutMeContainer>
                     <Label>About Me</Label>

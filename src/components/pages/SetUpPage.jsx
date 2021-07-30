@@ -23,6 +23,7 @@ export function SetUpPage(props) {
     const history = useHistory();
     const [profile, setProfile] = useState({
         about_me: '',
+        league_alias: '',
     })
     const [user, setUser] = useState('');
     const championData = useChampionData({});
@@ -44,6 +45,7 @@ export function SetUpPage(props) {
             console.log(res.data)
             setProfile({
                 about_me: '',
+                league_alias: '',
             })
             dispatch({type: 'CLEAR_SELECTED_CHAMPIONS', payload: []})
             dispatch({type: 'CLEAR_SELECTED_RANK', payload: []})
@@ -51,13 +53,23 @@ export function SetUpPage(props) {
             dispatch({type: 'CLEAR_IS_MIC_ENABLED', payload: false})
 
             // Push user to new route after submit
-            history.push(`/profile/${user.user_id}`)
+            // history.push(`/profile/${user.user_id}`)
         })
         .catch(err => console.log(err))
 
     }
     const onChange = (event) => {
         setProfile({...profile, [event.target.name]: event.target.value});
+    }
+    const handleLeagueConnect = async (event) => {
+        event.preventDefault();
+        try {
+            const res = await axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${profile.league_alias}?api_key=RGAPI-4f0bd1b1-9d04-4c8f-9554-aebff2dbabea`);
+            console.log(res.data);
+        } 
+        catch(err) {
+            console.log(err)
+        }
     }
     useEffect(() => {
         // After user discord login, get user_data from endpoint
@@ -68,7 +80,7 @@ export function SetUpPage(props) {
                     // Get user_id to redirect them
                     let jwt = decodeJWT(localStorage.getItem('token'));
                     // Redirect them to their profile, since they shouldn't come to this page again
-                    history.push(`/profile/${jwt.payload.user_id}`);
+                    // history.push(`/profile/${jwt.payload.user_id}`);
 
                     // Maybe set a flag in the database that they have submitted this form before, if they haven't let them come back
                     // if they have, then they should redirect? 
@@ -93,23 +105,39 @@ export function SetUpPage(props) {
         return null;
     }
     return (
-        <MainContainer>
-            <PageIntroContainer>
-                <Heading>Welcome, <Username>{`${user.username}`}</Username></Heading>
-                <DiscordAvatar src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}/>
-                <AboutContainer>
-                    <About>
-                    Thanks for joining LFGamer, Here you can add information to your profile and connect your Riot games account to your LFGamer account.
-                    </About>
-                </AboutContainer>
-                <ViewAccountContainer>
-                    <AccountLink to={`/profile/${user.user_id}`}>View your account</AccountLink>
-                </ViewAccountContainer>
-                <Form onSubmit={onSubmit}>
-                    <Label> About You:
-                        <TextArea onChange={onChange} name="about_me" type="textarea" value={profile.about_me} placeholder="tell everyone a little bit about yourself"/>
-                    </Label>
-                    <SelectListContainer>
+      <MainContainer>
+        <PageIntroContainer>
+          <Heading>
+            Welcome, <Username>{`${user.username}`}</Username>
+          </Heading>
+          <DiscordAvatar
+            src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
+          />
+          <AboutContainer>
+            <About>
+              Thanks for joining LFGamer, Here you can add information to your
+              profile and connect your Riot games account to your LFGamer
+              account.
+            </About>
+          </AboutContainer>
+          <ViewAccountContainer>
+            <AccountLink to={`/profile/${user.user_id}`}>
+              View your account
+            </AccountLink>
+          </ViewAccountContainer>
+          <Form onSubmit={onSubmit}>
+            <Label>
+              {" "}
+              About You:
+              <TextArea
+                onChange={onChange}
+                name="about_me"
+                type="textarea"
+                value={profile.about_me}
+                placeholder="tell everyone a little bit about yourself"
+              />
+            </Label>
+            {/* <SelectListContainer>
                         <ChampionCard 
                             rawData={championsData}
                             selectedOptions={champions}
@@ -137,34 +165,43 @@ export function SetUpPage(props) {
                             inputName={'role_input'}
                             lengthCheck={2}
                         />                        
-                    </SelectListContainer>
+                    </SelectListContainer> */}
 
-                        <SliderInput />
-                    <FormButtonContainer>
-                        <SubmitButton 
-                            text={'Save'}
-                        />
-                    </FormButtonContainer>
-                </Form>
-            </PageIntroContainer>
-            {riotAccount ? 'Riot Account has been connected!' : 
-                <ConnectionContainer>
-                    <RiotConnectionText>
-                        Connect your gaming accounts to LFGamer
-                    </RiotConnectionText>
-                    <GameConnectionCard>
-                        <GameLogo src={image}/>
-                        <ButtonContainer>
-                            <RiotConnectButton href="/">
-                                Connect
-                                <StyledIconArrow icon={faArrowRight} />                       
-                            </RiotConnectButton> 
-                        </ButtonContainer>
-                    </GameConnectionCard>
-                </ConnectionContainer>            
-            }
-        </MainContainer>
-    )
+            <SliderInput />
+            <FormButtonContainer>
+              <SubmitButton text={"Save"} />
+            </FormButtonContainer>
+          </Form>
+        </PageIntroContainer>
+        {riotAccount ? (
+          "Riot Account has been connected!"
+        ) : (
+          <ConnectionContainer>
+            <RiotConnectionText>
+              Connect your gaming accounts to LFGamer
+            </RiotConnectionText>
+            <GameConnectionCard>
+              <GameLogo src={image} />
+              <Label>
+                <LeagueUsernameInput
+                  onChange={onChange}
+                  type="text"
+                  name='league_alias'
+                  autoComplete="off"
+                  placeholder={'LOL Username'}
+                />
+              </Label>
+              <ButtonContainer>
+                <RiotConnectButton href="/" onClick={handleLeagueConnect}>
+                  Connect
+                  <StyledIconArrow icon={faArrowRight} />
+                </RiotConnectButton>
+              </ButtonContainer>
+            </GameConnectionCard>
+          </ConnectionContainer>
+        )}
+      </MainContainer>
+    );
 }
 
 export default SetUpPage;
@@ -246,6 +283,12 @@ const GameConnectionCard = S.div`
 const GameLogo = S.img`
     width: 100px;
     height: auto;
+`;
+const LeagueUsernameInput = S.input`
+    padding: 5px;
+    font-size: 20px;
+    border-radius: 5px;
+    width: 100%;
 `;
 const RiotConnectionText = S.p`
     width: fit-content;
