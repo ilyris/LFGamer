@@ -24,13 +24,16 @@ export function Playercard(props) {
             console.log(res);
             // This should be handled by the socket, so when we read a message came in the chat box displays.
             dispatch({type: 'SET_USER_CONNECTIONS', payload: {userId: String(props.listing.id), friendUsername: props.listing.username, conversationId: res.data.id}})
-            if(res.data.id) {
-                axios.get(`${env_be_url}message/${res.data.id}`)
-                .then(res => {
-                    dispatch({type: 'SET_MESSAGES', payload: res.data});
-                })
-                .catch(err => console.log(err));
-            }
+
+            // pretty certain this can be removed now, as it pointlessly pulls in the messages to the session
+            // there is other logic doing that atm.
+            // if(res.data.id) {
+            //     axios.get(`${env_be_url}message/${res.data.id}`)
+            //     .then(res => {
+            //         dispatch({type: 'SET_MESSAGES', payload: res.data});
+            //     })
+            //     .catch(err => console.log(err));
+            // }
         })
         .catch(err => console.log(err));
         

@@ -46,7 +46,6 @@ const Messages = (props) => {
             text: messageInput,
             read: false,
             created_at: Date.now()
-
         })
 
         // create a message object to send to the backend

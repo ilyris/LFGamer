@@ -52,7 +52,7 @@ export function DuoPage(props) {
     }
     useEffect(() => {
         getDuoListings();
-    }, [])
+    }, [duoListings.length, isFormClosed])
 
     // Only get champion data ( a lot of useless info in here we don't need)
     const championsData = Object.values(championData);
@@ -69,7 +69,7 @@ export function DuoPage(props) {
                 <Button onClick={handleClick}>Add Post</Button>
                 <DuoListing isFormClosed={isFormClosed} setIsFormClosed={setIsFormClosed}/>
             </ListingButtonContainer>
-            <Form onSubmit={onSubmit}>
+            <Form onSubmit={onSubmit} isFormClosed={isFormClosed}>
                 <SelectListContainer>
                     <ChampionCard
                         rawData={championsData}
@@ -134,6 +134,7 @@ const Form = S.form`
     flex-flow: row wrap;
     justify-content: space-between;
     margin-top: 50px;
+    z-index: ${props => props.isFormClosed ? '10': '0'};
 `;
 const SelectListContainer = S.div`
     display: flex;

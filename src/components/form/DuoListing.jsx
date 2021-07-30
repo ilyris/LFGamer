@@ -6,7 +6,7 @@ import { rankedEmblemArr } from '../pages/RankImageExport'
 import { roleArr } from '../pages/RoleImageExport'
 import { SubmitButton } from '../pageComponents/SubmitButton';
 import { env_be_url } from '../../globalVars';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SliderInput from './SliderInput';
 import MainTitle from '../pageComponents/MainTitle'
 import { useChampionData } from '../../customHooks/useChampionData';
@@ -22,12 +22,21 @@ export function DuoListing(props) {
     let jwt = decodeJWT(localStorage.getItem('token'));
     // make specific reducer for communication being searched for
     const userMicSetting = useSelector(state => state.championSelections.micEnabled);
+    const dispatch = useDispatch();
 
     const onSubmit = (e) => {
+        // we need to cause a rerender and reset the state.
+
         e.preventDefault();
         axios.post(`${env_be_url}duo/add`, {id:jwt.payload.user_id, champions, rank: rank[0], lanes, mic:userMicSetting, desc})
         .then(res => {
-            console.log(res.data);
+            // clear out the selections
+            dispatch({type:'CLEAR_SELECTED_CHAMPIONS', payload: []})
+            dispatch({type:'CLEAR_SELECTED_RANK', payload: []})
+            dispatch({type:'CLEAR_SELECTED_LANES', payload: []})
+            dispatch({type:'CLEAR_IS_MIC_ENABLED', payload: false})
+            setDesc('');
+            props.setIsFormClosed(true)
         })
         .catch(err => console.log(err));
     }
@@ -109,7 +118,7 @@ const Form = S.form`
     position: absolute;
     margin-top: -50px;
     background-color: #232323;
-    z-index: ${props => props.isFormClosed ? '0' :  '10'};
+    z-index: ${props => props.isFormClosed ? '0' :  '11'};
 `;
 const SelectListContainer = S.div`
     display: flex;
