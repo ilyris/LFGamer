@@ -1,4 +1,4 @@
-const cookieValue = document.cookie ? document.cookie.split(';').find(row => row.startsWith('token=')).split('=')[1] : '';
+// const cookieValue = document.cookie ? document.cookie.split(';').find(row => row.startsWith('token=')).split('=')[1] : '';
 
 
 
