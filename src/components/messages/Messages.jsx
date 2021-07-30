@@ -24,7 +24,7 @@ const Messages = (props) => {
     const dispatch = useDispatch();
     const scrollRef = useRef(null);
     const messageSessionRef = useRef(null);
-
+    const typingbubbleScrollRef = useRef(null);
     // Redux State
     const socket = useSelector(state => state.messageConnections.socket);
 
@@ -122,6 +122,7 @@ const Messages = (props) => {
         // Listen to the typing event and display that data.
         socket.on('typing', data => {
             setUserTyping(data);
+            typingbubbleScrollRef.current.scrollIntoView({behavior: 'smooth'});
         })
     }, [socket])
 
@@ -157,7 +158,7 @@ const Messages = (props) => {
                             )
                         }                        
                  }) : null}  
-                <div style={{margin: '5px 10px', width: '38px'}}>
+                <div style={{margin: '5px 10px', width: '38px'}} ref={typingbubbleScrollRef}>
                     {userTyping ? 
                         <UserTypingMessageAlertContainer>
                             <TypingDot></TypingDot>
