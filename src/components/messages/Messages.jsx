@@ -157,7 +157,7 @@ const Messages = (props) => {
                             )
                         }                        
                  }) : null}  
-                <div style={{height: '25px', margin: '2px 10px', width: '28px'}}>
+                <div style={{margin: '5px 10px', width: '38px'}}>
                     {userTyping ? 
                         <UserTypingMessageAlertContainer>
                             <TypingDot></TypingDot>
@@ -169,6 +169,7 @@ const Messages = (props) => {
             </InnerMessagesContainer>
 
             <StyledForm onSubmit={(e) => handleSubmit(e)}>
+                {/* make div instead of styledInput, m,ake content editable.*/}
                 <StyledInput contentEditable={true} onChange={handleMessageInput}  type="textarea" value={messageInput}></StyledInput>
                 <StyledButton>Send</StyledButton>
             </StyledForm>
