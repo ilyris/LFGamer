@@ -147,7 +147,7 @@ const Messages = (props) => {
             <ExitButton onClick={(e) => handleClose(e)}><StyledIcon icon={faTimes}/></ExitButton>
             <InnerMessagesContainer data-cid={props.cid} ref={scrollRef} style={{transition: 'all ease 120ms', scrollBehavior: 'smooth'}} >
                 {props.conversationMessages.length > 0 ? props.conversationMessages.map( (message,index) => {
-                        if(message.id == props.loggedInUserId ){
+                        if(message.id == props.loggedInUserId) {
                             return (
                                     <UserMessage key={index} message={message} isFromFriend={false}/>
                             )
@@ -158,7 +158,7 @@ const Messages = (props) => {
                         }                        
                  }) : null}   
             </InnerMessagesContainer>
-            <div style={{height: '25px', margin: '10px'}}>
+            <div style={{height: '25px', margin: '2px 10px'}}>
                 {userTyping ? 
                     <UserTypingMessageAlertContainer>
                         <TypingDot></TypingDot>
@@ -287,7 +287,7 @@ const StyledInput = S.input`
     min-height: 10px;
     max-height: 100px;
     overflow: auto;
-    padding: 12px 10px 0 12px;
+    padding: 10px;
 `;
 const StyledButton = S.button`
     background: linear-gradient(to right, rgb(118, 238, 116) 0%, rgb(0, 152, 142) 100%);
