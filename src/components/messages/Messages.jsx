@@ -136,7 +136,7 @@ const Messages = (props) => {
         }
         setUserTyping('');
 
-    },[ props.conversationMessages.length])
+    },[props.conversationMessages.length])
 
     return(
         <MessageContainer data-user-id={props.activeMessageSessions.userId} ref={messageSessionRef}>
