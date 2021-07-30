@@ -70,6 +70,7 @@ export function SetUpPage(props) {
                         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36",
                         "Accept-Language": "en-US,en;q=0.9",
                         "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
+                        "Access-Control-Allow-Origin": "true",
                         "Origin": "https://developer.riotgames.com"
                     }
                 }
