@@ -67,7 +67,6 @@ export function SetUpPage(props) {
         // After user discord login, get user_data from endpoint
             axios.get(`${env_be_url}login/user`)
             .then( async res => {
-                console.log(res.data)                // if dat ais empty, means they loged in past and we set the object to = {}
                 if(Object.keys(res.data).length === 0) {
                     // Get user_id to redirect them
                     let jwt = decodeJWT(localStorage.getItem('token'));

@@ -148,7 +148,6 @@ function Profile(props) {
     useEffect(() => {
         axios.post(`${env_be_url}profile`, { user_id: params.id })
             .then(async res => {
-                console.log(res.data)
                 // check if our profile_Data object is empty
                 if(Object.keys(res.data).length == 0) {
                     // if empty, there is no profile, so remove the loader
@@ -191,9 +190,7 @@ function Profile(props) {
             })
     }, [leagueProfileData.length])
 
-    
-    console.log(isLoading);
-    if(isLoading) {
+        if(isLoading) {
         return <Loader />
     } else if(display404) {
         return <Page404 />
