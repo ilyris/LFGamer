@@ -55,7 +55,9 @@ export function SetUpPage(props) {
             // add a confirmation message before we push the user.
             if(res.data) {
                 await dispatch({type: 'SET_LEAGUE_ACCOUNT_INFO', payload: res.data});
-                history.push(`/profile/${user.user_id}`)
+
+                // Maybe we handle the riot connect in the profile page, or make a request to see if its connected, if it is. Redirect them to the portfolio page
+                // history.push(`/profile/${user.user_id}`)
             }
         } 
         catch(err) {

@@ -157,7 +157,6 @@ function Profile(props) {
                 } 
                 else if(Object.keys(leagueProfileData).length == 0) {
                     dispatch({type: 'SET_ISLOADING'})
-
                 }
                 else {
                     // Remove loader
