@@ -56,8 +56,7 @@ export function SetUpPage(props) {
             if(res.data) {
                 await dispatch({type: 'SET_LEAGUE_ACCOUNT_INFO', payload: res.data});
 
-                // Maybe we handle the riot connect in the profile page, or make a request to see if its connected, if it is. Redirect them to the portfolio page
-                // history.push(`/profile/${user.user_id}`)
+                history.push(`/profile/${user.user_id}`)
             }
         } 
         catch(err) {
@@ -69,11 +68,14 @@ export function SetUpPage(props) {
         // After user discord login, get user_data from endpoint
             axios.get(`${env_be_url}login/user`)
             .then( async res => {
+
+                // Maybe we handle the riot connect in the profile page, or make a request to see if its connected, if it is. Redirect them to the portfolio page
+
                 if(Object.keys(res.data).length === 0) {
                     // Get user_id to redirect them
                     let jwt = decodeJWT(localStorage.getItem('token'));
                     // Redirect them to their profile, since they shouldn't come to this page again
-                    history.push(`/profile/${jwt.payload.user_id}`);
+                    // history.push(`/profile/${jwt.payload.user_id}`);
 
                     // Maybe set a flag in the database that they have submitted this form before, if they haven't let them come back
                     // if they have, then they should redirect? 
@@ -86,7 +88,7 @@ export function SetUpPage(props) {
                     // set their user data in our reducer
                     await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data}) 
                     
-                    history.push(`/profile/${res.data.user_id}`);
+                    // history.push(`/profile/${res.data.user_id}`);
 
                 }
 
