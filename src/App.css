@@ -66,3 +66,6 @@ p,li,ul,div,a {
       left: 0;
       background-color: red;
   }
+  .highcharts-credits {
+    display: none !important;
+  }

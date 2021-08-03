@@ -6,15 +6,17 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import axios from 'axios';
 import S from 'styled-components';
 import image from '../../assets/league-of-legends-game-logo.png';
-import ChampionCard from '../cards/ChampionCard';
-import SliderInput from '../form/SliderInput';
-import {rankedEmblemArr} from './RankImageExport'
-import {roleArr} from './RoleImageExport'
+// import ChampionCard from '../cards/ChampionCard';
+// import SliderInput from '../form/SliderInput';
+// import {rankedEmblemArr} from './RankImageExport'
+// import {roleArr} from './RoleImageExport'
 import { decodeJWT } from '../../helperFuncs/cookie';
-import { SubmitButton } from '../pageComponents/SubmitButton';
-import { useChampionData } from '../../customHooks/useChampionData';
+// import { SubmitButton } from '../pageComponents/SubmitButton';
+// import { useChampionData } from '../../customHooks/useChampionData';
 import {env_be_url} from '../../globalVars/envURL';
-import { useSetLeagueInformation } from '../../customHooks/useSetLeagueInformation';
+// import { useSetLeagueInformation } from '../../customHooks/useSetLeagueInformation';
+import {v4 as uuidv4} from 'uuid';
+import { Verification } from '../modals/Verification'
 
 export function SetUpPage(props) {
     const dispatch = useDispatch();
@@ -23,41 +25,43 @@ export function SetUpPage(props) {
     const history = useHistory();
     const [profile, setProfile] = useState({
         about_me: '',
+        league_alias: '',
     })
     const [user, setUser] = useState('');
-    const championData = useChampionData({});
-
+    const [modalActive, setModalActive] = useState(false);
     const riotAccount = useSelector( state => state.root.riotAccount);
     const [showSetupPage, setShowSetupPage] = useState(false);
-
-    const selectedLeagueInformation = useSetLeagueInformation();
-    const {champions, rank, lanes} = selectedLeagueInformation;
-
-    // Grab mic option (true || false)
-    const userMicSetting = useSelector(state => state.championSelections.micEnabled);
-
-    const onSubmit = (e) => {
-        e.preventDefault();
-        axios.post(`${env_be_url}setup`,{champions, rank, lanes, mic:userMicSetting, aboutMe: profile.about_me, email: user.email})
-        .then(res => {
-            // Clear the setup page form
-            console.log(res.data)
-            setProfile({
-                about_me: '',
-            })
-            dispatch({type: 'CLEAR_SELECTED_CHAMPIONS', payload: []})
-            dispatch({type: 'CLEAR_SELECTED_RANK', payload: []})
-            dispatch({type: 'CLEAR_SELECTED_LANES', payload: []})
-            dispatch({type: 'CLEAR_IS_MIC_ENABLED', payload: false})
-
-            // Push user to new route after submit
-            history.push(`/profile/${user.user_id}`)
-        })
-        .catch(err => console.log(err))
-
-    }
+    const [uuid, setUuid] = useState(uuidv4());
+    
     const onChange = (event) => {
         setProfile({...profile, [event.target.name]: event.target.value});
+    }
+    const handleLeagueConnect = async (event) => {
+        event.preventDefault();
+       
+        try {
+            setModalActive(true)
+        } 
+        catch(err) {
+            console.log(err)
+        }
+    }
+    const handleVerification = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post(`${env_be_url}setup/getSummonerInfo`, {user_id: user.user_id, leagueAlias: profile.league_alias, uuid: uuid})
+            console.log(res.data);
+
+            // add a confirmation message before we push the user.
+            if(res.data) {
+                await dispatch({type: 'SET_LEAGUE_ACCOUNT_INFO', payload: res.data});
+                history.push(`/profile/${user.user_id}`)
+            }
+        } 
+        catch(err) {
+            console.log(err)
+        }
+
     }
     useEffect(() => {
         // After user discord login, get user_data from endpoint
@@ -79,7 +83,10 @@ export function SetUpPage(props) {
                     await setUser(res.data);
 
                     // set their user data in our reducer
-                    await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data})                    
+                    await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data}) 
+                    
+                    history.push(`/profile/${res.data.user_id}`);
+
                 }
 
 
@@ -87,84 +94,55 @@ export function SetUpPage(props) {
             .catch(err => console.log(err));
     },[dispatch, history])
 
-    // Only get champion data ( a lot of useless info in here we don't need)
-    const championsData = Object.values(championData);
     if(!showSetupPage) {
         return null;
     }
     return (
-        <MainContainer>
-            <PageIntroContainer>
-                <Heading>Welcome, <Username>{`${user.username}`}</Username></Heading>
-                <DiscordAvatar src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}/>
-                <AboutContainer>
-                    <About>
-                    Thanks for joining LFGamer, Here you can add information to your profile and connect your Riot games account to your LFGamer account.
-                    </About>
-                </AboutContainer>
-                <ViewAccountContainer>
-                    <AccountLink to={`/profile/${user.user_id}`}>View your account</AccountLink>
-                </ViewAccountContainer>
-                <Form onSubmit={onSubmit}>
-                    <Label> About You:
-                        <TextArea onChange={onChange} name="about_me" type="textarea" value={profile.about_me} placeholder="tell everyone a little bit about yourself"/>
-                    </Label>
-                    <SelectListContainer>
-                        <ChampionCard 
-                            rawData={championsData}
-                            selectedOptions={champions}
-                            action={'SET_SELECTED_CHAMPIONS'}
-                            placeHolder={"select your champion(s)"}
-                            label={'Your Champion Pool'}
-                            inputName={'champion_input'}
-                            lengthCheck={6}
-                        />                    
-                        <ChampionCard
-                            rawData={rankedEmblemArr}
-                            selectedOptions={rank}
-                            action={'SET_SELECTED_RANK'}
-                            label={'Your Rank'}
-                            placeHolder={"Select your rank"}
-                            inputName={'rank_input'}
-                            lengthCheck={1}
-                        />
-                        <ChampionCard
-                            rawData={roleArr}
-                            selectedOptions={lanes}
-                            action={'SET_SELECTED_LANES'}
-                            label={'Your Roles'}
-                            placeHolder={"Select your roles"}
-                            inputName={'role_input'}
-                            lengthCheck={2}
-                        />                        
-                    </SelectListContainer>
-
-                        <SliderInput />
-                    <FormButtonContainer>
-                        <SubmitButton 
-                            text={'Save'}
-                        />
-                    </FormButtonContainer>
-                </Form>
-            </PageIntroContainer>
-            {riotAccount ? 'Riot Account has been connected!' : 
-                <ConnectionContainer>
-                    <RiotConnectionText>
-                        Connect your gaming accounts to LFGamer
-                    </RiotConnectionText>
-                    <GameConnectionCard>
-                        <GameLogo src={image}/>
-                        <ButtonContainer>
-                            <RiotConnectButton href="/">
-                                Connect
-                                <StyledIconArrow icon={faArrowRight} />                       
-                            </RiotConnectButton> 
-                        </ButtonContainer>
-                    </GameConnectionCard>
-                </ConnectionContainer>            
-            }
-        </MainContainer>
-    )
+      <MainContainer>
+        <PageIntroContainer>
+          <Heading>
+            Welcome, <Username>{`${user.username}`}</Username>
+          </Heading>
+          <DiscordAvatar
+            src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
+          />
+          <AboutContainer>
+            <About>
+              Thanks for joining LFGamer, Here you can connect your league of legends account information to your
+              profile..
+            </About>
+          </AboutContainer>
+        </PageIntroContainer>
+        {riotAccount ? (
+          "Riot Account has been connected!"
+        ) : (
+          <ConnectionContainer>
+            <RiotConnectionText>
+              Connect your gaming accounts to LFGamer
+            </RiotConnectionText>
+            <GameConnectionCard>
+              <GameLogo src={image} />
+              <Label>
+                <LeagueUsernameInput
+                  onChange={onChange}
+                  type="text"
+                  name='league_alias'
+                  autoComplete="off"
+                  placeholder={'LOL Username'}
+                />
+              </Label>
+              <ButtonContainer>
+                <RiotConnectButton href="/" onClick={handleLeagueConnect}>
+                  Connect
+                  <StyledIconArrow icon={faArrowRight} />
+                </RiotConnectButton>
+              </ButtonContainer>
+            </GameConnectionCard>
+            { modalActive ? < Verification handleVerification={handleVerification} modalActive={setModalActive}uuid={uuid}/> : null}
+          </ConnectionContainer>
+        )}
+      </MainContainer>
+    );
 }
 
 export default SetUpPage;
@@ -246,6 +224,12 @@ const GameConnectionCard = S.div`
 const GameLogo = S.img`
     width: 100px;
     height: auto;
+`;
+const LeagueUsernameInput = S.input`
+    padding: 5px;
+    font-size: 20px;
+    border-radius: 5px;
+    width: 100%;
 `;
 const RiotConnectionText = S.p`
     width: fit-content;

@@ -7,7 +7,9 @@ export const initialState = {
     riotAccount: false,
     isLoading: true,
     discordUserData: discordData ? JSON.parse(discordData) : {},
-    profileData: {}
+    profileData: {},
+    leagueAccountInfo: {},
+    leagueProfileData: {},
 };
 
 
@@ -33,6 +35,9 @@ export const rootReducer = (state = initialState, action) => {
             return {...state, discordUserData: action.payload};
         case 'SET_PROFILE_DATA':
             return {...state, profileData: action.payload}; 
+        case 'SET_LEAGUE_ACCOUNT_INFO':
+            return {...state, leagueAccountInfo: action.payload};
+            
         default:
             return state;
     }

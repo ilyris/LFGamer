@@ -6,7 +6,7 @@ export function useChampionData(initialState) {
 
     useEffect(() => {
         // get champion data from Riot Games
-        axios.get('https://ddragon.leagueoflegends.com/cdn/11.12.1/data/en_US/champion.json')
+        axios.get('https://ddragon.leagueoflegends.com/cdn/11.15.1/data/en_US/champion.json')
             .then(res => {
                 setChampionData(res.data.data);
             })

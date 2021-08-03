@@ -6,7 +6,16 @@ import { useParams } from 'react-router';
 import { Page404 } from './Page404';
 import { Loader } from '../loaders/loader';
 import {env_be_url} from '../../globalVars/envURL';
+import {Responsivebarchart} from '../charts/ResponsiveBarChart'
+import Highcharts from  "highcharts/highstock";
+import highchartsMore from "highcharts/highcharts-more.js"
+import solidgauge from "highcharts/modules/solid-gauge.js";
+import HighchartsReact from "highcharts-react-official";
+import summonerJsonData from '../../data/LeagueSummonerSpells.json';
+import leagueItemJsonData from '../../data/LeagueItems.json';
 
+highchartsMore(Highcharts)
+solidgauge(Highcharts)
 
 function Profile(props) {
     // get the dynamic id from the /profile route
@@ -14,31 +23,176 @@ function Profile(props) {
     const dispatch = useDispatch();
 
     const isLoading = useSelector(state => state.root.isLoading);
-
-    const [profileData, setProfileData] = useState({});
+    const leagueAccountInfo = useSelector(state => state.root.leagueAccountInfo)
+    const [leagueProfileData, setLeagueProfileData] = useState({});
+    const [discordData, setDiscordData] = useState({});
     const [display404, setDisplay404] = useState(false);
+
+    let totalGames, winPercentage, lossPercentage
+    if(Object.keys(leagueProfileData).length > 0) {
+        totalGames = leagueProfileData.leagueInfo.wins + leagueProfileData.leagueInfo.losses
+        winPercentage =  Math.round((leagueProfileData.leagueInfo.wins) / totalGames * 100)
+        lossPercentage =  Math.round((leagueProfileData.leagueInfo.losses) / totalGames * 100)
+    }
+    // Highchart options
+    const options = {
+        chart: {
+          type: 'solidgauge',
+          height: '60%',
+          width: 400,
+          backgroundColor: '#222'
+          },
+        // events: {
+        //     render: renderIcons
+        // },
+        title: {
+          text: `Games Played`,
+          style: {
+                color: '#FFF',
+                fontWeight: 'bold'
+            }
+        },
+        subtitle: {
+            text: typeof leagueProfileData.leagueInfo !== "undefined" ? `Wins: ${leagueProfileData.leagueInfo.wins}| Losses: ${leagueProfileData.leagueInfo.losses}` : `Wins | Losses`,
+            style: {
+                color: '#FFF',
+                fontWeight: 'bold'
+            }
+        },
+        tooltip: {
+            borderWidth: 0,
+            backgroundColor: 'none',
+            shadow: false,
+            style: {
+                color: '#fff',
+                fontSize: '12px'
+            },
+            // valueSuffix: '%',
+            pointFormat: '{series.name}<br><span style="font-size:1.5em; color: {point.color}; font-weight: bold">{point.y}</span>',
+            positioner: function (labelWidth) {
+                return {
+                    x: (this.chart.chartWidth - labelWidth) / 2,
+                    y: (this.chart.plotHeight / 2) + 40
+                };
+            }
+        },
+        pane: {
+            startAngle: 0,
+            endAngle: 360,
+            background: [{ // Track for Move
+                outerRadius: '112%',
+                innerRadius: '88%',
+                backgroundColor: '#ffffff78',
+                borderWidth: 0
+            }, { // Track for Exercise
+                outerRadius: '87%',
+                innerRadius: '63%',
+                backgroundColor: '#6bef715e',
+                borderWidth: 0
+            }, { // Track for Stand
+                outerRadius: '62%',
+                innerRadius: '38%',
+                backgroundColor: '#a900004f',
+                borderWidth: 0
+            }]
+        },
+        yAxis: {
+            min: 0,
+            max: 100,
+            lineWidth: 0,
+            tickPositions: []
+        },
+        plotOptions: {
+            solidgauge: {
+                dataLabels: {
+                    enabled: false
+                },
+                linecap: 'round',
+                stickyTracking: false,
+                rounded: true
+            }
+        },
+        series: [{
+            name: 'Games',
+            data: [{
+                color: '#fff',
+                radius: '112%',
+                innerRadius: '88%',
+                y: totalGames
+            }]
+        }, {
+            name: 'Wins',
+            data: [{
+                color: '#6bef71', 
+                radius: '87%',
+                innerRadius: '63%',
+                y: winPercentage
+            }],
+            tooltip: {
+                valueSuffix: '%',
+            }
+        }, {
+            name: 'Losses',
+            data: [{
+                color: '#a90000',
+                radius: '63%',
+                innerRadius: '39%',
+                y: lossPercentage
+            }],
+            tooltip: {
+                valueSuffix: '%',
+            }
+        }]
+      };
 
     useEffect(() => {
         axios.post(`${env_be_url}profile`, { user_id: params.id })
             .then(async res => {
-
+                console.log(res.data)
                 // check if our profile_Data object is empty
                 if(Object.keys(res.data).length == 0) {
                     // if empty, there is no profile, so remove the loader
                     await dispatch({type: 'REMOVE_ISLOADING'});
                     // set 404 page
                     await setDisplay404(true);
-                } else {
+                } 
+                else if(Object.keys(leagueProfileData).length == 0) {
+                    dispatch({type: 'SET_ISLOADING'})
+
+                }
+                else {
                     // Remove loader
                     await dispatch({type: 'REMOVE_ISLOADING'});                    
 
                     // Display profile data
-                    await setProfileData(res.data);
+                    await setDiscordData(res.data);
                 }
             })
             .catch(err => console.log(err))
+
     }, [params.id])
 
+    useEffect(() => {
+            axios.post(`${env_be_url}setup/getLeagueInfo`, {user_id: params.id })
+            .then(async res => {
+                    await setLeagueProfileData(res.data);
+                    // Remove loader
+                    await dispatch({type: 'REMOVE_ISLOADING'});                    
+
+                    // Display profile data
+                }
+            )
+            .catch(async err => {
+                await dispatch({type: 'REMOVE_ISLOADING'});                    
+
+                await setDisplay404(true);
+
+                console.log(err)
+            })
+    }, [leagueProfileData.length])
+
+    
+    console.log(isLoading);
     if(isLoading) {
         return <Loader />
     } else if(display404) {
@@ -47,36 +201,94 @@ function Profile(props) {
         return (
             <Main>
                 <UserNameContainer>
-                    {profileData.user ? <DiscordAvatar src={`https://cdn.discordapp.com/avatars/${profileData.user.discord_id}/${profileData.user.avatar}.png`} /> : null}
-                    {profileData.user && <Heading><Username>{`${profileData.user.username}`}</Username></Heading>}
+                    {discordData.user ? <DiscordAvatar src={`https://cdn.discordapp.com/avatars/${discordData.user.discord_id}/${discordData.user.avatar}.png`} /> : null}
+                    {discordData.user && <Heading><Username>{`${discordData.user.username}`}</Username></Heading>}
                 </UserNameContainer>
-                <AboutMeContainer>
+                {/* <AboutMeContainer>
                     <Label>About Me</Label>
                     <AboutMe>
                         {profileData.profile && profileData.profile.about_me}
                     </AboutMe>
-                </AboutMeContainer>
+                </AboutMeContainer> */}
+
                 <LeagueInformationContainer>
                     <Label>League of Legends information</Label>
                     <RankContainer>
-                        {profileData.profile && <RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${profileData.profile.rank}.png`} />}
-    
+                        <div>
+                            {leagueProfileData.leagueInfo && <RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${leagueProfileData.leagueInfo.tier}.png`} />}
+                            {leagueProfileData.leagueInfo && <RankText>Rank: {leagueProfileData.leagueInfo.rank}</RankText>}                            
+                        </div>
+                        <div>
+                            <HighchartsReact highcharts={Highcharts} options={options}/>
+                        </div>
+                        <div>
+                            {Object.keys(leagueProfileData).length > 0 ?  <Responsivebarchart data={leagueProfileData.recentMatches}/> : null}
+                        
+                        </div>
                     </RankContainer>
                     <RankContainer>
-                        {profileData.profile && profileData.profile.champions.map(champion => {
+                        {Object.keys(leagueProfileData).length > 0 && leagueProfileData.championPool.map(champion => {
                             return (
-                                <ChampionImage src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion}.png`} />
+                                <div style={{padding: '10px'}}>
+                                    <ChampionImage src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.champion}.png`} />
+                                    <ChampionMastery>Mastery Points: <Points>{champion.championPoints}</Points></ChampionMastery>
+                                </div>
                             )
                         })}
                     </RankContainer>
-                    <RankContainer>
+                    {/* <RankContainer>
                         {profileData.profile && profileData.profile.roles.map(role => {
                             return (
                                 <ChampionImage src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_Diamond-${role}.png`} />
                             )
                         })}
-                    </RankContainer>
-    
+                    </RankContainer> */}
+                    {leagueProfileData.recentMatches && 
+                        <RecentMatches>
+                            {leagueProfileData.recentMatches.map( (match,i) => {
+                                let summonerSpell1 =  Object.values(summonerJsonData.data).filter(obj => obj.key == match.spell1Id);
+                                let summonerSpell2 =  Object.values(summonerJsonData.data).filter(obj => obj.key == match.spell2Id);
+
+                                // this makes me sick, store this in an array and loop it. saves us like 20 lines of code.
+                                let item1 =  leagueItemJsonData.data[match.items[0]];
+                                let item2 =  leagueItemJsonData.data[match.items[1]];
+                                let item3 =  leagueItemJsonData.data[match.items[2]];
+                                let item4 =  leagueItemJsonData.data[match.items[3]];
+                                let item5 =  leagueItemJsonData.data[match.items[4]];
+                                let item6 =  leagueItemJsonData.data[match.items[5]];
+                                let item7 =  leagueItemJsonData.data[match.items[6]];
+
+
+                                return(
+                                    <RecentMatchCard>
+                                            <ChampionNameImageContainer>
+                                                <div>
+                                                    <ChampionName>{match.champion}</ChampionName>
+                                                    <ChampionImage style={{margin: '0', width:'60px' ,height: '60px'}} src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${match.champion}.png`} />
+                                                </div>
+                                                <div style={{display: 'flex', flexDirection: 'row'}}>
+                                                    <img style={{width: '25px', height: '25px'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell1[0].id}.png`}/>
+                                                    <img style={{width: '25px', height: '25px'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell2[0].id}.png`}/>
+                                                </div>
+                                            </ChampionNameImageContainer>
+                                            <KDAContainer>
+                                                {match.win ? <GameStatusText>Victory</GameStatusText> : <GameStatusText>Defeat</GameStatusText>}
+                                                <KDAText>KDA: {match.kills}/{match.deaths}/{match.assists}</KDAText>
+                                            </KDAContainer>
+                                            <div style={{display: 'flex', flexFlow: 'row wrap', flex: 'auto'}}>
+                                                {typeof item1 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item1.image.full}`}/> : null}
+                                                {typeof item != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item2.image.full}`}/> : null}
+                                                {typeof item3 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item3.image.full}`}/> : null}
+                                                {typeof item4 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item4.image.full}`}/> : null}
+                                                {typeof item5 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item5.image.full}`}/> : null}
+                                                {typeof item6 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item6.image.full}`}/> : null}
+                                                {typeof item7 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item7.image.full}`}/> : null}
+                                            </div>
+                                    </RecentMatchCard>
+                                )
+                            })}
+                        </RecentMatches>
+                    }
                 </LeagueInformationContainer>
             </Main>
         )        
@@ -151,15 +363,86 @@ const RankContainer = S.div`
     height: fit-content;
     flex: 1;
     margin-right: 30px;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
 `;
 
 const RankImage = S.img`
-    width: 250px;
+    width: 155px;
     height: auto;
 `;
+const RankText = S.p`
+    font-size: 28px;
+    color: #fff;
+    width: 100%;
+`;
 const ChampionImage = S.img`
-    width: 115px;
+    width: 80px;
     height: auto;
     border-radius: 50%;
     margin-right: 15px;
+`;
+const ChampionMastery = S.p`
+    font-size: 16px;
+    color: #fff;
+    padding-right: 10px;
+`;
+const Points = S.span`
+    font-size: 14px;
+    color: #fff;
+`;
+
+const RecentMatches = S.section`
+    display: flex;
+    flex-flow: row wrap;
+    padding: 20px;
+    border-radius: 15px;
+    justify-content: space-between;
+`;
+const RecentMatchCard = S.div`
+    display: flex;
+    flex-direction: column;
+    flex-flow: row wrap;
+    align-items: center;
+    padding: 10px;
+    flex: auto;
+    justify-content: space-between;
+    background-color: #222;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    border: 15px;
+    border-radius: 15px;
+`;
+const ChampionNameImageContainer = S.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-right: 10px;
+`;
+const ChampionName = S.p`
+    color: #fff; 
+    font-size: 16px; 
+    width: 100%;
+`;
+const KDAContainer = S.div`
+    display: flex;
+    flex-direction: column;
+    padding-right: 10px;
+`;
+const GameStatusText = S.p`
+    font-size: 24px;
+    color: #fff;
+`;
+const KDAText = S.p`
+    font-size: 16px;
+    color: #fff;
+    padding-top: 5px;
+`;
+const ItemImg = S.img`
+    width: 33%;
+    max-width: 40px;
+    height: auto;
 `;
