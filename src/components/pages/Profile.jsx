@@ -29,7 +29,7 @@ function Profile(props) {
     const [display404, setDisplay404] = useState(false);
 
     let totalGames, winPercentage, lossPercentage
-    if(Object.keys(leagueProfileData).length > 0) {
+    if(Object.keys(leagueProfileData.leagueInfo).length > 0) {
         totalGames = leagueProfileData.leagueInfo.wins + leagueProfileData.leagueInfo.losses
         winPercentage =  Math.round((leagueProfileData.leagueInfo.wins) / totalGames * 100)
         lossPercentage =  Math.round((leagueProfileData.leagueInfo.losses) / totalGames * 100)
@@ -157,6 +157,7 @@ function Profile(props) {
                 } 
                 else if(Object.keys(leagueProfileData).length == 0) {
                     dispatch({type: 'SET_ISLOADING'})
+
                 }
                 else {
                     // Remove loader
@@ -211,8 +212,8 @@ function Profile(props) {
                     <Label>League of Legends information</Label>
                     <RankContainer>
                         <div>
-                            {leagueProfileData.leagueInfo && <RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${leagueProfileData.leagueInfo.tier}.png`} />}
-                            {leagueProfileData.leagueInfo && <RankText>Rank: {leagueProfileData.leagueInfo.rank}</RankText>}                            
+                            {leagueProfileData.leagueInfo.length > 0 && <RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${leagueProfileData.leagueInfo.tier}.png`} />}
+                            {leagueProfileData.leagueInfo.length > 0 && <RankText>Rank: {leagueProfileData.leagueInfo.rank}</RankText>}                            
                         </div>
                         <div>
                             <HighchartsReact highcharts={Highcharts} options={options}/>
