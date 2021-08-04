@@ -264,7 +264,7 @@ function Profile(props) {
                                             </ChampionNameImageContainer>
 
                                             <KDAContainer>
-                                                {match.win ? <GameStatusText style={{color: 'rgb(107, 239, 113)'}}>Victory</GameStatusText> : <GameStatusText style={{color: 'rgb(169, 0, 0)'}}>Defeat</GameStatusText>}
+                                                {match.win ? <GameStatusText isWin={true}>Victory</GameStatusText> : <GameStatusText >Defeat</GameStatusText>}
                                                 <KDAText>KDA: {match.kills}/{match.deaths}/{match.assists}</KDAText>
                                             </KDAContainer>
 
@@ -441,7 +441,7 @@ const KDAContainer = S.div`
 `;
 const GameStatusText = S.p`
     font-size: 24px;
-    color: #fff;
+    color: ${props => props.isWin ?'rgb(107, 239, 113)' : red};
 `;
 const KDAText = S.p`
     font-size: 16px;
