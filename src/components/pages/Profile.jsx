@@ -441,7 +441,7 @@ const KDAContainer = S.div`
 `;
 const GameStatusText = S.p`
     font-size: 24px;
-    color: ${props => props.isWin ?'rgb(107, 239, 113)' : red};
+    color: ${props => props.isWin ?'rgb(107, 239, 113)' : 'red'};
 `;
 const KDAText = S.p`
     font-size: 16px;
