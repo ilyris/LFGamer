@@ -362,7 +362,6 @@ const RankContainer = S.div`
     margin-top: 20px;
     height: fit-content;
     flex: 1;
-    margin-right: 30px;
     display: flex;
     flex-flow: row wrap;
     align-items: center;
