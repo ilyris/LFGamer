@@ -190,7 +190,7 @@ function Profile(props) {
             })
     }, [leagueProfileData.length])
 
-        if(isLoading) {
+    if(isLoading) {
         return <Loader />
     } else if(display404) {
         return <Page404 />
@@ -201,6 +201,7 @@ function Profile(props) {
                     {discordData.user ? <DiscordAvatar src={`https://cdn.discordapp.com/avatars/${discordData.user.discord_id}/${discordData.user.avatar}.png`} /> : null}
                     {discordData.user && <Heading><Username>{`${discordData.user.username}`}</Username></Heading>}
                 </UserNameContainer>
+
                 {/* <AboutMeContainer>
                     <Label>About Me</Label>
                     <AboutMe>
@@ -223,23 +224,7 @@ function Profile(props) {
                         
                         </div>
                     </RankContainer>
-                    <RankContainer>
-                        {Object.keys(leagueProfileData).length > 0 && leagueProfileData.championPool.map(champion => {
-                            return (
-                                <div style={{padding: '10px'}}>
-                                    <ChampionImage src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.champion}.png`} />
-                                    <ChampionMastery>Mastery Points: <Points>{champion.championPoints}</Points></ChampionMastery>
-                                </div>
-                            )
-                        })}
-                    </RankContainer>
-                    {/* <RankContainer>
-                        {profileData.profile && profileData.profile.roles.map(role => {
-                            return (
-                                <ChampionImage src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_Diamond-${role}.png`} />
-                            )
-                        })}
-                    </RankContainer> */}
+
                     {leagueProfileData.recentMatches && 
                         <RecentMatches>
                             {leagueProfileData.recentMatches.map( (match,i) => {
@@ -268,10 +253,12 @@ function Profile(props) {
                                                     <img style={{width: '25px', height: '25px'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell2[0].id}.png`}/>
                                                 </div>
                                             </ChampionNameImageContainer>
+
                                             <KDAContainer>
                                                 {match.win ? <GameStatusText>Victory</GameStatusText> : <GameStatusText>Defeat</GameStatusText>}
                                                 <KDAText>KDA: {match.kills}/{match.deaths}/{match.assists}</KDAText>
                                             </KDAContainer>
+
                                             <div style={{display: 'flex', flexFlow: 'row wrap', flex: 'auto'}}>
                                                 {typeof item1 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item1.image.full}`}/> : null}
                                                 {typeof item != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item2.image.full}`}/> : null}
@@ -286,6 +273,23 @@ function Profile(props) {
                             })}
                         </RecentMatches>
                     }
+                    <RankContainer>
+                        {Object.keys(leagueProfileData).length > 0 && leagueProfileData.championPool.map(champion => {
+                            return (
+                                <div style={{padding: '10px'}}>
+                                    <ChampionImage src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.champion}.png`} />
+                                    <ChampionMastery>Mastery Points: <Points>{champion.championPoints}</Points></ChampionMastery>
+                                </div>
+                            )
+                        })}
+                    </RankContainer>
+                    {/* <RankContainer>
+                        {profileData.profile && profileData.profile.roles.map(role => {
+                            return (
+                                <ChampionImage src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_Diamond-${role}.png`} />
+                            )
+                        })}
+                    </RankContainer> */}
                 </LeagueInformationContainer>
             </Main>
         )        
@@ -411,6 +415,7 @@ const RecentMatchCard = S.div`
     margin-right: 10px;
     border: 15px;
     border-radius: 15px;
+    width: 50%;
 `;
 const ChampionNameImageContainer = S.div`
     display: flex;
