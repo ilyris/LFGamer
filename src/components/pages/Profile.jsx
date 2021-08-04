@@ -223,6 +223,16 @@ function Profile(props) {
                             {Object.keys(leagueProfileData).length > 0 ?  <Responsivebarchart data={leagueProfileData.recentMatches}/> : null}
                         
                         </div>
+                        <RankContainer>
+                        {Object.keys(leagueProfileData).length > 0 && leagueProfileData.championPool.map(champion => {
+                            return (
+                                <div style={{padding: '10px'}}>
+                                    <ChampionImage src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.champion}.png`} />
+                                    <ChampionMastery>Mastery Points: <Points>{champion.championPoints}</Points></ChampionMastery>
+                                </div>
+                            )
+                        })}
+                    </RankContainer>
                     </RankContainer>
 
                     {leagueProfileData.recentMatches && 
@@ -249,13 +259,13 @@ function Profile(props) {
                                                     <ChampionImage style={{margin: '0', width:'80px' ,height: '80px'}} src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${match.champion}.png`} />
                                                 </div>
                                                 <div style={{display: 'flex', flexDirection: 'row'}}>
-                                                    <img style={{width: '25px', height: '35px'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell1[0].id}.png`}/>
-                                                    <img style={{width: '25px', height: '45px'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell2[0].id}.png`}/>
+                                                    <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell1[0].id}.png`}/>
+                                                    <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell2[0].id}.png`}/>
                                                 </div>
                                             </ChampionNameImageContainer>
 
                                             <KDAContainer>
-                                                {match.win ? <GameStatusText>Victory</GameStatusText> : <GameStatusText>Defeat</GameStatusText>}
+                                                {match.win ? <GameStatusText style={{color: 'rgb(107, 239, 113)'}}>Victory</GameStatusText> : <GameStatusText style={{color: 'rgb(169, 0, 0);'}}>Defeat</GameStatusText>}
                                                 <KDAText>KDA: {match.kills}/{match.deaths}/{match.assists}</KDAText>
                                             </KDAContainer>
 
@@ -273,16 +283,6 @@ function Profile(props) {
                             })}
                         </RecentMatches>
                     }
-                    <RankContainer>
-                        {Object.keys(leagueProfileData).length > 0 && leagueProfileData.championPool.map(champion => {
-                            return (
-                                <div style={{padding: '10px'}}>
-                                    <ChampionImage src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.champion}.png`} />
-                                    <ChampionMastery>Mastery Points: <Points>{champion.championPoints}</Points></ChampionMastery>
-                                </div>
-                            )
-                        })}
-                    </RankContainer>
                     {/* <RankContainer>
                         {profileData.profile && profileData.profile.roles.map(role => {
                             return (
@@ -415,7 +415,7 @@ const RecentMatchCard = S.div`
     margin-right: 10px;
     border: 15px;
     border-radius: 15px;
-    width: 50%;
+    width: 48%;
 `;
 const ChampionNameImageContainer = S.div`
     display: flex;
@@ -449,4 +449,5 @@ const ItemImg = S.img`
     width: 33%;
     max-width: 40px;
     height: auto;
+    border-radius: 50%;
 `;
