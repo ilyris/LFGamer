@@ -1,8 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
-import S from 'styled-components'
-import {PrimaryCtaLink} from '../pageComponents/PrimaryCtaLink'
+import S from 'styled-components';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClipboard } from "@fortawesome/free-solid-svg-icons";
+
+import {PrimaryCtaLink} from '../pageComponents/PrimaryCtaLink';
 export function Verification(props) {
     const overlayRef = useRef(null);
+    const [clipboardText, setClipboardText] = useState('Copy To Clipboard');
     useOutsideAlerter(overlayRef, props.modalActive)
     function useOutsideAlerter(ref, hook) {
         useEffect(() => {
@@ -23,12 +27,21 @@ export function Verification(props) {
         }, [ref]);
     }
 
+    const copyToClipboard = (e) => {
+        const copyText = e.target.textContent;
+        const cb = navigator.clipboard;
+        cb.writeText(copyText).then(() => {
+            setClipboardText('Copied')
+        });
+        setTimeout(() => setClipboardText('Copy To Clipboard'), 1000)
+
+    }
     return (
         <>
         <Overlay ref={overlayRef}></Overlay>
         <ModalContainer>
             <ModalHeading>{'Verification Code'}</ModalHeading>
-            <HelperText>Here is your code: <Code>{props.uuid}</Code> Enter this code into your LOL client</HelperText>
+            <HelperText>Here is your code: <Code onClick={copyToClipboard}>{props.uuid}<ClipboardAlert><ClipboardIcon icon={faClipboard}/>{clipboardText}</ClipboardAlert> </Code> Enter this code into your LOL client</HelperText>
             <HelperText>Follow these steps:</HelperText>
             <ButtonContainer>
                 <PrimaryCtaLink handleClick={props.handleVerification} text={'Verify'}/>
@@ -71,9 +84,44 @@ const HelperText = S.p`
     padding-bottom: 20px;
     width: 100%;
 `;
-const Code = S.span`
+const ClipboardIcon = S(FontAwesomeIcon)`
+    font-size: 16px;
+    display: block;
+    margin-right: 10px;
+`;
+const ClipboardAlert = S.div`
+    height: auto;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    opacity: 0;
+    transition: all ease-in-out 120ms;
+    background-color: #6e6e6ed9;
+    padding: 5px;
+    width: 200px;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 15px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+const Code = S.div`
     font-style: italic;
-    color: rgb(118, 238, 116);
+    color: rgb(0,152,142);
+    position: relative;
+    display: inline-block;
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+
+        ${ClipboardAlert} {
+            opacity: 1;
+        }
+
+    }
+
 `
 const ButtonContainer = S.div`
     width: 100%;
