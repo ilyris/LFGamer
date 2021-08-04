@@ -211,7 +211,7 @@ function Profile(props) {
 
                 <LeagueInformationContainer>
                     <Label>League of Legends information</Label>
-                    <RankContainer>
+                    <RankContainer style={{flexBasis: '100%'}}>
                         <div>
                             {typeof leagueProfileData.leagueInfo != 'undefined' && <RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${leagueProfileData.leagueInfo.tier}.png`} />}
                             {typeof leagueProfileData.leagueInfo != 'undefined' && <RankText>Rank: {leagueProfileData.leagueInfo.rank}</RankText>}                            
@@ -268,7 +268,7 @@ function Profile(props) {
                                                 <KDAText>KDA: {match.kills}/{match.deaths}/{match.assists}</KDAText>
                                             </KDAContainer>
 
-                                            <div style={{display: 'flex', flexFlow: 'row wrap', flex: 'auto'}}>
+                                            <div style={{display: 'flex', flexFlow: 'row wrap', flex: 'auto', width: '50%'}}>
                                                 {typeof item1 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item1.image.full}`}/> : null}
                                                 {typeof item != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item2.image.full}`}/> : null}
                                                 {typeof item3 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item3.image.full}`}/> : null}
@@ -367,6 +367,7 @@ const RankContainer = S.div`
     flex-flow: row wrap;
     align-items: center;
     justify-content: center;
+    width: 29%;
 `;
 
 const RankImage = S.img`
@@ -399,21 +400,25 @@ const RecentMatches = S.section`
     flex-flow: row wrap;
     padding: 20px;
     border-radius: 15px;
+    -webkit-box-pack: justify;
     justify-content: space-between;
+    width: 71%;
 `;
 const RecentMatchCard = S.div`
     display: flex;
     flex-direction: column;
+    -webkit-box-align: center;
     align-items: center;
     padding: 10px;
-    flex: auto;
+    flex: 1 1 auto;
+    -webkit-box-pack: justify;
     justify-content: space-between;
-    background-color: #222;
+    background-color: rgb(34, 34, 34);
     margin-bottom: 10px;
     margin-right: 10px;
     border: 15px;
     border-radius: 15px;
-    width: ##%;
+    width: 25%;
 `;
 const ChampionNameImageContainer = S.div`
     display: flex;
