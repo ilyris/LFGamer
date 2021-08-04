@@ -223,7 +223,8 @@ function Profile(props) {
                             {Object.keys(leagueProfileData).length > 0 ?  <Responsivebarchart data={leagueProfileData.recentMatches}/> : null}
                         
                         </div>
-                        <RankContainer>
+                    </RankContainer>
+                    <RankContainer>
                         {Object.keys(leagueProfileData).length > 0 && leagueProfileData.championPool.map(champion => {
                             return (
                                 <div style={{padding: '10px'}}>
@@ -233,8 +234,6 @@ function Profile(props) {
                             )
                         })}
                     </RankContainer>
-                    </RankContainer>
-
                     {leagueProfileData.recentMatches && 
                         <RecentMatches>
                             {leagueProfileData.recentMatches.map( (match,i) => {
@@ -405,7 +404,6 @@ const RecentMatches = S.section`
 const RecentMatchCard = S.div`
     display: flex;
     flex-direction: column;
-    flex-flow: row wrap;
     align-items: center;
     padding: 10px;
     flex: auto;
@@ -415,7 +413,7 @@ const RecentMatchCard = S.div`
     margin-right: 10px;
     border: 15px;
     border-radius: 15px;
-    width: 48%;
+    width: ##%;
 `;
 const ChampionNameImageContainer = S.div`
     display: flex;
