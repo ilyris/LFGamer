@@ -53,7 +53,7 @@ function Profile(props) {
             }
         },
         subtitle: {
-            text: typeof leagueProfileData.leagueInfo !== "undefined" ? `Wins: ${leagueProfileData.leagueInfo.wins}| Losses: ${leagueProfileData.leagueInfo.losses}` : `Wins | Losses`,
+            text: typeof leagueProfileData.leagueInfo !== "undefined" ? `Wins: ${leagueProfileData.leagueInfo.wins}| Losses: ${leagueProfileData.leagueInfo.losses}` : `Wins: 0 | Losses: 0`,
             style: {
                 color: '#FFF',
                 fontWeight: 'bold'
@@ -246,11 +246,11 @@ function Profile(props) {
                                             <ChampionNameImageContainer>
                                                 <div>
                                                     <ChampionName>{match.champion}</ChampionName>
-                                                    <ChampionImage style={{margin: '0', width:'60px' ,height: '60px'}} src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${match.champion}.png`} />
+                                                    <ChampionImage style={{margin: '0', width:'80px' ,height: '80px'}} src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${match.champion}.png`} />
                                                 </div>
                                                 <div style={{display: 'flex', flexDirection: 'row'}}>
-                                                    <img style={{width: '25px', height: '25px'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell1[0].id}.png`}/>
-                                                    <img style={{width: '25px', height: '25px'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell2[0].id}.png`}/>
+                                                    <img style={{width: '25px', height: '35px'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell1[0].id}.png`}/>
+                                                    <img style={{width: '25px', height: '45px'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell2[0].id}.png`}/>
                                                 </div>
                                             </ChampionNameImageContainer>
 
@@ -358,7 +358,7 @@ const RankContainer = S.div`
     width: fit-content;
     border-radius: 15px;
     background-color: #222;
-    padding: 40px;
+    padding: 20px;
     box-sizing: border-box;
     margin-top: 20px;
     height: fit-content;
@@ -423,6 +423,8 @@ const ChampionNameImageContainer = S.div`
     justify-content: flex-start;
     align-items: flex-start;
     padding-right: 10px;
+    justify-content: center;
+    align-items: center;
 `;
 const ChampionName = S.p`
     color: #fff; 

@@ -70,7 +70,7 @@ export function Responsivebarchart({data}) {
    let options =   {  
     chart: {
         type: 'pie',
-        height: '70%',
+        height: '60%',
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,
@@ -79,7 +79,7 @@ export function Responsivebarchart({data}) {
     },
 
     title: {
-        text: 'Recent 20 Matches',
+        text: 'Last  10 Matches',
         style: {
             color: '#FFF',
             fontWeight: 'bold'
