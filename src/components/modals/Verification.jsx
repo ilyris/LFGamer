@@ -41,7 +41,7 @@ export function Verification(props) {
         <Overlay ref={overlayRef}></Overlay>
         <ModalContainer>
             <ModalHeading>{'Verification Code'}</ModalHeading>
-            <HelperText>Here is your code: <Code onClick={copyToClipboard}>{props.uuid}<ClipboardAlert><ClipboardIcon icon={faClipboard}/>{clipboardText}</ClipboardAlert> </Code> Enter this code into your LOL client</HelperText>
+            <HelperText>Here is your code: <VerificationCodeContainer><Code onClick={copyToClipboard}>{props.uuid}</Code> <ClipboardAlert><ClipboardIcon icon={faClipboard}/>{clipboardText}</ClipboardAlert></VerificationCodeContainer> Enter this code into your LOL client</HelperText>
             <HelperText>Follow these steps:</HelperText>
             <ButtonContainer>
                 <PrimaryCtaLink handleClick={props.handleVerification} text={'Verify'}/>
@@ -107,9 +107,7 @@ const ClipboardAlert = S.div`
     align-items: center;
     justify-content: center;
 `;
-const Code = S.div`
-    font-style: italic;
-    color: rgb(0,152,142);
+const VerificationCodeContainer = S.div`
     position: relative;
     display: inline-block;
     &:hover {
@@ -121,6 +119,14 @@ const Code = S.div`
         }
 
     }
+
+`;
+const Code = S.div`
+    font-style: italic;
+    color: rgb(0,152,142);
+    position: relative;
+    display: inline-block;
+
 
 `
 const ButtonContainer = S.div`
