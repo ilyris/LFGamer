@@ -399,8 +399,6 @@ const RecentMatches = S.section`
     flex-flow: row wrap;
     padding: 20px;
     border-radius: 15px;
-    -webkit-box-pack: justify;
-    justify-content: space-between;
     width: 71%;
 `;
 const RecentMatchCard = S.div`
@@ -409,15 +407,13 @@ const RecentMatchCard = S.div`
     -webkit-box-align: center;
     align-items: center;
     padding: 10px;
-    flex: 1 1 auto;
-    -webkit-box-pack: justify;
-    justify-content: space-between;
+    flex: 1 1 20%;
     background-color: rgb(34, 34, 34);
     margin-bottom: 10px;
     margin-right: 10px;
     border: 15px;
     border-radius: 15px;
-    width: 25%;
+    max-width: 240px;
 `;
 const ChampionNameImageContainer = S.div`
     display: flex;
@@ -453,4 +449,5 @@ const ItemImg = S.img`
     max-width: 40px;
     height: auto;
     border-radius: 50%;
+    max-height: 35px;
 `;
