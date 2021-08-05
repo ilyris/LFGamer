@@ -252,8 +252,8 @@ function Profile(props) {
                         <Label>League of Legends information</Label>
                         <RankContainer style={{flexBasis: '100%'}}>
                             <div>
-                                {typeof leagueProfileData.leagueInfo != 'undefined' && <RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${leagueProfileData.leagueInfo.tier}.png`} />}
-                                {typeof leagueProfileData.leagueInfo != 'undefined' && <RankText>Rank: {leagueProfileData.leagueInfo.rank}</RankText>}                            
+                                {typeof leagueProfileData.leagueInfo != 'undefined' ? <RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${leagueProfileData.leagueInfo.tier}.png`} /> :<RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_Unranked.png`} /> }
+                                {typeof leagueProfileData.leagueInfo != 'undefined' ? <RankText>Rank: {leagueProfileData.leagueInfo.rank}</RankText> :  <RankText>Rank: Unranked</RankText>}                            
                             </div>
                             <div>
                                 <HighchartsReact highcharts={Highcharts} options={options}/>
