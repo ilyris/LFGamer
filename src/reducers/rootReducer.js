@@ -20,13 +20,7 @@ export const rootReducer = (state = initialState, action) => {
         case 'IS_LOGGED_IN':
             return {...state, isLoggedIn : true};
         case 'SANITIZE_USER':
-            return {...state, loggedInUser: {}, isLoggedIn : false, 
-            newSignedUpUser: { 
-                // email: '', 
-                // username: '', 
-                // interests: []
-            } 
-        };
+            return {...state, loggedInUser: {}, isLoggedIn : false, };
         case 'SET_ISLOADING':
             return {...state, isLoading: true};
         case 'REMOVE_ISLOADING':

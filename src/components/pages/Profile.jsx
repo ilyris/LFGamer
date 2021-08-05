@@ -71,6 +71,40 @@ function Profile(props) {
         }
 
     }
+    function getDate(current, date) {
+        let timestamp = new Date(date).getTime();
+        var msPerMinute = 60 * 1000;
+        var msPerHour = msPerMinute * 60;
+        var msPerDay = msPerHour * 24;
+        var msPerMonth = msPerDay * 30;
+        var msPerYear = msPerDay * 365;
+    
+        var elapsed = current - timestamp;
+    
+        if (elapsed < msPerMinute) {
+             return Math.round(elapsed/1000) + ' seconds ago';   
+        }
+    
+        else if (elapsed < msPerHour) {
+             return Math.round(elapsed/msPerMinute) + ' minutes ago';   
+        }
+    
+        else if (elapsed < msPerDay ) {
+             return Math.round(elapsed/msPerHour ) + ' hours ago';   
+        }
+    
+        else if (elapsed < msPerMonth) {
+            return Math.round(elapsed/msPerDay) + ' days ago';   
+        }
+    
+        else if (elapsed < msPerYear) {
+            return Math.round(elapsed/msPerMonth) + ' months ago';   
+        }
+    
+        else {
+            return Math.round(elapsed/msPerYear ) + ' years ago';   
+        }
+    }
 
     let totalGames, winPercentage, lossPercentage
     if(typeof leagueProfileData.leagueInfo != 'undefined') {
@@ -299,7 +333,7 @@ function Profile(props) {
                                                     <div style={{display: 'flex', flexDirection: 'row'}}>
                                                         <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell1[0].id}.png`}/>
                                                         <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell2[0].id}.png`}/>
-                                                        {/* {match.lane != "NONE" || typeof leagueProfileData.leagueInfo != 'undefined' ? <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_${leagueProfileData.leagueInfo.tier}-${match.lane}.png`}/> : <KDAText>N/A</KDAText>} */}
+                                                        {typeof leagueProfileData.leagueInfo != 'undefined' ? <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_${leagueProfileData.leagueInfo.tier}-${match.lane}.png`}/> : <KDAText>N/A</KDAText>}
 
                                                     </div>
                                                 </ChampionNameImageContainer>
@@ -307,6 +341,8 @@ function Profile(props) {
                                                 <KDAContainer>
                                                     {match.win ? <GameStatusText isWin={true}>Victory</GameStatusText> : <GameStatusText >Defeat</GameStatusText>}
                                                     <KDAText>KDA: {match.kills}/{match.deaths}/{match.assists}</KDAText>
+                                                    <KDAText>{getDate(Date.now(),match.gameCreated)}</KDAText>
+
                                                 </KDAContainer>
 
                                                 <div style={{display: 'flex', flexFlow: 'row wrap', flex: 'auto', width: '50%'}}>

@@ -2,14 +2,10 @@ import React, { useState, useEffect } from 'react'
 import S from 'styled-components';
 import Highcharts from  "highcharts/highstock";
 import highchartsMore from "highcharts/highcharts-more.js"
-import exporting from "highcharts/modules/exporting.js";
-import exportData from "highcharts/modules/export-data.js";
 import accessibility from "highcharts/modules/accessibility.js";
 import HighchartsReact from "highcharts-react-official";
 
 highchartsMore(Highcharts)
-exporting(Highcharts);
-exportData(Highcharts);
 accessibility(Highcharts);
 
 export function Responsivebarchart({data}) {

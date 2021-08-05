@@ -8,6 +8,7 @@ import {PrimaryCtaLink} from '../pageComponents/PrimaryCtaLink';
 import {env_be_url} from '../../globalVars/envURL';
 
 export function Playercard(props) {
+    console.log(props);
     const {listing} = props;
     const dispatch = useDispatch();
     const loggedInUser = useSelector(state => state.root.loggedInUser);

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef } from 'react';
-import {  useDispatch } from 'react-redux';
+import {  useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {ProtectedRoute} from './ProtectedRoute';
@@ -17,6 +17,8 @@ import {env_be_url, env_ws_url} from './globalVars/envURL';
 
 function App() {
   const [jwt, setJWT] = useState(decodeJWT(localStorage.getItem('token')));
+  const isLoggedIn = useSelector( state => state.root.isLoggedIn);
+
   const socketRef = useRef();
   
 
@@ -57,7 +59,6 @@ useEffect(() => {
   return (
     <Router>
         <div className="App">
-        {/* {isLoading ? <IsLoadingComponent /> : null } */}
           <DesktopNavigation />
           {/* <MobileMenu  /> */}
           <Switch>
@@ -67,7 +68,7 @@ useEffect(() => {
             <ProtectedRoute exact path="/setup" component={SetUpPage} />
             <Route component={Page404} />
           </Switch>
-          {!jwt ? null : <MessageSessionContainer /> }
+          {isLoggedIn ? <MessageSessionContainer /> : null  }
         </div>
     </Router>
 
