@@ -299,7 +299,7 @@ function Profile(props) {
                                                     <div style={{display: 'flex', flexDirection: 'row'}}>
                                                         <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell1[0].id}.png`}/>
                                                         <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell2[0].id}.png`}/>
-                                                        {match.lane != "NONE" || typeof leagueProfileData.leagueInfo != 'undefined' ? <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_${leagueProfileData.leagueInfo.tier}-${match.lane}.png`}/> : <KDAText>N/A</KDAText>}
+                                                        {/* {match.lane != "NONE" || typeof leagueProfileData.leagueInfo != 'undefined' ? <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_${leagueProfileData.leagueInfo.tier}-${match.lane}.png`}/> : <KDAText>N/A</KDAText>} */}
 
                                                     </div>
                                                 </ChampionNameImageContainer>
