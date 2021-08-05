@@ -246,7 +246,7 @@ function Profile(props) {
                     {discordData.user && <Heading><Username>{`${discordData.user.username}`}</Username></Heading>}
                 </UserNameContainer>
 
-                {typeof leagueProfileData.leagueInfo != 'undefined' ?
+                {typeof leagueProfileData.championPool.length > 0 ?
 
                     <LeagueInformationContainer>
                         <Label>League of Legends information</Label>
