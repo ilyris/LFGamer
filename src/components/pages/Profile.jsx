@@ -273,7 +273,7 @@ function Profile(props) {
                                 )
                             })}
                         </RankContainer>
-                        {leagueProfileData.recentMatches && 
+                        {leagueProfileData.recentMatches && typeof leagueProfileData.leagueInfo != 'undefined' ? 
                             <RecentMatches>
                                 {leagueProfileData.recentMatches.map( (match,i) => {
                                     let summonerSpell1 =  Object.values(summonerJsonData.data).filter(obj => obj.key == match.spell1Id);
