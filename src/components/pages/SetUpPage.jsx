@@ -88,7 +88,7 @@ export function SetUpPage(props) {
                     // set their user data in our reducer
                     await dispatch({type: 'SET_LOGGEDIN_USER', payload: res.data}) 
                     
-                    // history.push(`/profile/${res.data.user_id}`);
+                    history.push(`/profile/${res.data.user_id}`);
 
                 }
 
@@ -116,9 +116,6 @@ export function SetUpPage(props) {
             </About>
           </AboutContainer>
         </PageIntroContainer>
-        {riotAccount ? (
-          "Riot Account has been connected!"
-        ) : (
           <ConnectionContainer>
             <RiotConnectionText>
               Connect your gaming accounts to LFGamer
@@ -143,7 +140,6 @@ export function SetUpPage(props) {
             </GameConnectionCard>
             { modalActive ? < Verification handleVerification={handleVerification} modalActive={setModalActive}uuid={uuid}/> : null}
           </ConnectionContainer>
-        )}
       </MainContainer>
     );
 }
