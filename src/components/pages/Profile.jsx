@@ -19,9 +19,11 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import image from '../../assets/league-of-legends-game-logo.png';
 import {v4 as uuidv4} from 'uuid';
 import { Verification } from '../modals/Verification'
+import '../../sass/main.scss';
 
 highchartsMore(Highcharts)
 solidgauge(Highcharts)
+
 
 function Profile(props) {
     // get the dynamic id from the /profile route
@@ -281,10 +283,9 @@ function Profile(props) {
                 </UserNameContainer>
 
                 { leagueProfileData.championPool.length !== 0 ?
-
-                    <LeagueInformationContainer>
-                        <Label>League of Legends information</Label>
-                        <RankContainer style={{flexBasis: '100%'}}>
+                    <section class="container d-flex flex-wrap justify-content-between">
+                        <h3 class="text-light text-align-start display-6 my-5">League of Legends information</h3>
+                        <div class="col-lg-12 bg-dark d-flex rounded p-5 justify-content-between mb-5">
                             <div>
                                 {typeof leagueProfileData.leagueInfo != 'undefined' ? <RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_${leagueProfileData.leagueInfo.tier}.png`} /> :<RankImage src={`${process.env.PUBLIC_URL}/assets/ranked-emblems/Emblem_Unranked.png`} /> }
                                 {typeof leagueProfileData.leagueInfo != 'undefined' ? <RankText>Rank: {leagueProfileData.leagueInfo.rank}</RankText> :  <RankText>Rank: Unranked</RankText>}                            
@@ -296,19 +297,23 @@ function Profile(props) {
                                 {Object.keys(leagueProfileData).length > 0 ?  <Responsivebarchart data={leagueProfileData.recentMatches}/> : null}
                             
                             </div>
-                        </RankContainer>
-                        <RankContainer>
-                            {Object.keys(leagueProfileData).length > 0 && leagueProfileData.championPool.map(champion => {
-                                return (
-                                    <div style={{padding: '10px'}}>
-                                        <ChampionImage src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.champion}.png`} />
-                                        <ChampionMastery>Mastery Points: <Points>{champion.championPoints}</Points></ChampionMastery>
-                                    </div>
-                                )
-                            })}
-                        </RankContainer>
+                        </div>
+                        <div class="col-3 pe-3">
+                        <h3 class="text-light text-start display-6 my-5">Top 3 Champions</h3>
+                            <div class="d-flex flex-column w-100 justify-content-center align-items-center bg-dark rounded p-3">
+                                {Object.keys(leagueProfileData).length > 0 && leagueProfileData.championPool.map(champion => {
+                                    return (
+                                        <div class="w-50 my-3">
+                                            <img class="rounded-circle w-75" src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${champion.champion}.png`} />
+                                            <p class="text-md-center fs-4 text-primary d-flex flex-column">Mastery <span class="fs-3 text-light">{champion.championPoints}</span></p>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
                         {leagueProfileData.recentMatches && 
-                            <RecentMatches>
+                            <section class="col-9 d-flex flex-wrap container me-0">
+                               <h3 class="text-light text-align-start display-6 my-5 w-100 text-start">Recent Matches</h3>
                                 {leagueProfileData.recentMatches.map( (match,i) => {
                                     let summonerSpell1 =  Object.values(summonerJsonData.data).filter(obj => obj.key == match.spell1Id);
                                     let summonerSpell2 =  Object.values(summonerJsonData.data).filter(obj => obj.key == match.spell2Id);
@@ -324,42 +329,41 @@ function Profile(props) {
 
 
                                     return(
-                                        <RecentMatchCard>
-                                                <ChampionNameImageContainer>
-                                                    <div>
-                                                        <ChampionName>{match.champion}</ChampionName>
-                                                        <ChampionImage style={{margin: '0', width:'80px' ,height: '80px'}} src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${match.champion}.png`} />
+                                        <div class="p-3 pt-0 w-50">
+                                            <div class=" position-relative container d-flex flex-row justify-content-between p-3 bg-dark rounded h-100 align-items-start">
+                                                    <div class="row d-flex col-4 justify-content-start">
+                                                        {match.win ? <h6 class="text-primary display-4">Victory</h6> : <h6 class="text-danger display-4">Defeat</h6>}
+                                                        <p class="text-light text-start fs-3 mb-1">KDA: {match.kills}/{match.deaths}/{match.assists}</p>
                                                     </div>
-                                                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                                                        <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell1[0].id}.png`}/>
-                                                        <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell2[0].id}.png`}/>
-                                                        {typeof leagueProfileData.leagueInfo != 'undefined' ? <img style={{width: '35px', height: '35px', borderRadius: '50%'}} src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_${leagueProfileData.leagueInfo.tier}-${match.lane}.png`}/> : <KDAText>N/A</KDAText>}
+                                                    <div class="row col-4 flex-column d-flex justify-content-center align-items-center">
+                                                        <div class="mb-3">
+                                                            {/* <h6 class="text-light fs-3" >{match.champion}</h6> */}
+                                                            <img class="rounded-circle w-75 h-auto" src={`${process.env.PUBLIC_URL}/assets/riot_games_champion_images/${match.champion}.png`} />
+                                                        </div>
+                                                        <div class="container">
+                                                            <img class="rounded p-0 col-4 p-1" src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell1[0].id}.png`}/>
+                                                            <img class="rounded p-0 col-4 p-1" src={`${process.env.PUBLIC_URL}/assets/spells/${summonerSpell2[0].id}.png`}/>
+                                                            {typeof leagueProfileData.leagueInfo != 'undefined' ? <img class="col-4 p-0 " src={`${process.env.PUBLIC_URL}/assets/ranked-positions/Position_${leagueProfileData.leagueInfo.tier}-${match.lane}.png`}/> : <KDAText>N/A</KDAText>}
 
+                                                        </div>
                                                     </div>
-                                                </ChampionNameImageContainer>
-
-                                                <KDAContainer>
-                                                    {match.win ? <GameStatusText isWin={true}>Victory</GameStatusText> : <GameStatusText >Defeat</GameStatusText>}
-                                                    <KDAText>KDA: {match.kills}/{match.deaths}/{match.assists}</KDAText>
-                                                    <KDAText>{getDate(Date.now(),match.gameCreated)}</KDAText>
-
-                                                </KDAContainer>
-
-                                                <div style={{display: 'flex', flexFlow: 'row wrap', flex: 'auto', width: '50%'}}>
-                                                    {typeof item1 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item1.image.full}`}/> : null}
-                                                    {typeof item != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item2.image.full}`}/> : null}
-                                                    {typeof item3 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item3.image.full}`}/> : null}
-                                                    {typeof item4 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item4.image.full}`}/> : null}
-                                                    {typeof item5 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item5.image.full}`}/> : null}
-                                                    {typeof item6 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item6.image.full}`}/> : null}
-                                                    {typeof item7 != 'undefined' ? <ItemImg src={`${process.env.PUBLIC_URL}/assets/item/${item7.image.full}`}/> : null}
-                                                </div>
-                                        </RecentMatchCard>
+                                                    <div class="row col-4 m-0">
+                                                        {typeof item1 != 'undefined' ? <img class="rounded col-4 p-1" src={`${process.env.PUBLIC_URL}/assets/item/${item1.image.full}`}/> : null}
+                                                        {typeof item2 != 'undefined' ? <img class="rounded col-4 p-1"  src={`${process.env.PUBLIC_URL}/assets/item/${item2.image.full}`}/> : null}
+                                                        {typeof item3 != 'undefined' ? <img class="rounded col-4 p-1"  src={`${process.env.PUBLIC_URL}/assets/item/${item3.image.full}`}/> : null}
+                                                        {typeof item4 != 'undefined' ? <img class="rounded col-4 p-1"  src={`${process.env.PUBLIC_URL}/assets/item/${item4.image.full}`}/> : null}
+                                                        {typeof item5 != 'undefined' ? <img class="rounded col-4 p-1"  src={`${process.env.PUBLIC_URL}/assets/item/${item5.image.full}`}/> : null}
+                                                        {typeof item6 != 'undefined' ? <img class="rounded col-4 p-1"  src={`${process.env.PUBLIC_URL}/assets/item/${item6.image.full}`}/> : null}
+                                                        {typeof item7 != 'undefined' ? <img class="rounded col-4 p-1"  src={`${process.env.PUBLIC_URL}/assets/item/${item7.image.full}`}/> : null}
+                                                    </div>
+                                                    <p class="text-light p-3 bg-black fs-5 m-0 fst-italic position-absolute bottom-0 end-0" style={{borderTopLeftRadius: '15px', borderBottomRightRadius: '15px'}}>{getDate(Date.now(),match.gameCreated)}</p>
+                                            </div>
+                                        </div>
                                     )
                                 })}
-                            </RecentMatches>
+                            </section>
                         }
-                    </LeagueInformationContainer>
+                    </section>
                     : (<ConnectionContainer>
                                 <RiotConnectionText>
                                   Connect your gaming accounts to LFGamer
@@ -421,50 +425,7 @@ const DiscordAvatar = S.img`
     width: auto;
     border-radius: 50%;
 `;
-const AboutMeContainer = S.section`
-    display: flex;
-    flex-flow: row wrap;
-    width: 100%;
-    margin-top: 50px;
-`;
 
-const Label = S.p`
-    font-size: 20px;
-    color: #ddd;
-    width: 100%;
-    text-align: left;
-`;
-
-const AboutMe = S.p`
-    font-size: 26px;
-    color: #fff;
-    text-align: left;
-    text-transform: capitalize;
-`;
-
-const LeagueInformationContainer = S.section`
-    width: 100%;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    margin-top: 50px;
-    display: flex;
-`;
-
-const RankContainer = S.div`
-    width: fit-content;
-    border-radius: 15px;
-    background-color: #222;
-    padding: 20px;
-    box-sizing: border-box;
-    margin-top: 20px;
-    height: fit-content;
-    flex: 1;
-    display: flex;
-    flex-flow: row wrap;
-    align-items: center;
-    justify-content: center;
-    width: 29%;
-`;
 
 const RankImage = S.img`
     width: 155px;
@@ -475,57 +436,7 @@ const RankText = S.p`
     color: #fff;
     width: 100%;
 `;
-const ChampionImage = S.img`
-    width: 80px;
-    height: auto;
-    border-radius: 50%;
-    margin-right: 15px;
-`;
-const ChampionMastery = S.p`
-    font-size: 16px;
-    color: #fff;
-    padding-right: 10px;
-`;
-const Points = S.span`
-    font-size: 14px;
-    color: #fff;
-`;
 
-const RecentMatches = S.section`
-    display: flex;
-    flex-flow: row wrap;
-    padding: 20px;
-    border-radius: 15px;
-    width: 71%;
-`;
-const RecentMatchCard = S.div`
-    display: flex;
-    flex-direction: column;
-    -webkit-box-align: center;
-    align-items: center;
-    padding: 10px;
-    flex: 1 1 20%;
-    background-color: rgb(34, 34, 34);
-    margin-bottom: 10px;
-    margin-right: 10px;
-    border: 15px;
-    border-radius: 15px;
-    max-width: 233px;
-`;
-const ChampionNameImageContainer = S.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding-right: 10px;
-    justify-content: center;
-    align-items: center;
-`;
-const ChampionName = S.p`
-    color: #fff; 
-    font-size: 16px; 
-    width: 100%;
-`;
 const KDAContainer = S.div`
     display: flex;
     flex-direction: column;
@@ -542,13 +453,7 @@ const KDAText = S.p`
     color: #fff;
     padding-top: 5px;
 `;
-const ItemImg = S.img`
-    width: 33%;
-    max-width: 40px;
-    height: auto;
-    border-radius: 50%;
-    max-height: 35px;
-`;
+
 
 
 // League connect buttons

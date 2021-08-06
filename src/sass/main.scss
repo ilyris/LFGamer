@@ -1,0 +1,14 @@
+// custom variables
+$primary: #76ee74;
+$black: #191818;
+$dark: rgb(34,34,34);
+
+// Card border
+$border-radius: 15px;
+// import BS file
+@import '../../node_modules/bootstrap/scss/bootstrap';
+// @import "bootstrap/dist/css/bootstrap.min.css";
+body {
+    background-color: $black;
+
+}

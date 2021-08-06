@@ -7,9 +7,7 @@ import { roleArr } from '../pages/RoleImageExport'
 import {PrimaryCtaLink} from '../pageComponents/PrimaryCtaLink';
 import {env_be_url} from '../../globalVars/envURL';
 
-export function Playercard(props) {
-    console.log(props);
-    const {listing} = props;
+export function Playercard({listing}) {
     const dispatch = useDispatch();
     const loggedInUser = useSelector(state => state.root.loggedInUser);
     // Filter our the rank file
@@ -18,13 +16,12 @@ export function Playercard(props) {
 
     const messageUser = (e) => {
         // Start a conversation
-    let conversationId;
 
         axios.post(`${env_be_url}conversation/startConversation`, {senderId: loggedInUser.id, receiverId: listing.id})
         .then((res) => {
             console.log(res);
             // This should be handled by the socket, so when we read a message came in the chat box displays.
-            dispatch({type: 'SET_USER_CONNECTIONS', payload: {userId: String(props.listing.id), friendUsername: props.listing.username, conversationId: res.data.id}})
+            dispatch({type: 'SET_USER_CONNECTIONS', payload: {userId: String(listing.id), friendUsername: listing.username, conversationId: res.data.id}})
 
             // pretty certain this can be removed now, as it pointlessly pulls in the messages to the session
             // there is other logic doing that atm.

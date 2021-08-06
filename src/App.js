@@ -58,7 +58,7 @@ useEffect(() => {
 
   return (
     <Router>
-        <div className="App">
+        <div className="App bg-black">
           <DesktopNavigation />
           {/* <MobileMenu  /> */}
           <Switch>
