@@ -356,7 +356,7 @@ function Profile(props) {
                                                         {typeof item6 != 'undefined' ? <img class="rounded col-4 p-1"  src={`${process.env.PUBLIC_URL}/assets/item/${item6.image.full}`}/> : null}
                                                         {typeof item7 != 'undefined' ? <img class="rounded col-4 p-1"  src={`${process.env.PUBLIC_URL}/assets/item/${item7.image.full}`}/> : null}
                                                     </div>
-                                                    <p class="text-light p-3 bg-black fs-5 m-0 fst-italic position-absolute bottom-0 end-0" style={{borderTopLeftRadius: '15px', borderBottomRightRadius: '15px'}}>{getDate(Date.now(),match.gameCreated)}</p>
+                                                    <p class="text-light p-2 bg-black fs-5 m-0 fst-italic position-absolute bottom-0 end-0" style={{borderTopLeftRadius: '15px', borderBottomRightRadius: '15px'}}>{getDate(Date.now(),match.gameCreated)}</p>
                                             </div>
                                         </div>
                                     )

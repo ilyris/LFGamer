@@ -17,7 +17,7 @@ import {MainPageButton} from '../pageComponents/MainPageButton'
                 <SubTitle 
                     text1={'Your'}
                     text={' League of Legends '}
-                    text2={`duo gamer provider. You're a few clicks away from finding your duo gamer`}
+                    text2={`duo provider. You're a few clicks away from finding your duo gamer`}
 
                 />
                 <ButtonContainer>

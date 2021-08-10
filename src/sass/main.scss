@@ -1,14 +1,46 @@
-// custom variables
+// Custom Bootstrap variables
 $primary: #76ee74;
 $black: #191818;
 $dark: rgb(34,34,34);
-
+$light: #fff;
+// Links
+$link-color: $light !default;
+$link-hover-color: #fff;
 // Card border
 $border-radius: 15px;
+
+
+// Custom LFGamer variables
+$fixed-25: 25px;
+$fixed-50: 50px;
+$fixed-75: 75px;
+
 // import BS file
 @import '../../node_modules/bootstrap/scss/bootstrap';
 // @import "bootstrap/dist/css/bootstrap.min.css";
 body {
     background-color: $black;
+}
+* {
+    text-decoration: none !important;
+}
 
+.secondary-link{
+    transition: all ease-in-out 120ms;
+    &:hover {
+        color: $primary !important;
+        text-decoration: underline;
+    }
+}
+.fixed-dim-25 {
+    height: $fixed-25;
+    width: $fixed-25;
+}
+.fixed-dim-50 {
+    height: $fixed-50;
+    width: $fixed-50;
+}
+.fixed-dim-75 {
+    height: $fixed-75;
+    width: $fixed-75;
 }

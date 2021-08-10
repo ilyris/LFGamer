@@ -22,13 +22,15 @@ export function DuoPage(props) {
 
     // hook for pages duo data
     const [duoListings, setDuoListings] = useState([]);
-    
+    const [count, setCount] = useState(0);
+
     // make specific reducer for communication being searched for
     const userMicSetting = useSelector(state => state.championSelections.micEnabled);
 
     const [isFormClosed, setIsFormClosed] = useState(true);
 
-    const getDuoListings = () => {
+    const getDuoListings = (test = 'test') => {
+        console.log(test)
         axios.get(`${env_be_url}duo`)
         .then(async res => {
             console.log(res.data)
@@ -40,8 +42,8 @@ export function DuoPage(props) {
     const onSubmit = (e) => {
         e.preventDefault();
         axios.post(`${env_be_url}duo/search`, {champions, rank, lanes, mic:userMicSetting})
-        .then(res => {
-            console.log(res.data);
+        .then(async res => {
+            await setDuoListings(res.data)
         })
         .catch(err => console.log(err));
     }
@@ -51,7 +53,7 @@ export function DuoPage(props) {
         setIsFormClosed(false)
     }
     useEffect(() => {
-        getDuoListings();
+        getDuoListings(count);
     }, [duoListings.length, isFormClosed])
 
     // Only get champion data ( a lot of useless info in here we don't need)
@@ -65,7 +67,7 @@ export function DuoPage(props) {
                     importantTitleText={'Duo Gamer'}
                 />
             </TitleContainer>
-            <ListingButtonContainer>
+            <ListingButtonContainer  isFormClosed={isFormClosed}>
                 <Button onClick={handleClick}>Add Post</Button>
                 <DuoListing isFormClosed={isFormClosed} setIsFormClosed={setIsFormClosed}/>
             </ListingButtonContainer>
@@ -109,7 +111,6 @@ export function DuoPage(props) {
             </Form>
             <ListingContainer>
                 {duoListings && duoListings.map( (listing,i) =>  <Playercard key={i} listing={listing}/>)}
-               
             </ListingContainer>
         </Main>
     )
@@ -162,7 +163,7 @@ const ListingButtonContainer = S.div`
     width: 100%;
     text-align: left;
     margin-top: 50px;
-    z-index: 10;
+    z-index: ${props => props.isFormClosed ? '0': '10'};
 `;
 const Button = S.div`
     padding: 10px 30px;
