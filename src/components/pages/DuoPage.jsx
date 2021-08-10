@@ -55,7 +55,7 @@ export function DuoPage(props) {
     }
     useEffect(() => {
         getDuoListings(count);
-        setCount(count++)
+        setCount(count + 1)
 
     }, [duoListings.length, isFormClosed])
 
