@@ -29,8 +29,9 @@ export function DuoPage(props) {
 
     const [isFormClosed, setIsFormClosed] = useState(true);
 
-    const getDuoListings = (test = 'test') => {
-        console.log(test)
+    const getDuoListings = (callCounter) => {
+        console.log(callCounter)
+        if(callCounter == 0) 
         axios.get(`${env_be_url}duo`)
         .then(async res => {
             console.log(res.data)
@@ -54,6 +55,8 @@ export function DuoPage(props) {
     }
     useEffect(() => {
         getDuoListings(count);
+        setCount(count++)
+
     }, [duoListings.length, isFormClosed])
 
     // Only get champion data ( a lot of useless info in here we don't need)
