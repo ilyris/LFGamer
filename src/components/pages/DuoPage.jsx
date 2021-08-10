@@ -110,7 +110,7 @@ export function DuoPage(props) {
                 </FormButtonContainer>
             </Form>
             <ListingContainer>
-                {duoListings && duoListings.map( (listing,i) =>  <Playercard key={i} listing={listing}/>)}
+                {duoListings.length > 0 && duoListings.map( (listing,i) =>  <Playercard key={i} listing={listing}/>)}
             </ListingContainer>
         </Main>
     )
