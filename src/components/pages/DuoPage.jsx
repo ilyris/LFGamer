@@ -31,13 +31,15 @@ export function DuoPage(props) {
 
     const getDuoListings = (callCounter) => {
         console.log(callCounter)
-        if(callCounter == 0) 
-        axios.get(`${env_be_url}duo`)
-        .then(async res => {
-            console.log(res.data)
-            await setDuoListings(res.data)
-        })
-        .catch(err => console.log(err))
+        if(callCounter == 0) {
+            axios.get(`${env_be_url}duo`)
+            .then(async res => {
+                console.log(res.data)
+                await setDuoListings(res.data)
+            })
+            .catch(err => console.log(err))            
+        }
+
     }
 
     const onSubmit = (e) => {
