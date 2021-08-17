@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import S from 'styled-components';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboard } from "@fortawesome/free-solid-svg-icons";
+import { faClipboard, faCog } from "@fortawesome/free-solid-svg-icons";
 
 import {PrimaryCtaLink} from '../pageComponents/PrimaryCtaLink';
 export function Verification(props) {
@@ -41,8 +41,16 @@ export function Verification(props) {
         <Overlay ref={overlayRef}></Overlay>
         <ModalContainer>
             <ModalHeading>{'Verification Code'}</ModalHeading>
-            <HelperText>Here is your code: <VerificationCodeContainer><Code onClick={copyToClipboard}>{props.uuid}</Code> <ClipboardAlert><ClipboardIcon icon={faClipboard}/>{clipboardText}</ClipboardAlert></VerificationCodeContainer> Enter this code into your LOL client</HelperText>
-            <HelperText>Follow these steps:</HelperText>
+            <HelperText>Here is your code: <VerificationCodeContainer><Code onClick={copyToClipboard}>{props.uuid}</Code> <ClipboardAlert><ClipboardIcon icon={faClipboard}/>{clipboardText}</ClipboardAlert></VerificationCodeContainer> Follow these steps to enter this code into your LOL client</HelperText>
+            <ol class="list-group list-group-numbered mx-auto mb-5 mt-0 w-75">
+                <li class="list-group-item fs-3">Copy the verification code</li>
+                <li class="list-group-item fs-3">Login to your LOL account</li>
+                <li class="list-group-item fs-3">Click the  <div class="mx-1 d-inline"><FontAwesomeIcon icon={faCog}/></div>settings button in the top right of your LOL client</li>
+                <li class="list-group-item fs-3">Click on the "Verification" tab on the left sidebar</li>
+                <li class="list-group-item fs-3">Paste in your verification code from LFG</li>
+                <li class="list-group-item fs-3">Click "Save" to save the verification code in your LOL client</li>
+                <li class="list-group-item fs-3">Click the "verify" button below</li>
+            </ol>
             <ButtonContainer>
                 <PrimaryCtaLink handleClick={props.handleVerification} text={'Verify'}/>
             </ButtonContainer>
@@ -70,7 +78,7 @@ const ModalContainer = S.div`
     margin: auto;
     left: 0;
     right: 0;
-    bottom: 35%;
+    bottom: 20%;
     width: 50%;
 `;
 const ModalHeading = S.h3`
@@ -81,7 +89,6 @@ const ModalHeading = S.h3`
 const HelperText = S.p`
     font-size: 22px;
     color: #000;
-    padding-bottom: 20px;
     width: 100%;
 `;
 const ClipboardIcon = S(FontAwesomeIcon)`
