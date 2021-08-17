@@ -95,33 +95,12 @@ const Messages = (props) => {
         }, [ref,  props.conversationMessages.length]);
     }
 
-    // useEffect(() => {
-    //     socket.on('getMessage', (data) => {
-    //         setArrivalMessage({
-    //             username: data.username,
-    //             avatar: data.avatar,
-    //             discord_id: data.discord_id,
-    //             conversationId: data.conversationId,
-    //             sender: data.senderId,
-    //             text: data.text,
-    //             created_at: Date.now()
-    //         })
-    //     })
-    //     return () => {
-    //         setArrivalMessage(null);
-    //     }
-    // }, [])
-
-    // useEffect(() => {
-    //     if(arrivalMessage && props.activeMessageSessions.userId == arrivalMessage.sender) {
-    //         dispatch({type: 'SET_MESSAGES', payload: arrivalMessage})
-    //     }
-    // },[arrivalMessage, props.activeMessageSessions.userId, dispatch])
-
     useEffect(() => {
         // Listen to the typing event and display that data.
         socket.on('typing', data => {
             setUserTyping(data);
+
+            if(typingbubbleScrollRef.current == null) return;
             typingbubbleScrollRef.current.scrollIntoView({behavior: 'smooth'});
         })
     }, [socket])

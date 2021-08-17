@@ -8,7 +8,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons"
 
 function ChampionCard(props) {
     const { rawData, selectedOptions, action, placeHolder, inputName, lengthCheck, label } = props;
-
+    console.log(props)
     const dispatch = useDispatch();
     // When to display the list of champion in select list
     const [displayList, setDisplayList] = useState(false);

@@ -12,6 +12,8 @@ import SliderInput from '../form/SliderInput';
 import Playercard from '../player/PlayerCard';
 import { useChampionData } from '../../customHooks/useChampionData';
 import { useSetLeagueInformation } from '../../customHooks/useSetLeagueInformation';
+import { useSearchedLeagueInfo } from '../../customHooks/useSetSearchedLeagueInfo';
+
 import {DuoListing} from '../form/DuoListing';
 
 export function DuoPage(props) {
@@ -19,7 +21,8 @@ export function DuoPage(props) {
     const championData = useChampionData({});
     const selectedLeagueInformation = useSetLeagueInformation();
     const {champions, rank, lanes} = selectedLeagueInformation;
-
+    const searchedLeagueData = useSearchedLeagueInfo()
+    console.log(searchedLeagueData)
     // hook for pages duo data
     const [duoListings, setDuoListings] = useState([]);
     const [count, setCount] = useState(0);
@@ -44,9 +47,10 @@ export function DuoPage(props) {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${env_be_url}duo/search`, {champions, rank, lanes, mic:userMicSetting})
+        axios.post(`${env_be_url}duo/search`, {champions: searchedLeagueData.champions, rank: searchedLeagueData.rank[0], lanes: searchedLeagueData.lanes, mic:userMicSetting})
         .then(async res => {
-            await setDuoListings(res.data)
+            console.log(res.data.listing)
+            await setDuoListings(res.data.listing)
         })
         .catch(err => console.log(err));
     }
@@ -80,8 +84,8 @@ export function DuoPage(props) {
                 <SelectListContainer>
                     <ChampionCard
                         rawData={championsData}
-                        selectedOptions={champions}
-                        action={'SET_SELECTED_CHAMPIONS'}
+                        selectedOptions={searchedLeagueData.champions}
+                        action={'SET_SEARCHED_CHAMPIONS'}
                         placeHolder={"search gamers champion(s)"}
                         label={'Champions'}
                         inputName={'champion_input'}
@@ -89,8 +93,8 @@ export function DuoPage(props) {
                     />
                     <ChampionCard
                         rawData={rankedEmblemArr}
-                        selectedOptions={rank}
-                        action={'SET_SELECTED_RANK'}
+                        selectedOptions={searchedLeagueData.rank}
+                        action={'SET_SEARCHED_RANK'}
                         label={'Rank'}
                         placeHolder={"Search Rank"}
                         inputName={'rank_input'}
@@ -98,8 +102,8 @@ export function DuoPage(props) {
                     />
                     <ChampionCard
                         rawData={roleArr}
-                        selectedOptions={lanes}
-                        action={'SET_SELECTED_LANES'}
+                        selectedOptions={searchedLeagueData.lanes}
+                        action={'SET_SEARCHED_LANES'}
                         label={'Role(s)'}
                         placeHolder={"Search role(s)"}
                         inputName={'role_input'}

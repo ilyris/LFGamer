@@ -49,7 +49,7 @@ export function Playercard({ listing }) {
       .catch((err) => console.log(err));
   };
   return (
-    <div class="pesudoContainer position-relative col-4">
+    <div class="pesudoContainer position-relative col-4 me-5">
       <div class="p-4 d-flex flex-wrap bg-dark rounded">
         <Link
           class="secondary-link fs-3 w-100 d-flex flex-wrap align-items-center justify-content-center"
@@ -115,7 +115,7 @@ export function Playercard({ listing }) {
         <Container>
           <LabelContainer backSide={true}>
             <LabelContainerText>Description</LabelContainerText>
-            <Text>Some long text about how I am some kind of mid laner</Text>
+            <Text>{listing.post_description}</Text>
           </LabelContainer>
         </Container>
       </div>

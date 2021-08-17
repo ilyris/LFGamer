@@ -32,10 +32,14 @@ function Profile(props) {
 
     const isLoading = useSelector(state => state.root.isLoading);
     const [leagueAccountInfo, setLeagueAccountInfo] = useState({})
-    const [leagueProfileData, setLeagueProfileData] = useState({});
+    const [leagueProfileData, setLeagueProfileData] = useState({
+        leagueInfo: undefined,
+        championPool: [],
+        recentMatches: [],
+    });
     const [discordData, setDiscordData] = useState({});
     const [display404, setDisplay404] = useState(false);
-
+    const loggedInUser = useSelector(state => state.root.loggedInUser);
     const [uuid, setUuid] = useState(uuidv4());
     const [modalActive, setModalActive] = useState(false);
     const [profile, setProfile] = useState({
@@ -226,6 +230,8 @@ function Profile(props) {
       };
 
     useEffect(() => {
+        dispatch({type: 'SET_ISLOADING'});                    
+
         axios.post(`${env_be_url}profile`, { user_id: params.id })
             .then(async res => {
                 console.log(res.data);
@@ -251,9 +257,11 @@ function Profile(props) {
     }, [params.id])
 
     useEffect(() => {
+        dispatch({type: 'SET_ISLOADING'});                    
 
             axios.post(`${env_be_url}setup/getLeagueInfo`, {user_id: params.id })
-            .then(async res => {
+            .then(async res => {                
+
                     await setLeagueProfileData(res.data);
                     // Remove loader
                     await dispatch({type: 'REMOVE_ISLOADING'});                    
@@ -275,14 +283,15 @@ function Profile(props) {
     } else if(display404) {
         return <Page404 />
     } else {
+        console.log(typeof leagueProfileData.championPool !== 'undefined')
         return (
             <Main>
                 <UserNameContainer>
                     {discordData.user ? <DiscordAvatar src={`https://cdn.discordapp.com/avatars/${discordData.user.discord_id}/${discordData.user.avatar}.png`} /> : null}
                     {discordData.user && <Heading><Username>{`${discordData.user.username}`}</Username></Heading>}
                 </UserNameContainer>
-
-                { leagueProfileData.championPool.length !== 0 ?
+                {/* {typeof leagueProfileData.championPool !== 'undefined' ? :} */}
+                { leagueProfileData.championPool && leagueProfileData.championPool.length > 0 ? 
                     <section class="container d-flex flex-wrap justify-content-between">
                         <h3 class="text-light text-align-start display-6 my-5">League of Legends information</h3>
                         <div class="col-lg-12 bg-dark d-flex rounded p-5 justify-content-between mb-5">
@@ -364,32 +373,33 @@ function Profile(props) {
                             </section>
                         }
                     </section>
-                    : (<ConnectionContainer>
-                                <RiotConnectionText>
-                                  Connect your gaming accounts to LFGamer
-                                </RiotConnectionText>
-                                <GameConnectionCard>
-                                  <GameLogo src={image} />
-                                  <InputLabel>
-                                    <LeagueUsernameInput
-                                      onChange={onChange}
-                                      type="text"
-                                      name='league_alias'
-                                      autoComplete="off"
-                                      placeholder={'LOL Username'}
-                                    />
-                                  </InputLabel>
-                                  <ButtonContainer>
-                                    <RiotConnectButton href="/" onClick={handleLeagueConnect}>
-                                      Connect
-                                      <StyledIconArrow icon={faArrowRight} />
-                                    </RiotConnectButton>
-                                  </ButtonContainer>
-                                </GameConnectionCard>
-                                { modalActive ? < Verification handleVerification={handleVerification} modalActive={setModalActive}uuid={uuid}/> : null}
-                              </ConnectionContainer>
-                              
-                        )
+                : <h3 class="display-3 text-light mt-5">No League of Legends account connected</h3>}
+                {params.id == loggedInUser.id && leagueProfileData.championPool.length == 0 && (<ConnectionContainer>
+                        <RiotConnectionText>
+                          Connect your gaming accounts to LFGamer
+                        </RiotConnectionText>
+                        <GameConnectionCard>
+                          <GameLogo src={image} />
+                          <InputLabel>
+                            <LeagueUsernameInput
+                              onChange={onChange}
+                              type="text"
+                              name='league_alias'
+                              autoComplete="off"
+                              placeholder={'LOL Username'}
+                            />
+                          </InputLabel>
+                          <ButtonContainer>
+                            <RiotConnectButton href="/" onClick={handleLeagueConnect}>
+                              Connect
+                              <StyledIconArrow icon={faArrowRight} />
+                            </RiotConnectButton>
+                          </ButtonContainer>
+                        </GameConnectionCard>
+                        { modalActive ? < Verification handleVerification={handleVerification} modalActive={setModalActive}uuid={uuid}/> : null}
+                      </ConnectionContainer>
+                      
+                )
                 }
             </Main>
         )        
