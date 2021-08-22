@@ -22,7 +22,8 @@ export function DuoPage(props) {
     const selectedLeagueInformation = useSetLeagueInformation();
     const {champions, rank, lanes} = selectedLeagueInformation;
     const searchedLeagueData = useSearchedLeagueInfo()
-    console.log(searchedLeagueData)
+    const socket = useSelector(state => state.messageConnections.socket);
+    const [onlineUsers, setOnlineUsers] = useState([]);
     // hook for pages duo data
     const [duoListings, setDuoListings] = useState([]);
     const [count, setCount] = useState(0);
@@ -64,6 +65,13 @@ export function DuoPage(props) {
         setCount(count + 1)
 
     }, [duoListings.length, isFormClosed])
+
+    useEffect(() => {
+        if(socket == null) return;
+        socket.on("getUsers", users => {
+            setOnlineUsers(users);
+        })
+    }, [socket, onlineUsers])
 
     // Only get champion data ( a lot of useless info in here we don't need)
     const championsData = Object.values(championData);
@@ -119,7 +127,14 @@ export function DuoPage(props) {
                 </FormButtonContainer>
             </Form>
             <ListingContainer>
-                {duoListings.length > 0 && duoListings.map( (listing,i) =>  <Playercard key={i} listing={listing}/>)}
+                {duoListings.length > 0 && duoListings.map( (listing,i) =>  {
+                    console.log(listing)
+                    let online = false;
+                    onlineUsers.forEach(user => {
+                        if(user.userId == listing.id) return online = true       
+                    })
+                    return <Playercard key={i} listing={listing} isOnline={online} />
+                })}
             </ListingContainer>
         </Main>
     )

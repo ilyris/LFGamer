@@ -9,7 +9,7 @@ import { PrimaryCtaLink } from "../pageComponents/PrimaryCtaLink";
 import { env_be_url } from "../../globalVars/envURL";
 import {getTimeAgo} from '../../helperFuncs/getTimeAgo';
 
-export function Playercard({ listing }) {
+export function Playercard({ listing,isOnline }) {
   const dispatch = useDispatch();
   const loggedInUser = useSelector((state) => state.root.loggedInUser);
   // Filter our the rank file
@@ -52,9 +52,14 @@ export function Playercard({ listing }) {
     <div class="pesudoContainer position-relative col-4 me-5">
       <div class="p-4 d-flex flex-wrap bg-dark rounded">
         <Link
-          class="secondary-link fs-3 w-100 d-flex flex-wrap align-items-center justify-content-center"
+          class="secondary-link fs-3 w-100 d-flex flex-wrap align-items-center justify-content-center online-status"
           to={`/profile/${listing.id}`}
         >
+          <div 
+            style={isOnline ? {backgroundColor: '#76ee74'}: {backgroundColor: 'gray'}} 
+            class="fixed-dim-10 rounded-circle me-4"
+          >
+          </div>
           <img
             class="fixed-dim-50 rounded-circle me-2"
             src={`https://cdn.discordapp.com/avatars/${listing.discord_id}/${listing.avatar}.png`}

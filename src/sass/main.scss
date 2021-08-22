@@ -12,6 +12,7 @@ $border-radius: 15px;
 
 
 // Custom LFGamer variables
+$fixed-10: 10px;
 $fixed-25: 25px;
 $fixed-50: 50px;
 $fixed-75: 75px;
@@ -42,7 +43,10 @@ body {
 .w-10 {
     width: $percentage-10;
 }
-
+.fixed-dim-10 {
+    height: $fixed-10;
+    width: $fixed-10;
+}
 .fixed-dim-25 {
     height: $fixed-25;
     width: $fixed-25;
