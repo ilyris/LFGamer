@@ -69,6 +69,9 @@ useEffect(() => {
             <Route component={Page404} />
           </Switch>
           {isLoggedIn ? <MessageSessionContainer /> : null  }
+          <div  class="fixed-bottom w-10   bg-danger rounded-top " >
+            <p class="fs-3 text-light mb-0"> Beta v0.0.1</p>
+          </div>
         </div>
     </Router>
 

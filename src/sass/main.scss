@@ -3,6 +3,7 @@ $primary: #76ee74;
 $black: #191818;
 $dark: rgb(34,34,34);
 $light: #fff;
+$secondary: #048f8b;
 // Links
 $link-color: $light !default;
 $link-hover-color: #fff;
@@ -14,12 +15,18 @@ $border-radius: 15px;
 $fixed-25: 25px;
 $fixed-50: 50px;
 $fixed-75: 75px;
+$percentage-10: 10%;
+// Section spacing
+$section-spacing-1: 15em;
+$section-spacing-2: 6em;
+$section-spacing-3: 9em;
 
 // import BS file
 @import '../../node_modules/bootstrap/scss/bootstrap';
 // @import "bootstrap/dist/css/bootstrap.min.css";
 body {
     background-color: $black;
+    padding-bottom: 100px;
 }
 * {
     text-decoration: none !important;
@@ -32,6 +39,10 @@ body {
         text-decoration: underline;
     }
 }
+.w-10 {
+    width: $percentage-10;
+}
+
 .fixed-dim-25 {
     height: $fixed-25;
     width: $fixed-25;
@@ -43,4 +54,7 @@ body {
 .fixed-dim-75 {
     height: $fixed-75;
     width: $fixed-75;
+}
+.section-spacing-1 {
+    margin: $section-spacing-1 auto !important;
 }

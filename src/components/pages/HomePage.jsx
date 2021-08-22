@@ -5,8 +5,11 @@ import image from '../../assets/LFG_header_illustration.png';
 import MainTitle from '../pageComponents/MainTitle';
 import {SubTitle} from '../pageComponents/SubTitle';
 import {MainPageButton} from '../pageComponents/MainPageButton'
+import {About} from '../sections/About';
+import {Contact} from '../sections/Contact';
  function Homepage(props) {
     return (
+        <>
         <HeroSection>
             <Container>
             <TextContainer>
@@ -15,9 +18,9 @@ import {MainPageButton} from '../pageComponents/MainPageButton'
                     importantTitleText={'LFGamer'}
                 />
                 <SubTitle 
-                    text1={'Your'}
+                    text1={'We are your'}
                     text={' League of Legends '}
-                    text2={`duo provider. You're a few clicks away from finding your duo gamer`}
+                    text2={`duo provider. You're only a few clicks away from finding your duo partner to climb up the League of legends ladder`}
 
                 />
                 <ButtonContainer>
@@ -36,6 +39,9 @@ import {MainPageButton} from '../pageComponents/MainPageButton'
             </ImageContainer>
             </Container>
         </HeroSection>
+        <About />
+        <Contact />
+        </>
     )
 }
 export default Homepage;
@@ -43,7 +49,6 @@ export default Homepage;
 const HeroSection = S.section`
     width: 100%;
     margin: 0 auto;
-    background-color: #01000f;
 `;
 const Container = S.div`
     widtH: 75%;
