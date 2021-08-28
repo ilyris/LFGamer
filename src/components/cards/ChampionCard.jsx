@@ -7,14 +7,13 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons"
 
 
 function ChampionCard(props) {
-    const { rawData, selectedOptions, action, placeHolder, inputName, lengthCheck, label } = props;
-    console.log(props)
+    const { rawData, selectedOptions, action, placeHolder, inputName, lengthCheck, label, userInput, setInput } = props;
     const dispatch = useDispatch();
     // When to display the list of champion in select list
     const [displayList, setDisplayList] = useState(false);
 
     // The user input when searching for a champions
-    const [userInput, setUserInput] = useState('');
+    // const [userInput, setUserInput] = useState('');
 
     // The raw list data
     const [dataList, setDataList] = useState(rawData || []);
@@ -32,7 +31,7 @@ function ChampionCard(props) {
     // Store the champion name data into an array
     const onChampionClick = (e) => {
         dispatch({ type: action, payload: [...new Set(selectedOptions), e.target.getAttribute("data-name")] })
-        setUserInput('');
+        // setInput({...userInput, [inputName]: ''});
     }
 
     const onCloseClick = (e) => {
@@ -44,13 +43,15 @@ function ChampionCard(props) {
         })
     }
     const onChange = (e) => {
-        setUserInput(e.target.value);
+        setInput({...userInput, [e.target.name]:e.target.value});
     }
 
     // On page component render, pass in our hook to filter the champion list when a user makes a selection
     function useFilterChampions(setDataList) {
         useEffect(() => {
             setDataList(filteredData.filter(champion => {
+                console.log(champion)
+                console.log(!selectedOptions.includes(champion.name))
                 return !selectedOptions.includes(champion.name);
             })
             )
@@ -85,32 +86,33 @@ function ChampionCard(props) {
     }, [rawData])
 
     useEffect(() => {
-        filteredData = rawData.filter(champion => champion.name.toLowerCase().includes(userInput.toLocaleLowerCase()));
+        if(typeof userInput == 'undefined' || typeof userInput[inputName] == 'undefined') return;
+        filteredData = rawData.filter(champion => champion.name.toLowerCase().includes(userInput[inputName].toLocaleLowerCase()));
         setDataList(filteredData)
     }, [userInput])
 
     return (
         <ChampionSelectionContainer ref={inputAndDataList}>
             <UserSelectionContainer >
-                <SelectedChampionContainer >
-                    {selectedOptions && selectedOptions.map( (champion) => {
-                        return (
-                            <SelectedChampTags data-name={champion}>
-                                {champion} 
-                                | 
-                                <RemoveButton data-name={champion} onClick={onCloseClick} icon={faTimes} />
-                            </SelectedChampTags>
-                        )
-                    })}
-                </SelectedChampionContainer>
                 <Label > {label}
+                    <SelectedChampionContainer hasTags={selectedOptions.length > 0 ? true : false}>
+                        {selectedOptions && selectedOptions.map( (champion) => {
+                            return (
+                                <SelectedChampTags data-name={champion}>
+                                    {champion} 
+                                    | 
+                                    <RemoveButton data-name={champion} onClick={onCloseClick} icon={faTimes} />
+                                </SelectedChampTags>
+                            )
+                        })}
+                    </SelectedChampionContainer>
                     <ChampionInput
                         onChange={onChange}
                         type="text"
                         name={inputName}
                         autoComplete="off"
                         placeholder={placeHolder}
-                        
+                        value={ typeof userInput == 'undefined' ? '' : userInput[inputName]}
                     />
                 </Label>
             </UserSelectionContainer>
@@ -118,6 +120,7 @@ function ChampionCard(props) {
             <ChampionContainer displayList={displayList} selectedOptions={selectedOptions} lengthCheck={lengthCheck}>
                 {selectedOptions.length < lengthCheck ?
                     dataList.map( (data, i) => {
+                        console.log(dataList)
                         return (
                             <DisplayListCard
                                 onChampionClick={onChampionClick}
@@ -149,14 +152,18 @@ const UserSelectionContainer = S.div`
 const SelectedChampionContainer = S.div`
     flex-flow: row wrap;
     display: flex;
-    min-height: 100px;
     width: 100%;
     align-items: center;
+    transition: all ease-in-out 50ms;
+    background-color: #fff;
+    padding: 1rem;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 `;
 const SelectedChampTags = S.div`
     padding: 5px 15px;
     border-radius: 20px;
-    font-size: 16px;
+    font-size: 13px;
     color: #000;
     margin-right: 5px;
     margin-top: 5px;
@@ -186,9 +193,7 @@ const ChampionInput = S.input`
     font-size: 18px;
     background-color: #fff;
     padding: 10px;
-    border-radius: 5px;
     widtH: 100%;
-    margin-top: 10px;
     border: none;
 `;
 const ChampionContainer = S.div`

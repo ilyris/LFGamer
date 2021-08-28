@@ -7,7 +7,7 @@ import { rankedEmblemArr } from './RankImageExport'
 import { roleArr } from './RoleImageExport'
 import { SubmitButton } from '../pageComponents/SubmitButton';
 import { env_be_url } from '../../globalVars';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import SliderInput from '../form/SliderInput';
 import Playercard from '../player/PlayerCard';
 import { useChampionData } from '../../customHooks/useChampionData';
@@ -17,13 +17,18 @@ import { useSearchedLeagueInfo } from '../../customHooks/useSetSearchedLeagueInf
 import {DuoListing} from '../form/DuoListing';
 
 export function DuoPage(props) {
-
     const championData = useChampionData({});
     const selectedLeagueInformation = useSetLeagueInformation();
     const {champions, rank, lanes} = selectedLeagueInformation;
     const searchedLeagueData = useSearchedLeagueInfo()
     const socket = useSelector(state => state.messageConnections.socket);
     const [onlineUsers, setOnlineUsers] = useState([]);
+
+    const [userInput, setUserInput] = useState({
+        champion_input: '',
+        rank_input: '',
+        role_input: '',
+    })
     // hook for pages duo data
     const [duoListings, setDuoListings] = useState([]);
     const [count, setCount] = useState(0);
@@ -51,6 +56,11 @@ export function DuoPage(props) {
         axios.post(`${env_be_url}duo/search`, {champions: searchedLeagueData.champions, rank: searchedLeagueData.rank[0], lanes: searchedLeagueData.lanes, mic:userMicSetting})
         .then(async res => {
             console.log(res.data.listing)
+            setUserInput({
+                champion_input: '',
+                rank_input: '',
+                role_input: '',
+            })
             await setDuoListings(res.data.listing)
         })
         .catch(err => console.log(err));
@@ -97,7 +107,9 @@ export function DuoPage(props) {
                         placeHolder={"search gamers champion(s)"}
                         label={'Champions'}
                         inputName={'champion_input'}
-                        lengthCheck={6}
+                        userInput={userInput}
+                        setInput={setUserInput}
+                        lengthCheck={3}
                     />
                     <ChampionCard
                         rawData={rankedEmblemArr}
@@ -106,6 +118,8 @@ export function DuoPage(props) {
                         label={'Rank'}
                         placeHolder={"Search Rank"}
                         inputName={'rank_input'}
+                        userInput={userInput}
+                        setInput={setUserInput}
                         lengthCheck={1}
                     />
                     <ChampionCard
@@ -115,6 +129,8 @@ export function DuoPage(props) {
                         label={'Role(s)'}
                         placeHolder={"Search role(s)"}
                         inputName={'role_input'}
+                        userInput={userInput}
+                        setInput={setUserInput}
                         lengthCheck={2}
                     />
                 </SelectListContainer>
@@ -128,7 +144,6 @@ export function DuoPage(props) {
             </Form>
             <ListingContainer>
                 {duoListings.length > 0 && duoListings.map( (listing,i) =>  {
-                    console.log(listing)
                     let online = false;
                     onlineUsers.forEach(user => {
                         if(user.userId == listing.id) return online = true       
