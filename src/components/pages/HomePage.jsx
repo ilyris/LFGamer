@@ -62,7 +62,8 @@ const TextContainer = S.div`
     flex-flow: row wrap;
     margin-top: 100px;
     margin-bottom: 100px;
-    width: 40%;
+    width: 55%;
+    flex: 1;
 `;
 
 const ButtonContainer = S.div`

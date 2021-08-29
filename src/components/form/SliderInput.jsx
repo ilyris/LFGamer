@@ -30,9 +30,7 @@ export default SliderInput;
 const MainContainer = S.div`
     display: flex;
     justify-content: flex-start;
-    margin: 50px 0;
-    transform: translateY(50px);
-
+    flex: 1;
 `;
 const Label = S.label`
     font-size: 20px;

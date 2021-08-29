@@ -90,14 +90,10 @@ export function DuoPage(props) {
         <Main>
             <TitleContainer>
                 <MainTitle
-                    title={'Search for your '}
-                    importantTitleText={'Duo Gamer'}
+                    title={'Active '}
+                    importantTitleText={'Gamers'}
                 />
             </TitleContainer>
-            <ListingButtonContainer  isFormClosed={isFormClosed}>
-                <Button onClick={handleClick}>Add Post</Button>
-                <DuoListing isFormClosed={isFormClosed} setIsFormClosed={setIsFormClosed}/>
-            </ListingButtonContainer>
             <Form onSubmit={onSubmit} isFormClosed={isFormClosed}>
                 <SelectListContainer>
                     <ChampionCard
@@ -142,6 +138,11 @@ export function DuoPage(props) {
                     />
                 </FormButtonContainer>
             </Form>
+            <ListingButtonContainer  isFormClosed={isFormClosed}>
+                <h6 class="sub-title display-6 mb-5 text-gray">Want to let people know your searching for a duo?</h6>
+                <Button onClick={handleClick}>Add Listing</Button>
+                <DuoListing isFormClosed={isFormClosed} setIsFormClosed={setIsFormClosed}/>
+            </ListingButtonContainer>
             <ListingContainer>
                 {duoListings.length > 0 && duoListings.map( (listing,i) =>  {
                     let online = false;
@@ -175,11 +176,11 @@ const Form = S.form`
     justify-content: space-between;
     margin-top: 50px;
     z-index: ${props => props.isFormClosed ? '10': '0'};
+    align-items: center;
 `;
 const SelectListContainer = S.div`
     display: flex;
     justify-content: space-between;
-    flex: 1;
 `;
 const FormButtonContainer = S.div`
     display: flex;
@@ -195,14 +196,17 @@ const ListingContainer = S.div`
     flex-flow: row wrap;
     width: 100%;
     margin-top: 100px;
+    z-index: 1;
 `;
 
 // Duo Listing buttons
 const ListingButtonContainer = S.div`
     width: 100%;
     text-align: left;
-    margin-top: 50px;
     z-index: ${props => props.isFormClosed ? '0': '10'};
+    margin-top: 5em;
+    z-index: 11;
+
 `;
 const Button = S.div`
     padding: 10px 30px;

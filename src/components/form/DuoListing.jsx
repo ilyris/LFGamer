@@ -104,26 +104,27 @@ export function DuoListing(props) {
 export default DuoListing;
 
 const Form = S.form`
-    transition: all 300ms ease-in-out;
+    transition: all 500ms ease-in-out;
     display: flex;
     width: 100%;
     overflow: hidden;
     opacity: ${props => props.isFormClosed ? '0' :  '1'};
     flex-flow: row wrap;
     justify-content: space-between;
-    padding:  ${props => props.isFormClosed ? '0' :  '20px'};
-    max-height: 999px;
+    padding:  ${props => props.isFormClosed ? '0' :  '5em'};
     height: auto;
     border-radius: 15px;
     position: absolute;
     margin-top: -50px;
-    background-color: #232323;
-    z-index: ${props => props.isFormClosed ? '0' :  '11'};
+    z-index: 11;
+    background-color: #717171;
+    transform: ${props => props.isFormClosed ? 'translateY(-200%)' :  'translateY(-60%)'}; 
 `;
 const SelectListContainer = S.div`
     display: flex;
     justify-content: space-between;
     flex: 1;
+    margin-top: 5em;
 `;
 const FormButtonContainer = S.div`
     display: flex;

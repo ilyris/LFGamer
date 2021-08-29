@@ -23,8 +23,10 @@ function ChampionCard(props) {
 
     // create a copy of the props.champions so that I can filter the array, without changing the raw data.
     let filteredData = rawData;
+
     // Outside click detection from ref element
     useOutsideAlerter(inputAndDataList, setDisplayList);
+
     // Filter champion hook
     useFilterChampions(setDataList)
 
@@ -50,8 +52,6 @@ function ChampionCard(props) {
     function useFilterChampions(setDataList) {
         useEffect(() => {
             setDataList(filteredData.filter(champion => {
-                console.log(champion)
-                console.log(!selectedOptions.includes(champion.name))
                 return !selectedOptions.includes(champion.name);
             })
             )
@@ -95,7 +95,8 @@ function ChampionCard(props) {
         <ChampionSelectionContainer ref={inputAndDataList}>
             <UserSelectionContainer >
                 <Label > {label}
-                    <SelectedChampionContainer hasTags={selectedOptions.length > 0 ? true : false}>
+                    {selectedOptions.length > 0 
+                    ? <SelectedChampionContainer >
                         {selectedOptions && selectedOptions.map( (champion) => {
                             return (
                                 <SelectedChampTags data-name={champion}>
@@ -105,8 +106,10 @@ function ChampionCard(props) {
                                 </SelectedChampTags>
                             )
                         })}
-                    </SelectedChampionContainer>
-                    <ChampionInput
+                    </SelectedChampionContainer> 
+                    : null}
+                    {selectedOptions.length < lengthCheck ?
+                        <ChampionInput
                         onChange={onChange}
                         type="text"
                         name={inputName}
@@ -114,13 +117,14 @@ function ChampionCard(props) {
                         placeholder={placeHolder}
                         value={ typeof userInput == 'undefined' ? '' : userInput[inputName]}
                     />
+                     : null}
+                    
                 </Label>
             </UserSelectionContainer>
-            {selectedOptions.length >= lengthCheck ? <NoMoreText>No more selections please</NoMoreText> : null}
+            {selectedOptions.length >= lengthCheck ? <NoMoreText>Reached max selections</NoMoreText> : null}
             <ChampionContainer displayList={displayList} selectedOptions={selectedOptions} lengthCheck={lengthCheck}>
                 {selectedOptions.length < lengthCheck ?
                     dataList.map( (data, i) => {
-                        console.log(dataList)
                         return (
                             <DisplayListCard
                                 onChampionClick={onChampionClick}
@@ -141,7 +145,6 @@ function ChampionCard(props) {
 export default ChampionCard;
 
 const ChampionSelectionContainer = S.div`
-    margin-top: 20px;
     width: 300px;
     margin-right: 20px;
 `;
@@ -220,8 +223,10 @@ const ChampionContainer = S.div`
 
 const NoMoreText = S.p`
     font-size: 18px;
-    color: #191818;
+    font-weight: 600;
     background-color: #fff;
     padding: 20px;
     margin-top: -3px;
+    color: #b90000;
+    text-align: left;
 `;

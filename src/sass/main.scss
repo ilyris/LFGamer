@@ -4,6 +4,7 @@ $black: #191818;
 $dark: rgb(34,34,34);
 $light: #fff;
 $secondary: #048f8b;
+$gray: #dede;
 // Links
 $link-color: $light !default;
 $link-hover-color: #fff;
@@ -61,4 +62,9 @@ body {
 }
 .section-spacing-1 {
     margin: $section-spacing-1 auto !important;
+}
+
+// Custom Text colors
+.text-gray {
+    color: $gray;
 }

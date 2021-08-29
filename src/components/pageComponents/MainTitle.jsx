@@ -13,7 +13,7 @@ function MainTitle(props) {
 export default MainTitle;
 
 const Title = S.h2`
-    font-size: 50px;
+    font-size: 70px;
     color: #fff;
     font-weight: 600;
     width: 100%;
