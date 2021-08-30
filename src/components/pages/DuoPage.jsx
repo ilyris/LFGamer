@@ -32,7 +32,6 @@ export function DuoPage(props) {
     // hook for pages duo data
     const [duoListings, setDuoListings] = useState([]);
     const [count, setCount] = useState(0);
-
     // make specific reducer for communication being searched for
     const userMicSetting = useSelector(state => state.championSelections.micEnabled);
 
@@ -175,7 +174,7 @@ const Form = S.form`
     flex-flow: row wrap;
     justify-content: space-between;
     margin-top: 50px;
-    z-index: ${props => props.isFormClosed ? '10': '0'};
+    z-index: ${props => props.isSearchSelectOpen ? '20': '0'};
     align-items: center;
 `;
 const SelectListContainer = S.div`
@@ -203,9 +202,8 @@ const ListingContainer = S.div`
 const ListingButtonContainer = S.div`
     width: 100%;
     text-align: left;
-    z-index: ${props => props.isFormClosed ? '0': '10'};
-    margin-top: 5em;
-    z-index: 11;
+    margin-top: 250px;
+    z-index: 21;
 
 `;
 const Button = S.div`

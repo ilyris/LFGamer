@@ -62,12 +62,13 @@ function ChampionCard(props) {
     function useOutsideAlerter(ref, hook) {
         useEffect(() => {
             function handleClickOutside(event) {
-
+                console.log(ref.current)
                 if (!ref.current.contains(event.target)) {
                     hook(false);
                 } else {
                     hook(true);
                 }
+
             }
             // Bind the event listener
             document.addEventListener("mousedown", handleClickOutside);
