@@ -49,7 +49,7 @@ export function Playercard({ listing,isOnline }) {
       .catch((err) => console.log(err));
   };
   return (
-    <div class="pesudoContainer position-relative col-4 me-5">
+    <div class="pesudoContainer position-relative col-4">
       <div class="p-4 d-flex flex-wrap bg-dark rounded">
         <Link
           class="secondary-link fs-3 w-100 d-flex flex-wrap align-items-center justify-content-center online-status"

@@ -196,6 +196,8 @@ const ListingContainer = S.div`
     width: 100%;
     margin-top: 100px;
     z-index: 1;
+    gap: 15px;
+    justify-content: space-between;
 `;
 
 // Duo Listing buttons
